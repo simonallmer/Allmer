@@ -122,7 +122,16 @@
         const Lightbulb = (props) => <IconWrapper {...props}><line x1="9" x2="15" y1="18" y2="18" /><line x1="10" x2="14" y1="22" y2="22" /><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 12 3 4.65 4.65 0 0 0 7.5 11.5c0 1.16.52 2.27 1.41 2.5" /></IconWrapper>;
         const Wand = (props) => <IconWrapper {...props}><path d="M15 4V2" /><path d="M15 16v-2" /><path d="M8 9h2" /><path d="M20 9h2" /><path d="M17.8 11.8 19 13" /><path d="M15 9h0" /><path d="M17.8 6.2 19 5" /><path d="m3 21 9-9" /><path d="M12.2 6.2 11 5" /></IconWrapper>;
         const Feather = (props) => <IconWrapper {...props}><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z" /><line x1="16" x2="2" y1="8" y2="22" /><line x1="17.5" x2="9" y1="15" y2="15" /></IconWrapper>;
-        const MenuIcon = (props) => <IconWrapper {...props}><line x1="3" x2="21" y1="6" y2="6" /><line x1="3" x2="21" y1="12" y2="12" /><line x1="3" x2="21" y1="18" y2="18" /></IconWrapper>;
+        const TerminalIcon = (props) => <IconWrapper {...props}><polyline points="4 17 10 11 4 5" /><line x1="12" x2="20" y1="19" y2="19" /></IconWrapper>;
+        const ExternalLink = (props) => <IconWrapper {...props}><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" x2="21" y1="14" y2="3" /></IconWrapper>;
+        const Mic = (props) => <IconWrapper {...props}><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2" /><line x1="12" x2="12" y1="19" y2="22" /></IconWrapper>;
+        const Monitor = (props) => <IconWrapper {...props}><rect width="20" height="14" x="2" y="3" rx="2" /><line x1="8" x2="16" y1="21" y2="21" /><line x1="12" x2="12" y1="17" y2="21" /></IconWrapper>;
+        const Footprints = (props) => <IconWrapper {...props}><path d="M4 16v-2.38C4 11.5 5.81 10.5 7 10.5s3 1 3 3.12V16" /><path d="M14 16v-2.38C14 11.5 15.81 10.5 17 10.5s3 1 3 3.12V16" /><path d="M12 21a2 2 0 0 1-2-2" /><path d="M18 21a2 2 0 0 1-2-2" /><circle cx="7" cy="18" r="2" /><circle cx="17" cy="18" r="2" /></IconWrapper>;
+        const Piano = (props) => <IconWrapper {...props}><path d="M2 18v-6c0-4 4-8 10-8h8l2 2v12c0 2-2 2-2 2H4s-2 0-2-2Z" /><path d="M6 12v6" /><path d="M10 12v6" /><path d="M14 12v6" /><path d="M18 12v6" /><path d="M2 12h20" /></IconWrapper>;
+        const Guitar = (props) => <IconWrapper {...props}><path d="M9 16c0 2.2 1.8 4 4 4s4-1.8 4-4-1.8-4-4-4-4 1.8-4 4Z" /><path d="m14.5 12.5 5-5" /><path d="M18.5 8.5c1-1 3-1.5 4-.5s.5 3-.5 4c-1 1-3 1.5-4 .5s-.5-3 .5-4Z" /><path d="m11 14-8 8" /><path d="m13 12-6 6" /></IconWrapper>;
+        const Club = (props) => <IconWrapper {...props}><path d="M12 2a3 3 0 0 1 3 3c0 1.5-1 3.5-3 5-2-1.5-3-3.5-3-5a3 3 0 0 1 3-3Z" /><path d="M7 10a3 3 0 1 1 3-3c0 1.5-1 3.5-3 5-2-1.5-3-3.5-3-5a3 3 0 0 1 3 3Z" /><path d="M17 10a3 3 0 1 1 3-3c0 1.5-1 3.5-3 5-2-1.5-3-3.5-3-5a3 3 0 0 1 3 3Z" /><path d="M12 12s-1 1-1 3v2h2v-2s0-3-1-3Z" /></IconWrapper>;
+        const Dices = (props) => <IconWrapper {...props}><rect width="12" height="12" x="2" y="10" rx="2" /><rect width="12" height="12" x="10" y="2" rx="2" /><path d="m14 14 3-3" /><path d="M15 14h.01" /><path d="M18 11h.01" /><path d="M12 10.01h.01" /></IconWrapper>;
+        const Circle = (props) => <IconWrapper {...props}><circle cx="12" cy="12" r="10" /></IconWrapper>;
 
         // --- MAIN APP CODE ---
 
@@ -192,6 +201,14 @@
                     >
                         Leadership
                     </button>
+                    <a
+                        href="https://allmer.miraheze.org/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="border border-[#D4AF37] px-6 py-2 text-[#D4AF37] text-xs tracking-[0.2em] font-serif uppercase hover:bg-[#D4AF37] hover:text-black transition-all flex items-center gap-2"
+                    >
+                        Terminal <ExternalLink className="w-3 h-3" />
+                    </a>
                 </div>
 
                 <div className="grid grid-cols-3 gap-12 max-w-2xl mx-auto pt-8 border-t border-[#333]">
@@ -290,7 +307,7 @@
             </div>
         );
 
-        const ArtsPillar = () => (
+        const ArtsPillar = ({ onSelectStudio }) => (
             <div className="flex-1 bg-black min-h-full p-8 pb-20 text-white relative overflow-hidden">
                 <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/black-mamba.png')] pointer-events-none"></div>
 
@@ -316,16 +333,20 @@
                             { name: 'Allmer Journals', icon: <BookOpen />, desc: "Literature", url: "allmerjournals.com" },
                             { name: 'Allmer Snacks', icon: <Coffee />, desc: "Gastronomy", url: "allmersnacks.com" }
                         ].map((div) => (
-                            <div key={div.name} className="flex items-center gap-4 group p-4 border border-[#222] hover:border-[#D4AF37] transition-colors bg-[#050505]">
+                            <div
+                                key={div.name}
+                                onClick={() => onSelectStudio(div)}
+                                className="flex items-center gap-4 group p-4 border border-[#222] hover:border-[#D4AF37] transition-colors bg-[#050505] cursor-pointer"
+                            >
                                 <div className="text-[#555] group-hover:text-[#D4AF37] transition-colors">
                                     {div.icon}
                                 </div>
                                 <div>
                                     <span className="block text-[#D4AF37] font-serif tracking-widest text-sm brand-font">{div.name.toUpperCase()}</span>
                                     <span className="text-xs text-gray-500 font-serif italic block">{div.desc}</span>
-                                    <a href={`https://${div.url}`} target="_blank" className="text-gray-600 text-[10px] tracking-wide mt-1 block font-mono hover:text-[#D4AF37] transition-colors cursor-pointer">
-                                        {div.url}
-                                    </a>
+                                    <div className="text-gray-600 text-[10px] tracking-wide mt-1 block font-mono group-hover:text-[#D4AF37] transition-colors">
+                                        View Studio
+                                    </div>
                                 </div>
                             </div>
                         ))}
@@ -541,6 +562,9 @@
                         <button onClick={() => handleNav('profile')} className="block w-full text-2xl text-white hover:text-[#D4AF37] font-serif transition-colors py-2">Profile</button>
                         <button onClick={() => handleNav('principles')} className="block w-full text-2xl text-white hover:text-[#D4AF37] font-serif transition-colors py-2">Principles</button>
                         <button onClick={() => handleNav('leadership')} className="block w-full text-2xl text-white hover:text-[#D4AF37] font-serif transition-colors py-2">Leadership</button>
+                        <a href="https://allmer.miraheze.org/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full text-2xl text-white hover:text-[#D4AF37] font-serif transition-colors py-2">
+                            Terminal <ExternalLink className="w-4 h-4" />
+                        </a>
                     </div>
                 </div>
             );
@@ -586,10 +610,297 @@
             </div>
         );
 
+        const MusicStudioRoom = () => {
+            const [activeTool, setActiveTool] = useState(null);
+
+            const tools = [
+                { id: 'mic', img: 'studio_mic_1770858863989.png', label: 'Mic', skill: 'Best Singing Voice', pos: 'top-10 left-10' },
+                { id: 'piano', img: 'steinway_upright_1770858876136.png', label: 'Steinway', skill: 'Steinway Upright Piano', pos: 'bottom-16 left-12', url: 'https://www.steinway.com' },
+                { id: 'guitar', img: 'fender_stratocaster_1770858893744.png', label: 'Fender', skill: 'Fender Stratocaster', pos: 'bottom-12 right-1/3', url: 'https://www.fender.com' },
+                { id: 'shoes', img: 'dance_shoes_1770858907703.png', label: 'Shoes', skill: 'Steezy Choreography', pos: 'bottom-10 right-10', url: 'https://www.steezy.co' },
+                { id: 'monitor', img: 'mac_mini_monitor_1770858922277.png', label: 'Monitor', skill: 'Production Suite', pos: 'top-16 right-16', interactive: true }
+            ];
+
+            const handleToolClick = (tool) => {
+                if (tool.interactive) {
+                    setActiveTool(tool.id);
+                } else if (tool.url) {
+                    window.open(tool.url, '_blank');
+                }
+            };
+
+            return (
+                <div className="relative w-full h-[600px] bg-[#050505] border border-[#222] overflow-hidden group/room">
+                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/dark-leather.png')] opacity-20"></div>
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#1a1a1a] via-black to-[#0a0a0a]"></div>
+
+                    {/* Shadow/Reflection floors */}
+                    <div className="absolute bottom-0 w-full h-32 bg-gradient-to-t from-[#D4AF37]/5 to-transparent"></div>
+
+                    {/* Room elements */}
+                    {tools.map(tool => (
+                        <div
+                            key={tool.id}
+                            className={`absolute ${tool.pos} flex flex-col items-center group cursor-pointer transition-all duration-700 hover:scale-110`}
+                            onClick={() => handleToolClick(tool)}
+                        >
+                            <div className="relative group-hover:drop-shadow-[0_0_25px_rgba(212,175,55,0.5)] transition-all duration-500">
+                                <img
+                                    src={tool.img}
+                                    alt={tool.label}
+                                    className={`
+                                        object-contain transition-all duration-700
+                                        ${tool.id === 'mic' ? 'h-32' : ''}
+                                        ${tool.id === 'piano' ? 'h-48' : ''}
+                                        ${tool.id === 'guitar' ? 'h-48 rotate-[-15deg]' : ''}
+                                        ${tool.id === 'shoes' ? 'h-24' : ''}
+                                        ${tool.id === 'monitor' ? 'h-40' : ''}
+                                        filter brightness-75 group-hover:brightness-110 contrast-125
+                                    `}
+                                />
+                                {/* Hover tooltip */}
+                                <div className="absolute -top-12 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap bg-black border border-[#D4AF37] text-[#D4AF37] px-4 py-2 text-[10px] brand-font uppercase font-bold pointer-events-none shadow-[0_0_20px_rgba(212,175,55,0.2)] translate-y-2 group-hover:translate-y-0 z-50">
+                                    <div className="flex flex-col items-center">
+                                        <span>{tool.skill}</span>
+                                        {tool.url && <span className="text-[8px] text-gray-500 mt-1">Visit Website ↗</span>}
+                                        {tool.interactive && <span className="text-[8px] text-gray-500 mt-1">Open System ↵</span>}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="mt-4 text-[9px] text-gray-600 uppercase tracking-[0.3em] group-hover:text-[#D4AF37] transition-colors brand-font font-bold">
+                                {tool.label}
+                            </div>
+                        </div>
+                    ))}
+
+                    {/* Monitor View Overlay */}
+                    {
+                        activeTool === 'monitor' && (
+                            <div className="absolute inset-0 bg-black/90 z-20 flex flex-col items-center justify-center p-8 animate-in fade-in duration-300">
+                                <button onClick={() => setActiveTool(null)} className="absolute top-4 right-4 text-[#D4AF37] text-2xl hover:text-white transition-colors">&times;</button>
+                                <h4 className="text-[#D4AF37] brand-font text-xl mb-8 border-b border-[#333] pb-2 uppercase tracking-widest">Production Suite</h4>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-2xl">
+                                    <a href="https://www.apple.com/logic-pro/" target="_blank" className="border border-[#222] p-6 hover:border-[#D4AF37] bg-[#080808] transition-all group">
+                                        <h5 className="text-[#D4AF37] brand-font mb-2">Apple Logic Pro</h5>
+                                        <p className="text-gray-400 text-xs leading-relaxed">The industry standard digital audio workstation for professional recording, editing, and mixing.</p>
+                                    </a>
+                                    <a href="https://suno.com" target="_blank" className="border border-[#222] p-6 hover:border-[#D4AF37] bg-[#080808] transition-all group">
+                                        <h5 className="text-[#D4AF37] brand-font mb-2">Suno</h5>
+                                        <p className="text-gray-400 text-xs leading-relaxed">Cutting-edge generative platform for experimental composition and rapid melodic ideation.</p>
+                                    </a>
+                                </div>
+                            </div>
+                        )
+                    }
+
+                    <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-[10px] text-gray-700 uppercase tracking-[0.3em] brand-font font-bold">
+                        Interactive Studio Environment
+                    </div>
+                </div >
+            );
+        };
+
+        const FilmStudioRoom = () => {
+            const [activeTool, setActiveTool] = useState(null);
+
+            const tools = [
+                { id: 'camera', img: 'arri_alexa_mini_1770859287473.png', label: 'Camera', skill: 'ARRI Alexa Mini', pos: 'bottom-16 left-12', url: 'https://www.arri.com/en/camera-systems/cameras/alexa-mini' },
+                { id: 'monitor', img: 'mac_mini_monitor_1770858922277.png', label: 'Edit Suite', skill: 'Post-Production', pos: 'top-16 right-16', interactive: true }
+            ];
+
+            const handleToolClick = (tool) => {
+                if (tool.interactive) {
+                    setActiveTool(tool.id);
+                } else if (tool.url) {
+                    window.open(tool.url, '_blank');
+                }
+            };
+
+            return (
+                <div className="relative w-full h-[600px] bg-[#050505] border border-[#222] overflow-hidden group/room">
+                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/dark-leather.png')] opacity-20"></div>
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#1a1a1a] via-black to-[#0a0a0a]"></div>
+                    <div className="absolute bottom-0 w-full h-32 bg-gradient-to-t from-[#D4AF37]/5 to-transparent"></div>
+
+                    {tools.map(tool => (
+                        <div
+                            key={tool.id}
+                            className={`absolute ${tool.pos} flex flex-col items-center group cursor-pointer transition-all duration-700 hover:scale-110`}
+                            onClick={() => handleToolClick(tool)}
+                        >
+                            <div className="relative group-hover:drop-shadow-[0_0_25px_rgba(212,175,55,0.5)] transition-all duration-500">
+                                <img
+                                    src={tool.img}
+                                    alt={tool.label}
+                                    className={`
+                                        object-contain transition-all duration-700
+                                        ${tool.id === 'camera' ? 'h-64' : ''}
+                                        ${tool.id === 'monitor' ? 'h-40' : ''}
+                                        filter brightness-75 group-hover:brightness-110 contrast-125
+                                    `}
+                                />
+                                <div className="absolute -top-12 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap bg-black border border-[#D4AF37] text-[#D4AF37] px-4 py-2 text-[10px] brand-font uppercase font-bold pointer-events-none shadow-[0_0_20px_rgba(212,175,55,0.2)] translate-y-2 group-hover:translate-y-0 z-50">
+                                    <div className="flex flex-col items-center">
+                                        <span>{tool.skill}</span>
+                                        {tool.url && <span className="text-[8px] text-gray-500 mt-1">Visit Website ↗</span>}
+                                        {tool.interactive && <span className="text-[8px] text-gray-500 mt-1">Open System ↵</span>}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="mt-4 text-[9px] text-gray-600 uppercase tracking-[0.3em] group-hover:text-[#D4AF37] transition-colors brand-font font-bold">
+                                {tool.label}
+                            </div>
+                        </div>
+                    ))}
+
+                    {activeTool === 'monitor' && (
+                        <div className="absolute inset-0 bg-black/90 z-[70] flex flex-col items-center justify-center p-8 animate-in fade-in duration-300">
+                            <button onClick={() => setActiveTool(null)} className="absolute top-4 right-4 text-[#D4AF37] text-2xl hover:text-white transition-colors">&times;</button>
+                            <h4 className="text-[#D4AF37] brand-font text-xl mb-8 border-b border-[#333] pb-2 uppercase tracking-widest">Editing & Writing Suite</h4>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-2xl">
+                                <a href="https://www.blackmagicdesign.com/products/davinciresolve" target="_blank" className="border border-[#222] p-6 hover:border-[#D4AF37] bg-[#080808] transition-all group">
+                                    <h5 className="text-[#D4AF37] brand-font mb-2">DaVinci Resolve</h5>
+                                    <p className="text-gray-400 text-xs leading-relaxed">Professional color grading, editing, and visual effects software for high-end cinema production.</p>
+                                </a>
+                                <a href="https://www.finaldraft.com" target="_blank" className="border border-[#222] p-6 hover:border-[#D4AF37] bg-[#080808] transition-all group">
+                                    <h5 className="text-[#D4AF37] brand-font mb-2">Final Draft</h5>
+                                    <p className="text-gray-400 text-xs leading-relaxed">The industry standard screenwriting software for professional writers and studios worldwide.</p>
+                                </a>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-[10px] text-gray-700 uppercase tracking-[0.3em] brand-font font-bold">
+                        Interactive Film Studio Environment
+                    </div>
+                </div>
+            );
+        }; const GamesStudioRoom = () => {
+            const [activeTool, setActiveTool] = useState(null);
+
+            const tools = [
+                { id: 'arcade', icon: <Gamepad2 className="w-20 h-20" />, label: 'Video Games', skill: 'Arcade Engineering', pos: 'bottom-12 right-12' },
+                { id: 'cards', icon: <Club className="w-16 h-16" />, label: 'Card Games', skill: 'Premium Decks', pos: 'bottom-32 left-1/3' },
+                { id: 'board', icon: <Dices className="w-16 h-16" />, label: 'Board Games', skill: 'Ancient Game Sets', pos: 'bottom-16 left-12' },
+                { id: 'roulette', icon: <Circle className="w-20 h-20" />, label: 'Casino', skill: 'Sleek Roulette', pos: 'top-32 left-10' },
+                { id: 'monitor', img: 'mac_mini_monitor_1770858922277.png', label: 'Workstation', skill: 'Game Development', pos: 'top-16 right-16', interactive: true }
+            ];
+
+            const handleToolClick = (tool) => {
+                if (tool.interactive) {
+                    setActiveTool(tool.id);
+                } else if (tool.url) {
+                    window.open(tool.url, '_blank');
+                }
+            };
+
+            return (
+                <div className="relative w-full h-[600px] bg-[#050505] border border-[#222] overflow-hidden group/room">
+                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/dark-leather.png')] opacity-20"></div>
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#1a1a1a] via-black to-[#0a0a0a]"></div>
+                    <div className="absolute bottom-0 w-full h-32 bg-gradient-to-t from-[#D4AF37]/5 to-transparent"></div>
+
+                    {tools.map(tool => (
+                        <div
+                            key={tool.id}
+                            className={`absolute ${tool.pos} flex flex-col items-center group cursor-pointer transition-all duration-700 hover:scale-110`}
+                            onClick={() => handleToolClick(tool)}
+                        >
+                            <div className="relative group-hover:drop-shadow-[0_0_25px_rgba(212,175,55,0.5)] transition-all duration-500">
+                                {tool.img ? (
+                                    <img
+                                        src={tool.img}
+                                        alt={tool.label}
+                                        className="h-40 object-contain transition-all duration-700 filter brightness-75 group-hover:brightness-110 contrast-125"
+                                    />
+                                ) : (
+                                    <div className="text-[#444] group-hover:text-[#D4AF37] transition-all duration-500">
+                                        {tool.icon}
+                                    </div>
+                                )}
+                                <div className="absolute -top-12 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap bg-black border border-[#D4AF37] text-[#D4AF37] px-4 py-2 text-[10px] brand-font uppercase font-bold pointer-events-none shadow-[0_0_20px_rgba(212,175,55,0.2)] translate-y-2 group-hover:translate-y-0 z-50">
+                                    <div className="flex flex-col items-center">
+                                        <span>{tool.skill}</span>
+                                        {tool.url && <span className="text-[8px] text-gray-500 mt-1">Visit Website ↗</span>}
+                                        {tool.interactive && <span className="text-[8px] text-gray-500 mt-1">Open System ↵</span>}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="mt-4 text-[9px] text-gray-600 uppercase tracking-[0.3em] group-hover:text-[#D4AF37] transition-colors brand-font font-bold">
+                                {tool.label}
+                            </div>
+                        </div>
+                    ))}
+
+                    {activeTool === 'monitor' && (
+                        <div className="absolute inset-0 bg-black/90 z-[70] flex flex-col items-center justify-center p-8 animate-in fade-in duration-300">
+                            <button onClick={() => setActiveTool(null)} className="absolute top-4 right-4 text-[#D4AF37] text-2xl hover:text-white transition-colors">&times;</button>
+                            <h4 className="text-[#D4AF37] brand-font text-xl mb-8 border-b border-[#333] pb-2 uppercase tracking-widest">Development Suite</h4>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-2xl">
+                                <a href="https://www.blender.org" target="_blank" className="border border-[#222] p-6 hover:border-[#D4AF37] bg-[#080808] transition-all group">
+                                    <h5 className="text-[#D4AF37] brand-font mb-2">Blender</h5>
+                                    <p className="text-gray-400 text-xs leading-relaxed">The industry standard open-source 3D creation suite for modeling, animation, and rendering.</p>
+                                </a>
+                                <a href="https://deepmind.google/discover/blog/genie-generative-interactive-environments/" target="_blank" className="border border-[#222] p-6 hover:border-[#D4AF37] bg-[#080808] transition-all group">
+                                    <h5 className="text-[#D4AF37] brand-font mb-2">Google Genie</h5>
+                                    <p className="text-gray-400 text-xs leading-relaxed">Generative Interactive Environments: Advanced AI models capable of generating playable 2D worlds.</p>
+                                </a>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-[10px] text-gray-700 uppercase tracking-[0.3em] brand-font font-bold">
+                        Interactive Games Studio Environment
+                    </div>
+                </div>
+            );
+        };
+
+
+        const StudioModal = ({ studio, onClose }) => {
+            if (!studio) return null;
+            return (
+                <div className="fixed inset-0 modal-overlay z-[60] flex items-center justify-center p-4">
+                    <div className="bg-black border-2 border-[#D4AF37] w-full max-w-4xl relative shadow-[0_0_50px_rgba(212,175,55,0.1)] overflow-hidden">
+                        <div className="p-6 border-b border-[#222] flex justify-between items-center bg-[#050505]">
+                            <div>
+                                <h3 className="text-[#D4AF37] brand-font text-2xl tracking-widest">{studio.name.toUpperCase()}</h3>
+                                <p className="text-gray-500 text-xs uppercase tracking-widest">{studio.desc}</p>
+                            </div>
+                            <button onClick={onClose} className="text-[#D4AF37] text-3xl hover:text-white transition-colors">&times;</button>
+                        </div>
+
+                        <div className="p-8">
+                            {studio.name === 'Allmer Music' ? (
+                                <MusicStudioRoom />
+                            ) : studio.name === 'Allmer Films' ? (
+                                <FilmStudioRoom />
+                            ) : studio.name === 'Allmer Games' ? (
+                                <GamesStudioRoom />
+                            ) : (
+                                <div className="h-[400px] flex flex-col items-center justify-center text-center space-y-6">
+                                    <div className="text-[#D4AF37] opacity-20">{studio.icon}</div>
+                                    <div>
+                                        <h4 className="text-white brand-font text-xl mb-4">Studio Archives</h4>
+                                        <p className="text-gray-400 max-w-md mx-auto italic">
+                                            The digital repository for {studio.name} is currently being curated. Content will be available in the upcoming portfolio expansion.
+                                        </p>
+                                    </div>
+                                    <div className="w-12 h-[1px] bg-[#D4AF37]"></div>
+                                    <p className="text-[10px] text-gray-600 uppercase tracking-[0.4em]">Proprietary Content</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
         const App = () => {
             const [activeTab, setActiveTab] = useState('home');
             const [showMenu, setShowMenu] = useState(false);
             const [showLeadership, setShowLeadership] = useState(false);
+            const [selectedStudio, setSelectedStudio] = useState(null);
 
             // Handle navigation from the Global Menu
             const handleMenuNav = (tab) => {
@@ -607,6 +918,7 @@
 
                     {showMenu && <GlobalMenu onClose={() => setShowMenu(false)} navigate={handleMenuNav} />}
                     {showLeadership && <LeadershipModal onClose={() => setShowLeadership(false)} />}
+                    <StudioModal studio={selectedStudio} onClose={() => setSelectedStudio(null)} />
 
                     <div className="bg-black border-b border-[#333] py-4 z-20 flex justify-between items-center px-8 shadow-2xl relative">
                         <div className="flex items-center gap-4 cursor-pointer" onClick={() => setActiveTab('home')}>
@@ -660,7 +972,7 @@
                                 {activeTab === 'profile' && <ProfilePillar />}
                                 {activeTab === 'principles' && <PrinciplesPillar />}
                                 {/* Philosophy Removed */}
-                                {activeTab === 'arts' && <ArtsPillar />}
+                                {activeTab === 'arts' && <ArtsPillar onSelectStudio={setSelectedStudio} />}
                                 {activeTab === 'estates' && <EstatesPillar />}
                                 {activeTab === 'assets' && <AssetsPillar />}
                             </div>
