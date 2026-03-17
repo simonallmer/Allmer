@@ -976,6 +976,7 @@
 
             const [searchTerm, setSearchTerm] = useState('');
             const [filterTag, setFilterTag] = useState(null);
+            const [selectedEntry, setSelectedEntry] = useState(null);
 
             const tags = [...new Set(entries.map(e => e.tag))].sort();
 
@@ -990,7 +991,7 @@
 
                     <SectionHeader title="Lexicon" subtitle="Allmer Studios Terminology" />
 
-                    <div className="max-w-4xl mx-auto">
+                    <div className="max-w-6xl mx-auto">
                         {/* Search Bar */}
                         <div className="mb-4">
                             <input
@@ -1021,22 +1022,44 @@
                             ))}
                         </div>
 
-                        {/* Entries List */}
-                        <div className="space-y-2">
-                            {filteredEntries.map((entry) => (
-                                <div 
-                                    key={entry.name} 
-                                    className="border border-[#222] hover:border-[#D4AF37] transition-all bg-[#050505] p-3"
-                                >
-                                    <div className="flex items-start justify-between">
-                                        <h3 className="text-[#D4AF37] brand-font text-sm">{entry.name}</h3>
-                                        <span className="px-1.5 py-0.5 bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-[8px] uppercase tracking-wider">
-                                            {entry.tag}
-                                        </span>
+                        {/* Split Screen */}
+                        <div className="flex gap-6">
+                            {/* Left Side - Entries List */}
+                            <div className="w-1/2 space-y-2 max-h-[60vh] overflow-y-auto">
+                                {filteredEntries.map((entry) => (
+                                    <div 
+                                        key={entry.name} 
+                                        onClick={() => setSelectedEntry(entry)}
+                                        className={`border cursor-pointer transition-all bg-[#050505] p-3 ${selectedEntry?.name === entry.name ? 'border-[#D4AF37]' : 'border-[#222] hover:border-[#D4AF37]'}`}
+                                    >
+                                        <div className="flex items-start justify-between">
+                                            <h3 className="text-[#D4AF37] brand-font text-sm">{entry.name}</h3>
+                                            <span className="px-1.5 py-0.5 bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-[8px] uppercase tracking-wider">
+                                                {entry.tag}
+                                            </span>
+                                        </div>
                                     </div>
-                                    <p className="text-gray-400 text-xs mt-1">{entry.description || 'Definition coming soon.'}</p>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
+
+                            {/* Right Side - Definition */}
+                            <div className="w-1/2 border border-[#222] bg-[#050505] p-6 min-h-[300px]">
+                                {selectedEntry ? (
+                                    <div>
+                                        <div className="flex items-center justify-between mb-4">
+                                            <h3 className="text-[#D4AF37] brand-font text-xl">{selectedEntry.name}</h3>
+                                            <span className="px-2 py-1 bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-xs uppercase tracking-wider">
+                                                {selectedEntry.tag}
+                                            </span>
+                                        </div>
+                                        <p className="text-gray-300 text-sm leading-relaxed">{selectedEntry.description || 'Definition coming soon.'}</p>
+                                    </div>
+                                ) : (
+                                    <div className="flex items-center justify-center h-full">
+                                        <p className="text-gray-500 text-sm">Select a term to view its definition</p>
+                                    </div>
+                                )}
+                            </div>
                         </div>
 
                         {filteredEntries.length === 0 && (
@@ -1044,6 +1067,53 @@
                                 <p className="text-gray-400">No entries match your search.</p>
                             </div>
                         )}
+                    </div>
+                </div>
+            );
+        };
+
+        const CampaignsPillar = () => {
+            const campaigns = [
+                { name: 'Seven Wonders Expansion', description: 'Expanding the Seven Wonders brand with new game releases and related media products across multiple studios.', studio: 'Allmer Games', priority: 'High' },
+                { name: 'American Portrait: The Series', description: 'Developing a film and comic series based on the American Portrait universe, utilizing all six studios.', studio: 'Allmer Films', priority: 'High' },
+                { name: 'Futory Saga Launch', description: 'Building out the Futory universe across games, comics, and film with coordinated releases.', studio: 'Allmer Games', priority: 'Medium' },
+                { name: 'Detective Noname Investigation', description: 'Creating new mystery content under the Detective Noname brand through comics and interactive experiences.', studio: 'Allmer Comics', priority: 'Medium' },
+                { name: 'Chronicle: Historical Archives', description: 'Developing the Chronicle brand with historical content and publications.', studio: 'Allmer Journals', priority: 'Low' }
+            ];
+
+            return (
+                <div className="flex-1 bg-black min-h-full p-8 pb-20 text-white font-serif relative overflow-hidden">
+                    <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/dark-leather.png')] pointer-events-none"></div>
+
+                    <SectionHeader title="Campaigns" subtitle="Current Company Efforts" />
+
+                    <div className="max-w-4xl mx-auto">
+                        <div className="space-y-4">
+                            {campaigns.map((campaign, idx) => (
+                                <div 
+                                    key={idx} 
+                                    className="border border-[#222] hover:border-[#D4AF37] transition-all bg-[#050505] p-6"
+                                >
+                                    <div className="flex items-start justify-between mb-3">
+                                        <h3 className="text-[#D4AF37] brand-font text-lg">{campaign.name}</h3>
+                                        <span className={`px-2 py-1 text-[10px] uppercase tracking-wider ${
+                                            campaign.priority === 'High' ? 'bg-red-900/30 border border-red-500 text-red-400' :
+                                            campaign.priority === 'Medium' ? 'bg-yellow-900/30 border border-yellow-500 text-yellow-400' :
+                                            'bg-gray-800 border border-gray-600 text-gray-400'
+                                        }`}>
+                                            {campaign.priority} Priority
+                                        </span>
+                                    </div>
+                                    <p className="text-gray-400 text-sm mb-3">{campaign.description}</p>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-gray-500 text-xs">Studio:</span>
+                                        <span className="px-2 py-0.5 bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-[10px] uppercase tracking-wider">
+                                            {campaign.studio}
+                                        </span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             );
@@ -1587,6 +1657,7 @@
                                     <LuxuryButton onClick={() => setActiveTab('agency')} active={activeTab === 'agency'}>AGENCY</LuxuryButton>
                                     <LuxuryButton onClick={() => setActiveTab('catalog')} active={activeTab === 'catalog'}>CATALOG</LuxuryButton>
                                     <LuxuryButton onClick={() => setActiveTab('lexicon')} active={activeTab === 'lexicon'}>LEXICON</LuxuryButton>
+                                    <LuxuryButton onClick={() => setActiveTab('campaigns')} active={activeTab === 'campaigns'}>CAMPAIGNS</LuxuryButton>
                                 </nav>
                             </div>
 
@@ -1609,6 +1680,7 @@
                                 {activeTab === 'agency' && <AgencyPillar />}
                                 {activeTab === 'catalog' && <CatalogPillar />}
                                 {activeTab === 'lexicon' && <LexiconPillar />}
+                                {activeTab === 'campaigns' && <CampaignsPillar />}
                             </div>
                         </div>
                     </div>
