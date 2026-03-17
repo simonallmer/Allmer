@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>Allmer International | Est. 2020</title>
+    <title>Allmer</title>
 
     <!-- React & ReactDOM -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
@@ -540,6 +540,487 @@
                             </div>
                         </section>
 
+                    </div>
+                </div>
+            );
+        };
+
+        const CatalogPillar = () => {
+            const games = [
+                { number: 'G031', name: '(Colbu)', series: '', brand: 'Colbu', genre: 'World Builder', platforms: 'Web, App', year: 2028 },
+                { number: 'G030', name: 'Dangerous', series: '', brand: 'Danger', genre: 'Action-Adventure', platforms: 'Web, App', year: 2028 },
+                { number: 'G029', name: 'Lunyra Explorer', series: '', brand: 'Lunyra', genre: 'Open World', platforms: 'Web, App', year: 2028 },
+                { number: 'G028', name: '(Detective Noname 2)', series: 'Riddle Novels', brand: 'Detective Noname', genre: 'Riddle', platforms: 'Book, eBook, Web, App', year: 2028 },
+                { number: 'G027', name: 'Futory Cards Trinity', series: 'Futory Cards', brand: 'Futory', genre: 'Deck Building', platforms: 'Tabletop, Web, App', year: 2028 },
+                { number: 'G026', name: 'Silk Road', series: '', brand: '', genre: '', platforms: 'Tabletop, Web', year: 2027 },
+                { number: 'G025', name: 'Equilibrium', series: '', brand: 'American Portrait', genre: 'War and Peace', platforms: 'Web, App', year: 2026 },
+                { number: 'G024', name: 'Capital', series: '', brand: '', genre: 'Resource Management', platforms: 'Web, App', year: 2026 },
+                { number: 'G023', name: 'Futory Cards Duality', series: 'Futory Cards', brand: 'Futory', genre: 'Deck Building', platforms: 'Tabletop, Web, App', year: 2026 },
+                { number: 'G022', name: 'Skyscraper', series: 'New Seven Wonders', brand: 'Seven Wonders', genre: 'Abstract Strategy', platforms: 'Tabletop, Web, App', year: 2026 },
+                { number: 'G021', name: 'Palace', series: 'New Seven Wonders', brand: 'Seven Wonders', genre: 'Abstract Strategy', platforms: 'Tabletop, Web, App', year: 2026 },
+                { number: 'G020', name: 'Basilica', series: 'New Seven Wonders', brand: 'Seven Wonders', genre: 'Abstract Strategy', platforms: 'Tabletop, Web, App', year: 2026 },
+                { number: 'G019', name: 'Citadell', series: 'New Seven Wonders', brand: 'Seven Wonders', genre: 'Abstract Strategy', platforms: 'Tabletop, Web, App', year: 2026 },
+                { number: 'G018', name: 'Pagoda', series: 'New Seven Wonders', brand: 'Seven Wonders', genre: 'Abstract Strategy', platforms: 'Tabletop, Web, App', year: 2026 },
+                { number: 'G017', name: 'Great Wall', series: 'New Seven Wonders', brand: 'Seven Wonders', genre: 'Abstract Strategy', platforms: 'Tabletop, Web, App', year: 2026 },
+                { number: 'G016', name: 'Colosseum', series: 'New Seven Wonders', brand: 'Seven Wonders', genre: 'Abstract Strategy', platforms: 'Tabletop, Web, App', year: 2026 },
+                { number: 'G015', name: 'Ricochet', series: '', brand: 'Casino Camino', genre: 'Reaction Betting', platforms: '', year: 2026 },
+                { number: 'G014', name: 'Fortuna', series: '', brand: 'Casino Camino', genre: 'Dice Betting', platforms: '', year: 2026 },
+                { number: 'G013', name: 'American Playing Cards', series: '', brand: 'Casino Camino', genre: 'Card Betting', platforms: '', year: 2026 },
+                { number: 'G012', name: 'Pharos', series: 'Old Seven Wonders', brand: 'Seven Wonders', genre: 'Abstract Strategy', platforms: 'Tabletop, Web, App', year: 2025 },
+                { number: 'G011', name: 'Colossus', series: 'Old Seven Wonders', brand: 'Seven Wonders', genre: 'Abstract Strategy', platforms: 'Tabletop, Web, App', year: 2025 },
+                { number: 'G010', name: 'Mausoleum', series: 'Old Seven Wonders', brand: 'Seven Wonders', genre: 'Abstract Strategy', platforms: 'Tabletop, Web, App', year: 2025 },
+                { number: 'G009', name: 'Statue', series: 'Old Seven Wonders', brand: 'Seven Wonders', genre: 'Abstract Strategy', platforms: 'Tabletop, Web, App', year: 2025 },
+                { number: 'G008', name: 'Detective Noname and the Silent Circle', series: 'Riddle Novels', brand: 'Detective Noname', genre: 'Riddle', platforms: 'Book, eBook, Web, App', year: 2025 },
+                { number: 'G007', name: 'Believe', series: '', brand: 'Believe', genre: 'Storytelling', platforms: 'Tabletop, Web', year: 2025 },
+                { number: 'G006', name: 'Temple', series: 'Old Seven Wonders', brand: 'Seven Wonders', genre: 'Abstract Strategy', platforms: 'Tabletop, Web, App', year: 2024 },
+                { number: 'G005', name: 'Gardens', series: 'Old Seven Wonders', brand: 'Seven Wonders', genre: 'Abstract Strategy', platforms: 'Tabletop, Web, App', year: 2024 },
+                { number: 'G004', name: 'Elements', series: '', brand: 'Elements', genre: 'Shedding', platforms: 'Tabletop, Web', year: 2023 },
+                { number: 'G003', name: 'Futory Cards Unity', series: 'Futory Cards', brand: 'Futory', genre: 'Deck Building', platforms: 'Tabletop, Web, App', year: 2022 },
+                { number: 'G002', name: 'Nectar', series: '', brand: 'Nectar', genre: 'Strategy', platforms: 'Tabletop, Web, App', year: 2021 },
+                { number: 'G001', name: 'Pyramid', series: 'Old Seven Wonders', brand: 'Seven Wonders', genre: 'Abstract Strategy', platforms: 'Tabletop, Web, App', year: 2020 }
+            ];
+
+            const journals = [
+                { number: 'J007', name: 'Gambler', series: '', brand: 'Casino Camino', genre: 'Journal', platforms: '', year: 2026 },
+                { number: 'J006', name: 'American Chronicle', series: 'Chronicle', brand: 'Chronicle', genre: 'Journal', platforms: '', year: 2026 },
+                { number: 'J005', name: 'Cosmographia', series: '', brand: '', genre: 'Journal', platforms: '', year: 2026 },
+                { number: 'J004', name: 'ACRONYM', series: '', brand: 'Detective Noname', genre: 'Journal', platforms: '', year: 2026 },
+                { number: 'J003', name: 'Chronicle: Years of Change', series: 'Chronicle', brand: 'Chronicle', genre: 'Journal', platforms: '', year: 2023 },
+                { number: 'J002', name: 'Society Review', series: '', brand: 'Society Review', genre: 'Journal', platforms: '', year: 2021 },
+                { number: 'J001', name: 'Simon Allmer World', series: '', brand: 'Simon Allmer', genre: 'Journal', platforms: '', year: 2020 }
+            ];
+
+            const music = [
+                { number: 'M002', name: 'Pentamorph', series: '', brand: '', genre: 'Score', platforms: '', year: 2026 },
+                { number: 'M001', name: 'American Portrait Score', series: '', brand: 'American Portrait', genre: 'Score', platforms: '', year: 2026 },
+                { number: 'M003', name: 'Sin', series: '', brand: 'Simon Allmer', genre: 'Score', platforms: '', year: 2026 },
+                { number: 'M004', name: 'Futory Score', series: 'Futory Cards', brand: 'Futory', genre: 'Score', platforms: '', year: 2026 }
+            ];
+
+            const comics = [
+                { number: 'C001', name: 'Kissinger: A World Destroyed', series: 'Kissinger', brand: 'American Portrait', genre: 'Comic', platforms: '', year: 2026 },
+                { number: 'C002', name: 'Carter: The Blood Beneath the Soil', series: 'Carter', brand: 'American Portrait', genre: 'Comic', platforms: '', year: 2026 },
+                { number: 'C003', name: 'Futory: Dragon Kingdom', series: 'Futory Saga', brand: 'Futory', genre: 'Comic', platforms: '', year: 2026 },
+                { number: 'C004', name: 'Kissinger: Chain Reaction', series: 'Kissinger', brand: 'American Portrait', genre: 'Comic', platforms: '', year: 2026 }
+            ];
+
+            const films = [
+                { number: 'F001', name: 'Kissinger', series: 'Kissinger', brand: 'American Portrait', genre: 'Film', platforms: '', year: 2026 },
+                { number: 'F002', name: 'Carter', series: 'Carter', brand: 'American Portrait', genre: 'Film', platforms: '', year: 2026 },
+                { number: 'F003', name: 'Futory: Dragon Kingdom', series: 'Futory Saga', brand: 'Futory', genre: 'Film', platforms: '', year: 2026 }
+            ];
+
+            const snacks = [
+                { number: 'S001', name: 'Solar-Soda', series: '', brand: 'Solar-Soda', genre: 'Snack', platforms: '', year: 2026 },
+                { number: 'S002', name: 'Metropole', series: '', brand: 'Metropole', genre: 'Snack', platforms: '', year: 2026 },
+                { number: 'S003', name: 'Hot Ice', series: '', brand: '', genre: 'Snack', platforms: '', year: 2026 },
+                { number: 'S004', name: 'Sakura Tea', series: '', brand: '', genre: 'Snack', platforms: '', year: 2026 }
+            ];
+
+            const [filterStudio, setFilterStudio] = useState('all');
+            const [filterBrand, setFilterBrand] = useState(null);
+            const [filterSeries, setFilterSeries] = useState(null);
+            const [selectedProduct, setSelectedProduct] = useState(null);
+
+            const getStudioLabel = (num) => {
+                if (num.startsWith('G')) return 'Allmer Games';
+                if (num.startsWith('J')) return 'Allmer Journals';
+                if (num.startsWith('M')) return 'Allmer Music';
+                if (num.startsWith('C')) return 'Allmer Comics';
+                if (num.startsWith('F')) return 'Allmer Films';
+                if (num.startsWith('S')) return 'Allmer Snacks';
+                return 'Allmer';
+            };
+
+            const allProducts = filterStudio === 'all' ? [...games, ...journals, ...music, ...comics, ...films, ...snacks] : 
+                                filterStudio === 'games' ? games : 
+                                filterStudio === 'journals' ? journals :
+                                filterStudio === 'music' ? music : 
+                                filterStudio === 'comics' ? comics :
+                                filterStudio === 'films' ? films : snacks;
+            
+            const brands = [...new Set(allProducts.filter(g => g.brand).map(g => g.brand))].sort();
+            const series = [...new Set(allProducts.filter(g => g.series).map(g => g.series))].sort();
+
+            const filtered = allProducts.filter(g => 
+                (!filterBrand || g.brand === filterBrand) && 
+                (!filterSeries || g.series === filterSeries)
+            ).sort((a, b) => {
+                const numA = parseInt(a.number.replace(/\D/g, ''));
+                const numB = parseInt(b.number.replace(/\D/g, ''));
+                return numB - numA;
+            });
+
+            const filteredBrands = [...new Set(filtered.filter(g => g.brand).map(g => g.brand))].sort();
+            const filteredSeries = [...new Set(filtered.filter(g => g.series).map(g => g.series))].sort();
+
+            return (
+                <div className="flex-1 bg-black min-h-full p-8 pb-20 text-white font-serif relative overflow-hidden">
+                    <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/dark-leather.png')] pointer-events-none"></div>
+
+                    <SectionHeader title="Catalog" subtitle="Allmer Studios Product Library" />
+
+                    <div className="max-w-6xl mx-auto">
+                        {/* Products Section Header */}
+                        <div className="mb-6 border-b border-[#333] pb-4">
+                            <h3 className="text-[#D4AF37] text-xl font-serif uppercase tracking-[0.2em] brand-font">Products</h3>
+                        </div>
+
+                        {/* Filter Tags */}
+                        <div className="mb-8 space-y-4">
+                            <div>
+                                <p className="text-[#D4AF37] text-xs uppercase tracking-widest mb-3 brand-font">STUDIOS</p>
+                                <div className="flex flex-wrap gap-2">
+                                    <button 
+                                        onClick={() => { setFilterStudio('all'); setFilterBrand(null); setFilterSeries(null); }}
+                                        className={`px-3 py-1 text-xs border transition-all ${filterStudio === 'all' ? 'border-[#D4AF37] text-[#D4AF37] bg-[#D4AF37]/10' : 'border-[#333] text-gray-500 hover:border-[#D4AF37]'}`}
+                                    >
+                                        All Studios
+                                    </button>
+                                    <button 
+                                        onClick={() => { setFilterStudio('games'); setFilterBrand(null); setFilterSeries(null); }}
+                                        className={`px-3 py-1 text-xs border transition-all ${filterStudio === 'games' ? 'border-[#D4AF37] text-[#D4AF37] bg-[#D4AF37]/10' : 'border-[#333] text-gray-500 hover:border-[#D4AF37]'}`}
+                                    >
+                                        Allmer Games
+                                    </button>
+                                    <button 
+                                        onClick={() => { setFilterStudio('journals'); setFilterBrand(null); setFilterSeries(null); }}
+                                        className={`px-3 py-1 text-xs border transition-all ${filterStudio === 'journals' ? 'border-[#D4AF37] text-[#D4AF37] bg-[#D4AF37]/10' : 'border-[#333] text-gray-500 hover:border-[#D4AF37]'}`}
+                                    >
+                                        Allmer Journals
+                                    </button>
+                                    <button 
+                                        onClick={() => { setFilterStudio('music'); setFilterBrand(null); setFilterSeries(null); }}
+                                        className={`px-3 py-1 text-xs border transition-all ${filterStudio === 'music' ? 'border-[#D4AF37] text-[#D4AF37] bg-[#D4AF37]/10' : 'border-[#333] text-gray-500 hover:border-[#D4AF37]'}`}
+                                    >
+                                        Allmer Music
+                                    </button>
+                                    <button 
+                                        onClick={() => { setFilterStudio('comics'); setFilterBrand(null); setFilterSeries(null); }}
+                                        className={`px-3 py-1 text-xs border transition-all ${filterStudio === 'comics' ? 'border-[#D4AF37] text-[#D4AF37] bg-[#D4AF37]/10' : 'border-[#333] text-gray-500 hover:border-[#D4AF37]'}`}
+                                    >
+                                        Allmer Comics
+                                    </button>
+                                    <button 
+                                        onClick={() => { setFilterStudio('films'); setFilterBrand(null); setFilterSeries(null); }}
+                                        className={`px-3 py-1 text-xs border transition-all ${filterStudio === 'films' ? 'border-[#D4AF37] text-[#D4AF37] bg-[#D4AF37]/10' : 'border-[#333] text-gray-500 hover:border-[#D4AF37]'}`}
+                                    >
+                                        Allmer Films
+                                    </button>
+                                    <button 
+                                        onClick={() => { setFilterStudio('snacks'); setFilterBrand(null); setFilterSeries(null); }}
+                                        className={`px-3 py-1 text-xs border transition-all ${filterStudio === 'snacks' ? 'border-[#D4AF37] text-[#D4AF37] bg-[#D4AF37]/10' : 'border-[#333] text-gray-500 hover:border-[#D4AF37]'}`}
+                                    >
+                                        Allmer Snacks
+                                    </button>
+                                </div>
+                            </div>
+                            <div>
+                                <p className="text-[#D4AF37] text-xs uppercase tracking-widest mb-3 brand-font">BRANDS</p>
+                                <div className="flex flex-wrap gap-2">
+                                    <button 
+                                        onClick={() => { setFilterBrand(null); setFilterSeries(null); }}
+                                        className={`px-3 py-1 text-xs border transition-all ${!filterBrand ? 'border-[#D4AF37] text-[#D4AF37] bg-[#D4AF37]/10' : 'border-[#333] text-gray-500 hover:border-[#D4AF37]'}`}
+                                    >
+                                        All Brands
+                                    </button>
+                                    {filteredBrands.map(b => (
+                                        <button
+                                            key={b}
+                                            onClick={() => { setFilterBrand(filterBrand === b ? null : b); setFilterSeries(null); }}
+                                            className={`px-3 py-1 text-xs border transition-all ${filterBrand === b ? 'border-[#D4AF37] text-[#D4AF37] bg-[#D4AF37]/10' : 'border-[#333] text-gray-500 hover:border-[#D4AF37]'}`}
+                                        >
+                                            {b}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                            <div>
+                                <p className="text-[#D4AF37] text-xs uppercase tracking-widest mb-3 brand-font">SERIES</p>
+                                <div className="flex flex-wrap gap-2">
+                                    <button 
+                                        onClick={() => { setFilterBrand(null); setFilterSeries(null); }}
+                                        className={`px-3 py-1 text-xs border transition-all ${!filterSeries ? 'border-[#D4AF37] text-[#D4AF37] bg-[#D4AF37]/10' : 'border-[#333] text-gray-500 hover:border-[#D4AF37]'}`}
+                                    >
+                                        All Series
+                                    </button>
+                                    {filteredSeries.map(s => (
+                                        <button
+                                            key={s}
+                                            onClick={() => { setFilterSeries(filterSeries === s ? null : s); setFilterBrand(null); }}
+                                            className={`px-3 py-1 text-xs border transition-all ${filterSeries === s ? 'border-[#D4AF37] text-[#D4AF37] bg-[#D4AF37]/10' : 'border-[#333] text-gray-500 hover:border-[#D4AF37]'}`}
+                                        >
+                                            {s}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Products Grid */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {filtered.map((game) => (
+                                <div 
+                                    key={game.number} 
+                                    className="border border-[#222] hover:border-[#D4AF37] transition-all bg-[#050505] p-6 group cursor-pointer"
+                                    onClick={() => setSelectedProduct(game)}
+                                >
+                                    <div className="flex items-start justify-between mb-4">
+                                        <div>
+                                            <p className="text-[#D4AF37] font-bold brand-font text-lg">{game.number}</p>
+                                            <p className="text-gray-400 text-[10px] uppercase tracking-widest mt-1">
+                                                {getStudioLabel(game.number)}
+                                            </p>
+                                        </div>
+                                        <p className="text-[#D4AF37] text-xs">{game.year}</p>
+                                    </div>
+
+                                    <h3 className="text-white brand-font text-lg mb-4 group-hover:text-[#D4AF37] transition-colors">{game.name}</h3>
+
+                                    <div className="space-y-3 text-xs mb-4">
+                                        {game.genre && (
+                                            <div className="flex items-start gap-2">
+                                                <span className="text-gray-500 w-16">Genre:</span>
+                                                <span className="text-gray-300">{game.genre}</span>
+                                            </div>
+                                        )}
+                                        {game.platforms && (
+                                            <div className="flex items-start gap-2">
+                                                <span className="text-gray-500 w-16">Platform:</span>
+                                                <span className="text-gray-300">{game.platforms}</span>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className="flex flex-wrap gap-2 pt-4 border-t border-[#222]">
+                                        {game.brand && (
+                                            <button 
+                                                onClick={(e) => { e.stopPropagation(); setFilterBrand(game.brand); }}
+                                                className="px-2 py-1 bg-[#D4AF37]/10 border border-[#D4AF37] text-[#D4AF37] text-[10px] uppercase tracking-wider hover:bg-[#D4AF37]/20 transition-colors"
+                                            >
+                                                {game.brand}
+                                            </button>
+                                        )}
+                                        {game.series && (
+                                            <button 
+                                                onClick={(e) => { e.stopPropagation(); setFilterSeries(game.series); }}
+                                                className="px-2 py-1 bg-[#D4AF37]/5 border border-[#D4AF37]/50 text-gray-300 text-[10px] uppercase tracking-wider hover:bg-[#D4AF37]/10 transition-colors"
+                                            >
+                                                {game.series}
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Services Section Header */}
+                        <div className="mt-16 mb-6 border-b border-[#333] pb-4">
+                            <h3 className="text-[#D4AF37] text-xl font-serif uppercase tracking-[0.2em] brand-font">Services</h3>
+                        </div>
+
+                        <div>
+                            <p className="text-gray-400 font-serif italic text-sm mb-8">Allmer Studios Subscription Services</p>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                <div 
+                                    className="border border-[#222] hover:border-[#D4AF37] transition-all bg-[#050505] p-6 group cursor-pointer"
+                                    onClick={() => setSelectedProduct({ number: 'SUB-ARC', name: 'Arcade Subscription', brand: 'Allmer Games', genre: 'Subscription', description: '15 Allmer Games, 5 Classic Games, 5 Third Party Games', price: '5€/year or 1€/month' })}
+                                >
+                                    <div className="flex items-start justify-between mb-4">
+                                        <div>
+                                            <p className="text-[#D4AF37] font-bold brand-font text-lg">SUB-ARC</p>
+                                            <p className="text-gray-400 text-[10px] uppercase tracking-widest mt-1">Allmer Games</p>
+                                        </div>
+                                    </div>
+                                    <h3 className="text-white brand-font text-lg mb-4 group-hover:text-[#D4AF37] transition-colors">Arcade Subscription</h3>
+                                    <p className="text-gray-500 text-xs">15 Allmer Games, 5 Classic Games, 5 Third Party Games</p>
+                                    <p className="text-[#D4AF37] text-xs mt-2">5€/year or 1€/month</p>
+                                </div>
+
+                                <div 
+                                    className="border border-[#222] hover:border-[#D4AF37] transition-all bg-[#050505] p-6 group cursor-pointer"
+                                    onClick={() => setSelectedProduct({ number: 'SUB-CIN', name: 'Cinema Subscription', brand: 'Allmer Films', genre: 'Subscription', description: 'Full access to Allmer Films library', price: '5€/year or 1€/month' })}
+                                >
+                                    <div className="flex items-start justify-between mb-4">
+                                        <div>
+                                            <p className="text-[#D4AF37] font-bold brand-font text-lg">SUB-CIN</p>
+                                            <p className="text-gray-400 text-[10px] uppercase tracking-widest mt-1">Allmer Films</p>
+                                        </div>
+                                    </div>
+                                    <h3 className="text-white brand-font text-lg mb-4 group-hover:text-[#D4AF37] transition-colors">Cinema Subscription</h3>
+                                    <p className="text-gray-500 text-xs">Full access to Allmer Films library</p>
+                                    <p className="text-[#D4AF37] text-xs mt-2">5€/year or 1€/month</p>
+                                </div>
+
+                                <div 
+                                    className="border border-[#222] hover:border-[#D4AF37] transition-all bg-[#050505] p-6 group cursor-pointer"
+                                    onClick={() => setSelectedProduct({ number: 'SUB-CLB', name: 'Club Subscription', brand: 'Allmer Music', genre: 'Subscription', description: 'Full access to Allmer Music library', price: '5€/year or 1€/month' })}
+                                >
+                                    <div className="flex items-start justify-between mb-4">
+                                        <div>
+                                            <p className="text-[#D4AF37] font-bold brand-font text-lg">SUB-CLB</p>
+                                            <p className="text-gray-400 text-[10px] uppercase tracking-widest mt-1">Allmer Music</p>
+                                        </div>
+                                    </div>
+                                    <h3 className="text-white brand-font text-lg mb-4 group-hover:text-[#D4AF37] transition-colors">Club Subscription</h3>
+                                    <p className="text-gray-500 text-xs">Full access to Allmer Music library</p>
+                                    <p className="text-[#D4AF37] text-xs mt-2">5€/year or 1€/month</p>
+                                </div>
+
+                                <div 
+                                    className="border border-[#222] hover:border-[#D4AF37] transition-all bg-[#050505] p-6 group cursor-pointer"
+                                    onClick={() => setSelectedProduct({ number: 'SUB-LIB', name: 'Library Subscription', brand: 'Allmer Comics', genre: 'Subscription', description: 'Full access to Allmer Comics library', price: '5€/year or 1€/month' })}
+                                >
+                                    <div className="flex items-start justify-between mb-4">
+                                        <div>
+                                            <p className="text-[#D4AF37] font-bold brand-font text-lg">SUB-LIB</p>
+                                            <p className="text-gray-400 text-[10px] uppercase tracking-widest mt-1">Allmer Comics</p>
+                                        </div>
+                                    </div>
+                                    <h3 className="text-white brand-font text-lg mb-4 group-hover:text-[#D4AF37] transition-colors">Library Subscription</h3>
+                                    <p className="text-gray-500 text-xs">Full access to Allmer Comics library</p>
+                                    <p className="text-[#D4AF37] text-xs mt-2">5€/year or 1€/month</p>
+                                </div>
+
+                                <div 
+                                    className="border border-[#222] hover:border-[#D4AF37] transition-all bg-[#050505] p-6 group cursor-pointer md:col-span-2 lg:col-span-1"
+                                    onClick={() => setSelectedProduct({ number: 'SUB-CTR', name: 'Center Subscription', brand: 'All Studios', genre: 'Subscription', description: 'Full access to Allmer Studios complete library', price: '15€/year or 2.50€/month' })}
+                                >
+                                    <div className="flex items-start justify-between mb-4">
+                                        <div>
+                                            <p className="text-[#D4AF37] font-bold brand-font text-lg">SUB-CTR</p>
+                                            <p className="text-gray-400 text-[10px] uppercase tracking-widest mt-1">All Studios</p>
+                                        </div>
+                                    </div>
+                                    <h3 className="text-white brand-font text-lg mb-4 group-hover:text-[#D4AF37] transition-colors">Center Subscription</h3>
+                                    <p className="text-gray-500 text-xs">Full access to Allmer Studios complete library</p>
+                                    <p className="text-[#D4AF37] text-xs mt-2">15€/year or 2.50€/month</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {filtered.length === 0 && (
+                            <div className="flex flex-col items-center justify-center h-64 text-center">
+                                <p className="text-gray-400 mb-2">No products match your filters</p>
+                                    <button 
+                                        onClick={() => { setFilterBrand(null); setFilterSeries(null); setFilterStudio('all'); }}
+                                        className="text-[#D4AF37] text-sm hover:underline"
+                                    >
+                                    Clear filters
+                                </button>
+                            </div>
+                        )}
+
+                        {/* Product Detail Modal */}
+                        {selectedProduct && (
+                            <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4" onClick={() => setSelectedProduct(null)}>
+                                <div className="bg-[#0a0a0a] border border-[#D4AF37] p-8 max-w-md w-full text-center" onClick={e => e.stopPropagation()}>
+                                    <p className="text-[#D4AF37] font-bold brand-font text-xl mb-2">{selectedProduct.number}</p>
+                                    <h3 className="text-white brand-font text-2xl mb-4">{selectedProduct.name}</h3>
+                                    {selectedProduct.description && (
+                                        <p className="text-gray-300 text-sm mb-2">{selectedProduct.description}</p>
+                                    )}
+                                    {selectedProduct.price ? (
+                                        <p className="text-[#D4AF37] text-lg font-bold mb-4">{selectedProduct.price}</p>
+                                    ) : (
+                                        <p className="text-gray-400 text-lg mb-6">More information coming soon.</p>
+                                    )}
+                                    <button 
+                                        onClick={() => setSelectedProduct(null)}
+                                        className="px-6 py-2 border border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37]/10 transition-colors"
+                                    >
+                                        Close
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        const LexiconPillar = () => {
+            const entries = [
+                { name: 'Allmer', description: '', tag: 'Company' },
+                { name: 'Allmer Comics', description: '', tag: 'Studio' },
+                { name: 'Allmer Films', description: '', tag: 'Studio' },
+                { name: 'Allmer Games', description: '', tag: 'Studio' },
+                { name: 'Allmer Journals', description: '', tag: 'Studio' },
+                { name: 'Allmer Music', description: '', tag: 'Studio' },
+                { name: 'Allmer Snacks', description: '', tag: 'Studio' },
+                { name: 'American Portrait', description: '', tag: 'Brand' },
+                { name: 'Arcade', description: '15 Allmer Games, 5 Classic Games, 5 Third Party Games', tag: 'Service' },
+                { name: 'Believe', description: '', tag: 'Brand' },
+                { name: 'Casino Camino', description: '', tag: 'Brand' },
+                { name: 'Center', description: 'Full access to Allmer Studios complete library', tag: 'Service' },
+                { name: 'Chronicle', description: '', tag: 'Brand' },
+                { name: 'Cinema', description: 'Full access to Allmer Films library', tag: 'Service' },
+                { name: 'Club', description: 'Full access to Allmer Music library', tag: 'Service' },
+                { name: 'Colbu', description: '', tag: 'Brand' },
+                { name: 'Cosmographia', description: '', tag: 'Brand' },
+                { name: 'Danger', description: '', tag: 'Brand' },
+                { name: 'Detective Noname', description: '', tag: 'Brand' },
+                { name: 'Elements', description: '', tag: 'Brand' },
+                { name: 'Futory', description: '', tag: 'Brand' },
+                { name: 'Library', description: 'Full access to Allmer Comics library', tag: 'Service' },
+                { name: 'Lunyra', description: '', tag: 'Brand' },
+                { name: 'Metropole', description: '', tag: 'Brand' },
+                { name: 'Piano Voice', description: '', tag: 'Skill' },
+                { name: 'Seven Wonders', description: '', tag: 'Brand' },
+                { name: 'Simon Allmer Entertainment', description: '', tag: 'Company' },
+                { name: 'Society Review', description: '', tag: 'Brand' },
+                { name: 'Studio System', description: '', tag: 'Company' },
+                { name: 'Water Lung', description: '', tag: 'Skill' }
+            ].sort((a, b) => a.name.localeCompare(b.name));
+
+            const [searchTerm, setSearchTerm] = useState('');
+
+            const filteredEntries = entries.filter(e => 
+                e.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+
+            return (
+                <div className="flex-1 bg-black min-h-full p-8 pb-20 text-white font-serif relative overflow-hidden">
+                    <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/dark-leather.png')] pointer-events-none"></div>
+
+                    <SectionHeader title="Lexicon" subtitle="Allmer Studios Terminology" />
+
+                    <div className="max-w-4xl mx-auto">
+                        {/* Search Bar */}
+                        <div className="mb-8">
+                            <input
+                                type="text"
+                                placeholder="Search terms..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="w-full bg-[#0a0a0a] border border-[#333] text-white px-4 py-3 text-sm focus:border-[#D4AF37] focus:outline-none transition-colors"
+                            />
+                        </div>
+
+                        {/* Entries List */}
+                        <div className="space-y-2">
+                            {filteredEntries.map((entry) => (
+                                <div 
+                                    key={entry.name} 
+                                    className="border border-[#222] hover:border-[#D4AF37] transition-all bg-[#050505] p-3"
+                                >
+                                    <div className="flex items-start justify-between">
+                                        <h3 className="text-[#D4AF37] brand-font text-sm">{entry.name}</h3>
+                                        <span className="px-1.5 py-0.5 bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-[8px] uppercase tracking-wider">
+                                            {entry.tag}
+                                        </span>
+                                    </div>
+                                    <p className="text-gray-400 text-xs mt-1">{entry.description || 'Definition coming soon.'}</p>
+                                </div>
+                            ))}
+                        </div>
+
+                        {filteredEntries.length === 0 && (
+                            <div className="text-center py-12">
+                                <p className="text-gray-400">No entries match your search.</p>
+                            </div>
+                        )}
                     </div>
                 </div>
             );
@@ -1081,6 +1562,8 @@
                                     <LuxuryButton onClick={() => setActiveTab('arts')} active={activeTab === 'arts'}>ARTS</LuxuryButton>
                                     <LuxuryButton onClick={() => setActiveTab('assets')} active={activeTab === 'assets'}>ASSETS</LuxuryButton>
                                     <LuxuryButton onClick={() => setActiveTab('agency')} active={activeTab === 'agency'}>AGENCY</LuxuryButton>
+                                    <LuxuryButton onClick={() => setActiveTab('catalog')} active={activeTab === 'catalog'}>CATALOG</LuxuryButton>
+                                    <LuxuryButton onClick={() => setActiveTab('lexicon')} active={activeTab === 'lexicon'}>LEXICON</LuxuryButton>
                                 </nav>
                             </div>
 
@@ -1101,6 +1584,8 @@
                                 {activeTab === 'arts' && <ArtsPillar onSelectStudio={setSelectedStudio} />}
                                 {activeTab === 'assets' && <AssetsPillar />}
                                 {activeTab === 'agency' && <AgencyPillar />}
+                                {activeTab === 'catalog' && <CatalogPillar />}
+                                {activeTab === 'lexicon' && <LexiconPillar />}
                             </div>
                         </div>
                     </div>
