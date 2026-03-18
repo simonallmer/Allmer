@@ -1173,6 +1173,23 @@
             );
         };
 
+        const PublicationsPillar = () => {
+            return (
+                <div className="flex-1 bg-black min-h-full p-8 pb-20 text-white font-serif relative overflow-hidden">
+                    <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/dark-leather.png')] pointer-events-none"></div>
+
+                    <SectionHeader title="Publications" subtitle="Written Works & Concepts" />
+
+                    <div className="max-w-4xl mx-auto">
+                        <div className="border border-[#222] bg-[#050505] p-12 text-center">
+                            <h3 className="text-[#D4AF37] brand-font text-2xl mb-4">Magic is Real</h3>
+                            <p className="text-gray-400 text-lg">Coming Soon</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
         const CapitalPillar = () => {
             const [transactions, setTransactions] = useState([
                 { id: 1, date: '2026.03.15', description: 'Paradice am See, Vienna', studio: 'games', type: 'oneoff', amount: 30.00, transactionType: 'income' }
@@ -1964,6 +1981,7 @@
                                     <LuxuryButton onClick={() => setActiveTab('lexicon')} active={activeTab === 'lexicon'}>LEXICON</LuxuryButton>
                                     <LuxuryButton onClick={() => setActiveTab('campaigns')} active={activeTab === 'campaigns'}>CAMPAIGNS</LuxuryButton>
                                     <LuxuryButton onClick={() => setActiveTab('capital')} active={activeTab === 'capital'}>CAPITAL</LuxuryButton>
+                                    <LuxuryButton onClick={() => setActiveTab('publications')} active={activeTab === 'publications'}>PUBLICATIONS</LuxuryButton>
                                 </nav>
                             </div>
 
@@ -1988,6 +2006,7 @@
                                 {activeTab === 'lexicon' && <LexiconPillar />}
                                 {activeTab === 'campaigns' && <CampaignsPillar />}
                                 {activeTab === 'capital' && <CapitalPillar />}
+                                {activeTab === 'publications' && <PublicationsPillar />}
                             </div>
                         </div>
                     </div>
