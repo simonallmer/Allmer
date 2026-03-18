@@ -137,17 +137,17 @@
 
         // --- MAIN APP CODE ---
 
-        const LuxuryButton = ({ children, onClick, active }) => (
+        const LuxuryButton = ({ children, onClick, active, collapsed }) => (
             <button
                 onClick={onClick}
                 className={`
-              w-full mb-3 px-4 py-2 text-center font-serif text-sm tracking-widest transition-all duration-300 brand-font
+              ${collapsed ? 'px-2 py-2' : 'w-full mb-3 px-4 py-2'} text-center font-serif text-sm tracking-widest transition-all duration-300 brand-font
               ${active
                         ? 'bg-[#D4AF37] text-black border-2 border-[#D4AF37] shadow-[0_0_10px_#D4AF37]'
                         : 'bg-black text-[#D4AF37] border-2 border-[#D4AF37] hover:bg-[#1a1a1a]'}
             `}
             >
-                {children}
+                {collapsed ? children.charAt(0) : children}
             </button>
         );
 
@@ -1903,6 +1903,7 @@
             const [showMenu, setShowMenu] = useState(false);
             const [showLeadership, setShowLeadership] = useState(false);
             const [selectedStudio, setSelectedStudio] = useState(null);
+            const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
             // Handle navigation from the Global Menu
             const handleMenuNav = (tab) => {
@@ -1945,35 +1946,86 @@
 
                     <div className="flex flex-1 overflow-hidden"> {/* Removed pb-8 gap */}
 
-                        <div className="w-64 bg-[#050505] border-r border-[#222] flex flex-col justify-between py-8 px-6 z-10 shadow-[5px_0_30px_rgba(0,0,0,0.5)]">
+                        {/* Desktop Sidebar - Collapsible */}
+                        <div className={`hidden md:flex ${sidebarCollapsed ? 'w-16' : 'w-64'} bg-[#050505] border-r border-[#222] flex-col justify-between py-4 px-3 z-10 shadow-[5px_0_30px_rgba(0,0,0,0.5)] transition-all duration-300`}>
 
-                            <div className="space-y-8">
-                                <div className="text-center mb-8 opacity-80">
+                            {/* Toggle Button */}
+                            <button 
+                                onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+                                className="absolute top-4 -right-3 w-6 h-6 bg-[#0a0a0a] border border-[#D4AF37] flex items-center justify-center text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black transition-colors z-20"
+                            >
+                                {sidebarCollapsed ? '>' : '<'}
+                            </button>
+
+                            <div className="space-y-6">
+                                <div className={`text-center mb-4 opacity-80 ${sidebarCollapsed ? 'hidden' : ''}`}>
                                     <p className="text-[10px] text-gray-600 uppercase tracking-[0.4em] mb-2 brand-font">Navigation</p>
                                     <div className="w-8 h-[1px] bg-[#D4AF37] mx-auto"></div>
                                 </div>
 
-                                <nav className="flex flex-col gap-2">
-                                    <LuxuryButton onClick={() => setActiveTab('arts')} active={activeTab === 'arts'}>ARTS</LuxuryButton>
-                                    <LuxuryButton onClick={() => setActiveTab('assets')} active={activeTab === 'assets'}>ASSETS</LuxuryButton>
-                                    <LuxuryButton onClick={() => setActiveTab('catalog')} active={activeTab === 'catalog'}>CATALOG</LuxuryButton>
-                                    <LuxuryButton onClick={() => setActiveTab('lexicon')} active={activeTab === 'lexicon'}>LEXICON</LuxuryButton>
-                                    <LuxuryButton onClick={() => setActiveTab('campaigns')} active={activeTab === 'campaigns'}>CAMPAIGNS</LuxuryButton>
-                                    <LuxuryButton onClick={() => setActiveTab('capital')} active={activeTab === 'capital'}>CAPITAL</LuxuryButton>
-                                    <LuxuryButton onClick={() => setActiveTab('publications')} active={activeTab === 'publications'}>PUBLICATIONS</LuxuryButton>
-                                    <LuxuryButton onClick={() => setActiveTab('directory')} active={activeTab === 'directory'}>DIRECTORY</LuxuryButton>
+                                <nav className="flex flex-col gap-1">
+                                    <LuxuryButton onClick={() => setActiveTab('arts')} active={activeTab === 'arts'} collapsed={sidebarCollapsed}>ARTS</LuxuryButton>
+                                    <LuxuryButton onClick={() => setActiveTab('assets')} active={activeTab === 'assets'} collapsed={sidebarCollapsed}>ASSETS</LuxuryButton>
+                                    <LuxuryButton onClick={() => setActiveTab('catalog')} active={activeTab === 'catalog'} collapsed={sidebarCollapsed}>CATALOG</LuxuryButton>
+                                    <LuxuryButton onClick={() => setActiveTab('lexicon')} active={activeTab === 'lexicon'} collapsed={sidebarCollapsed}>LEXICON</LuxuryButton>
+                                    <LuxuryButton onClick={() => setActiveTab('campaigns')} active={activeTab === 'campaigns'} collapsed={sidebarCollapsed}>CAMPAIGNS</LuxuryButton>
+                                    <LuxuryButton onClick={() => setActiveTab('capital')} active={activeTab === 'capital'} collapsed={sidebarCollapsed}>CAPITAL</LuxuryButton>
+                                    <LuxuryButton onClick={() => setActiveTab('publications')} active={activeTab === 'publications'} collapsed={sidebarCollapsed}>PUBLICATIONS</LuxuryButton>
+                                    <LuxuryButton onClick={() => setActiveTab('directory')} active={activeTab === 'directory'} collapsed={sidebarCollapsed}>DIRECTORY</LuxuryButton>
                                 </nav>
                             </div>
 
-                            <div className="text-center opacity-40">
-                                <Scroll className="w-6 h-6 mx-auto mb-2 text-[#D4AF37]" />
-                                <p className="text-[8px] text-gray-500 uppercase tracking-widest leading-loose">
+                            <div className={`text-center opacity-40 ${sidebarCollapsed ? '' : ''}`}>
+                                <div className={`w-6 h-6 mx-auto mb-1 text-[#D4AF37] ${sidebarCollapsed ? '' : 'mb-2'}`}>
+                                    <Scroll className="w-6 h-6" />
+                                </div>
+                                <p className={`text-[8px] text-gray-500 uppercase tracking-widest leading-loose ${sidebarCollapsed ? 'hidden' : ''}`}>
                                     Paris • London • Vienna
                                 </p>
                             </div>
                         </div>
 
-                        <div className="flex-1 relative overflow-y-auto bg-[#111]">
+                        {/* Mobile Sidebar - Fixed at bottom */}
+                        <div className="md:hidden fixed bottom-14 left-0 right-0 z-30 bg-[#050505] border-t border-[#333]">
+                            <div className="overflow-x-auto overflow-y-hidden">
+                                <div className="flex gap-1 p-2 min-w-max">
+                                    <button 
+                                        onClick={() => setActiveTab('arts')} 
+                                        className={`px-3 py-2 text-[10px] uppercase tracking-wider whitespace-nowrap border transition-all ${activeTab === 'arts' ? 'bg-[#D4AF37] text-black border-[#D4AF37]' : 'bg-[#0a0a0a] text-[#D4AF37] border-[#333]'}`}
+                                    >Arts</button>
+                                    <button 
+                                        onClick={() => setActiveTab('assets')} 
+                                        className={`px-3 py-2 text-[10px] uppercase tracking-wider whitespace-nowrap border transition-all ${activeTab === 'assets' ? 'bg-[#D4AF37] text-black border-[#D4AF37]' : 'bg-[#0a0a0a] text-[#D4AF37] border-[#333]'}`}
+                                    >Assets</button>
+                                    <button 
+                                        onClick={() => setActiveTab('catalog')} 
+                                        className={`px-3 py-2 text-[10px] uppercase tracking-wider whitespace-nowrap border transition-all ${activeTab === 'catalog' ? 'bg-[#D4AF37] text-black border-[#D4AF37]' : 'bg-[#0a0a0a] text-[#D4AF37] border-[#333]'}`}
+                                    >Catalog</button>
+                                    <button 
+                                        onClick={() => setActiveTab('lexicon')} 
+                                        className={`px-3 py-2 text-[10px] uppercase tracking-wider whitespace-nowrap border transition-all ${activeTab === 'lexicon' ? 'bg-[#D4AF37] text-black border-[#D4AF37]' : 'bg-[#0a0a0a] text-[#D4AF37] border-[#333]'}`}
+                                    >Lexicon</button>
+                                    <button 
+                                        onClick={() => setActiveTab('campaigns')} 
+                                        className={`px-3 py-2 text-[10px] uppercase tracking-wider whitespace-nowrap border transition-all ${activeTab === 'campaigns' ? 'bg-[#D4AF37] text-black border-[#D4AF37]' : 'bg-[#0a0a0a] text-[#D4AF37] border-[#333]'}`}
+                                    >Campaigns</button>
+                                    <button 
+                                        onClick={() => setActiveTab('capital')} 
+                                        className={`px-3 py-2 text-[10px] uppercase tracking-wider whitespace-nowrap border transition-all ${activeTab === 'capital' ? 'bg-[#D4AF37] text-black border-[#D4AF37]' : 'bg-[#0a0a0a] text-[#D4AF37] border-[#333]'}`}
+                                    >Capital</button>
+                                    <button 
+                                        onClick={() => setActiveTab('publications')} 
+                                        className={`px-3 py-2 text-[10px] uppercase tracking-wider whitespace-nowrap border transition-all ${activeTab === 'publications' ? 'bg-[#D4AF37] text-black border-[#D4AF37]' : 'bg-[#0a0a0a] text-[#D4AF37] border-[#333]'}`}
+                                    >Publications</button>
+                                    <button 
+                                        onClick={() => setActiveTab('directory')} 
+                                        className={`px-3 py-2 text-[10px] uppercase tracking-wider whitespace-nowrap border transition-all ${activeTab === 'directory' ? 'bg-[#D4AF37] text-black border-[#D4AF37]' : 'bg-[#0a0a0a] text-[#D4AF37] border-[#333]'}`}
+                                    >Directory</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex-1 relative overflow-y-auto bg-[#111] md:pb-0 pb-16">
                             <div className="min-h-full flex flex-col border-l border-[#333]"> {/* Forced flex-col to ground backgrounds */}
                                 {activeTab === 'home' && <HomePillar navigate={setActiveTab} openMenu={() => setShowLeadership(true)} />}
                                 {activeTab === 'profile' && <ProfilePillar />}
