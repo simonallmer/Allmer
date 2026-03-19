@@ -313,7 +313,7 @@
             <div className="flex-1 bg-black min-h-full p-8 pb-20 text-white relative overflow-hidden">
                 <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/black-mamba.png')] pointer-events-none"></div>
 
-                <SectionHeader title="Arts" subtitle="Curated Entertainment Divisions" />
+                <SectionHeader title="Subsidiaries" subtitle="Curated Entertainment Divisions" />
 
                 <div className="max-w-4xl mx-auto">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
@@ -352,33 +352,6 @@
                                 </div>
                             </div>
                         ))}
-                    </div>
-
-                    <div className="border-t border-[#333] pt-8">
-                        <h4 className="text-center text-gray-400 font-serif text-sm tracking-widest mb-6 brand-font">FUTURE ACQUISITIONS</h4>
-                        <div className="flex justify-center flex-wrap gap-8 md:gap-16 text-center">
-                            <div className="opacity-50 hover:opacity-100 transition-opacity cursor-pointer">
-                                <a href="https://www.hanayama-toys.co.jp" target="_blank">
-                                    <p className="text-[#D4AF37] font-serif brand-font">Hanayama</p>
-                                    <p className="text-[10px] text-gray-500 uppercase tracking-widest">Est. 1933</p>
-                                    <p className="text-gray-600 text-[10px] mt-1 font-mono">hanayama-toys.co.jp</p>
-                                </a>
-                            </div>
-                            <div className="opacity-50 hover:opacity-100 transition-opacity cursor-pointer">
-                                <a href="https://www.cirquedusoleil.com" target="_blank">
-                                    <p className="text-[#D4AF37] font-serif brand-font">Cirque du Soleil</p>
-                                    <p className="text-[10px] text-gray-500 uppercase tracking-widest">Est. 1984</p>
-                                    <p className="text-gray-600 text-[10px] mt-1 font-mono">cirquedusoleil.com</p>
-                                </a>
-                            </div>
-                            <div className="opacity-50 hover:opacity-100 transition-opacity cursor-pointer">
-                                <a href="https://cartamundi.com" target="_blank">
-                                    <p className="text-[#D4AF37] font-serif brand-font">Cartamundi</p>
-                                    <p className="text-[10px] text-gray-500 uppercase tracking-widest">Est. 1765</p>
-                                    <p className="text-gray-600 text-[10px] mt-1 font-mono">cartamundi.com</p>
-                                </a>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -1563,7 +1536,6 @@
                         <h2 className="text-[#D4AF37] text-3xl brand-font border-b border-[#333] pb-4 mb-8 tracking-widest">MENU</h2>
                         <button onClick={() => handleNav('profile')} className="block w-full text-2xl text-white hover:text-[#D4AF37] font-serif transition-colors py-2">Profile</button>
                         <button onClick={() => handleNav('principles')} className="block w-full text-2xl text-white hover:text-[#D4AF37] font-serif transition-colors py-2">Principles</button>
-                        <button onClick={() => handleNav('leadership')} className="block w-full text-2xl text-white hover:text-[#D4AF37] font-serif transition-colors py-2">Leadership</button>
                         <a href="https://allmer.miraheze.org/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full text-2xl text-white hover:text-[#D4AF37] font-serif transition-colors py-2">
                             Terminal <ExternalLink className="w-4 h-4" />
                         </a>
@@ -1964,7 +1936,7 @@
                                 </div>
 
                                 <nav className="flex flex-col gap-1">
-                                    <LuxuryButton onClick={() => setActiveTab('arts')} active={activeTab === 'arts'} collapsed={sidebarCollapsed}>ARTS</LuxuryButton>
+                                    <LuxuryButton onClick={() => setActiveTab('arts')} active={activeTab === 'arts'} collapsed={sidebarCollapsed}>SUBSIDIARIES</LuxuryButton>
                                     <LuxuryButton onClick={() => setActiveTab('assets')} active={activeTab === 'assets'} collapsed={sidebarCollapsed}>ASSETS</LuxuryButton>
                                     <LuxuryButton onClick={() => setActiveTab('catalog')} active={activeTab === 'catalog'} collapsed={sidebarCollapsed}>CATALOG</LuxuryButton>
                                     <LuxuryButton onClick={() => setActiveTab('lexicon')} active={activeTab === 'lexicon'} collapsed={sidebarCollapsed}>LEXICON</LuxuryButton>
@@ -1992,7 +1964,7 @@
                                     <button 
                                         onClick={() => setActiveTab('arts')} 
                                         className={`px-3 py-2 text-[10px] uppercase tracking-wider whitespace-nowrap border transition-all ${activeTab === 'arts' ? 'bg-[#D4AF37] text-black border-[#D4AF37]' : 'bg-[#0a0a0a] text-[#D4AF37] border-[#333]'}`}
-                                    >Arts</button>
+                                    >Subsidiaries</button>
                                     <button 
                                         onClick={() => setActiveTab('assets')} 
                                         className={`px-3 py-2 text-[10px] uppercase tracking-wider whitespace-nowrap border transition-all ${activeTab === 'assets' ? 'bg-[#D4AF37] text-black border-[#D4AF37]' : 'bg-[#0a0a0a] text-[#D4AF37] border-[#333]'}`}
