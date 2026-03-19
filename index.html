@@ -1517,33 +1517,6 @@
             );
         };
 
-        const GlobalMenu = ({ onClose, navigate }) => {
-            const handleNav = (tab) => {
-                navigate(tab);
-                onClose();
-            };
-
-            return (
-                <div className="fixed inset-0 modal-overlay z-50 flex flex-col items-center justify-center p-8">
-                    <button
-                        onClick={onClose}
-                        className="absolute top-6 right-8 text-[#D4AF37] text-4xl hover:text-white"
-                    >
-                        &times;
-                    </button>
-
-                    <div className="space-y-6 text-center animate-[fadeIn_0.3s_ease-out]">
-                        <h2 className="text-[#D4AF37] text-3xl brand-font border-b border-[#333] pb-4 mb-8 tracking-widest">MENU</h2>
-                        <button onClick={() => handleNav('profile')} className="block w-full text-2xl text-white hover:text-[#D4AF37] font-serif transition-colors py-2">Profile</button>
-                        <button onClick={() => handleNav('principles')} className="block w-full text-2xl text-white hover:text-[#D4AF37] font-serif transition-colors py-2">Principles</button>
-                        <a href="https://allmer.miraheze.org/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full text-2xl text-white hover:text-[#D4AF37] font-serif transition-colors py-2">
-                            Terminal <ExternalLink className="w-4 h-4" />
-                        </a>
-                    </div>
-                </div>
-            );
-        };
-
         const LeadershipModal = ({ onClose }) => (
             <div className="fixed inset-0 modal-overlay z-40 flex items-center justify-center p-4">
                 <div className="bg-black border-2 border-[#D4AF37] p-8 max-w-md w-full relative shadow-[0_0_30px_rgba(212,175,55,0.2)]">
@@ -1872,30 +1845,18 @@
 
         const App = () => {
             const [activeTab, setActiveTab] = useState('home');
-            const [showMenu, setShowMenu] = useState(false);
             const [showLeadership, setShowLeadership] = useState(false);
             const [selectedStudio, setSelectedStudio] = useState(null);
-            const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-
-            // Handle navigation from the Global Menu
-            const handleMenuNav = (tab) => {
-                if (tab === 'leadership') {
-                    setShowLeadership(true);
-                    // Don't change active tab, just show modal over current content
-                } else {
-                    setActiveTab(tab);
-                    setShowLeadership(false);
-                }
-            }
+            const [showMenu, setShowMenu] = useState(false);
 
             return (
                 <div className="h-screen w-full flex flex-col font-serif overflow-hidden select-none bg-black text-gray-200">
 
-                    {showMenu && <GlobalMenu onClose={() => setShowMenu(false)} navigate={handleMenuNav} />}
                     {showLeadership && <LeadershipModal onClose={() => setShowLeadership(false)} />}
                     <StudioModal studio={selectedStudio} onClose={() => setSelectedStudio(null)} />
 
-                    <div className="bg-black border-b border-[#333] py-4 z-20 flex justify-between items-center px-8 shadow-2xl relative">
+                    {/* Header */}
+                    <div className={`bg-black border-b border-[#333] py-4 z-20 flex justify-between items-center px-8 shadow-2xl relative transition-all duration-500 ${showMenu ? 'pr-80' : ''}`}>
                         <div className="flex items-center gap-4 cursor-pointer" onClick={() => setActiveTab('home')}>
                             <div className="flex items-center gap-2">
                                 <div className="w-8 h-8 border border-[#D4AF37] flex items-center justify-center">
@@ -1904,60 +1865,122 @@
                             </div>
                         </div>
 
-                        {/* MARQUEE REMOVED HERE */}
+                        {/* MARQUEE REMOVED */}
 
                         <div className="ml-auto"> {/* Pushes Menu button to the right */}
                             <button
-                                onClick={() => setShowMenu(true)}
-                                className="text-[#D4AF37] text-xs border border-[#D4AF37] px-4 py-2 uppercase hover:bg-[#D4AF37] hover:text-black transition-colors tracking-widest brand-font"
+                                onClick={() => setShowMenu(!showMenu)}
+                                className="text-[#D4AF37] text-xs border border-[#D4AF37] px-4 py-2 uppercase hover:bg-[#D4AF37] hover:text-black transition-all tracking-widest brand-font"
                             >
-                                Menu
+                                {showMenu ? 'Close' : 'Menu'}
                             </button>
                         </div>
                     </div>
 
-                    <div className="flex flex-1 overflow-hidden"> {/* Removed pb-8 gap */}
+                    {/* Main Content Area */}
+                    <div className="flex flex-1 overflow-hidden relative">
 
-                        {/* Desktop Sidebar - Collapsible */}
-                        <div className={`hidden md:flex ${sidebarCollapsed ? 'w-16' : 'w-64'} bg-[#050505] border-r border-[#222] flex-col justify-between py-4 px-3 z-10 shadow-[5px_0_30px_rgba(0,0,0,0.5)] transition-all duration-300`}>
-
-                            {/* Toggle Button */}
-                            <button 
-                                onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-                                className="absolute top-4 -right-3 w-6 h-6 bg-[#0a0a0a] border border-[#D4AF37] flex items-center justify-center text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black transition-colors z-20"
-                            >
-                                {sidebarCollapsed ? '>' : '<'}
-                            </button>
-
-                            <div className="space-y-6">
-                                <div className={`text-center mb-4 opacity-80 ${sidebarCollapsed ? 'hidden' : ''}`}>
-                                    <p className="text-[10px] text-gray-600 uppercase tracking-[0.4em] mb-2 brand-font">Navigation</p>
-                                    <div className="w-8 h-[1px] bg-[#D4AF37] mx-auto"></div>
-                                </div>
-
-                                <nav className="flex flex-col gap-1">
-                                    <LuxuryButton onClick={() => setActiveTab('arts')} active={activeTab === 'arts'} collapsed={sidebarCollapsed}>SUBSIDIARIES</LuxuryButton>
-                                    <LuxuryButton onClick={() => setActiveTab('assets')} active={activeTab === 'assets'} collapsed={sidebarCollapsed}>ASSETS</LuxuryButton>
-                                    <LuxuryButton onClick={() => setActiveTab('catalog')} active={activeTab === 'catalog'} collapsed={sidebarCollapsed}>CATALOG</LuxuryButton>
-                                    <LuxuryButton onClick={() => setActiveTab('lexicon')} active={activeTab === 'lexicon'} collapsed={sidebarCollapsed}>LEXICON</LuxuryButton>
-                                    <LuxuryButton onClick={() => setActiveTab('campaigns')} active={activeTab === 'campaigns'} collapsed={sidebarCollapsed}>CAMPAIGNS</LuxuryButton>
-                                    <LuxuryButton onClick={() => setActiveTab('capital')} active={activeTab === 'capital'} collapsed={sidebarCollapsed}>CAPITAL</LuxuryButton>
-                                    <LuxuryButton onClick={() => setActiveTab('publications')} active={activeTab === 'publications'} collapsed={sidebarCollapsed}>PUBLICATIONS</LuxuryButton>
-                                    <LuxuryButton onClick={() => setActiveTab('directory')} active={activeTab === 'directory'} collapsed={sidebarCollapsed}>DIRECTORY</LuxuryButton>
-                                </nav>
-                            </div>
-
-                            <div className={`text-center opacity-40 ${sidebarCollapsed ? '' : ''}`}>
-                                <div className={`w-6 h-6 mx-auto mb-1 text-[#D4AF37] ${sidebarCollapsed ? '' : 'mb-2'}`}>
-                                    <Scroll className="w-6 h-6" />
-                                </div>
-                                <p className={`text-[8px] text-gray-500 uppercase tracking-widest leading-loose ${sidebarCollapsed ? 'hidden' : ''}`}>
-                                    Paris • London • Vienna
-                                </p>
+                        {/* Content Area - shifts when menu opens */}
+                        <div className={`flex-1 relative overflow-y-auto bg-[#111] transition-all duration-500 ${showMenu ? 'mr-64' : ''}`}>
+                            <div className="min-h-full flex flex-col border-l border-[#333]">
+                                {activeTab === 'home' && <HomePillar navigate={setActiveTab} openMenu={() => setShowLeadership(true)} />}
+                                {activeTab === 'profile' && <ProfilePillar />}
+                                {activeTab === 'principles' && <PrinciplesPillar />}
+                                {activeTab === 'arts' && <ArtsPillar onSelectStudio={setSelectedStudio} />}
+                                {activeTab === 'assets' && <AssetsPillar />}
+                                {activeTab === 'catalog' && <CatalogPillar />}
+                                {activeTab === 'lexicon' && <LexiconPillar />}
+                                {activeTab === 'campaigns' && <CampaignsPillar />}
+                                {activeTab === 'capital' && <CapitalPillar />}
+                                {activeTab === 'publications' && <PublicationsPillar />}
+                                {activeTab === 'directory' && <DirectoryPillar />}
                             </div>
                         </div>
 
-                        {/* Mobile Sidebar - Fixed at bottom */}
+                        {/* Sliding Sidebar Menu - opens from right */}
+                        <div className={`fixed top-[52px] right-0 h-[calc(100%-52px)] w-64 bg-[#050505] border-l border-[#333] z-30 shadow-[-10px_0_40px_rgba(0,0,0,0.8)] transform transition-transform duration-500 ease-in-out ${showMenu ? 'translate-x-0' : 'translate-x-full'}`}>
+                            {/* Menu Content */}
+                            <div className="flex flex-col h-full py-8 px-6">
+                                <div className="space-y-6 flex-1">
+                                    <div className="text-center mb-6 opacity-80">
+                                        <p className="text-[10px] text-gray-600 uppercase tracking-[0.4em] mb-2 brand-font">Navigation</p>
+                                        <div className="w-8 h-[1px] bg-[#D4AF37] mx-auto"></div>
+                                    </div>
+
+                                    <nav className="flex flex-col gap-2">
+                                        <button
+                                            onClick={() => { setActiveTab('arts'); setShowMenu(false); }}
+                                            className={`w-full mb-2 px-4 py-3 text-center font-serif text-sm tracking-widest transition-all duration-200 brand-font ${activeTab === 'arts' ? 'bg-[#D4AF37] text-black border-2 border-[#D4AF37] shadow-[0_0_10px_#D4AF37]' : 'bg-black text-[#D4AF37] border-2 border-[#D4AF37] hover:bg-[#1a1a1a]'}`}
+                                        >
+                                            SUBSIDIARIES
+                                        </button>
+                                        <button
+                                            onClick={() => { setActiveTab('assets'); setShowMenu(false); }}
+                                            className={`w-full mb-2 px-4 py-3 text-center font-serif text-sm tracking-widest transition-all duration-200 brand-font ${activeTab === 'assets' ? 'bg-[#D4AF37] text-black border-2 border-[#D4AF37] shadow-[0_0_10px_#D4AF37]' : 'bg-black text-[#D4AF37] border-2 border-[#D4AF37] hover:bg-[#1a1a1a]'}`}
+                                        >
+                                            ASSETS
+                                        </button>
+                                        <button
+                                            onClick={() => { setActiveTab('catalog'); setShowMenu(false); }}
+                                            className={`w-full mb-2 px-4 py-3 text-center font-serif text-sm tracking-widest transition-all duration-200 brand-font ${activeTab === 'catalog' ? 'bg-[#D4AF37] text-black border-2 border-[#D4AF37] shadow-[0_0_10px_#D4AF37]' : 'bg-black text-[#D4AF37] border-2 border-[#D4AF37] hover:bg-[#1a1a1a]'}`}
+                                        >
+                                            CATALOG
+                                        </button>
+                                        <button
+                                            onClick={() => { setActiveTab('lexicon'); setShowMenu(false); }}
+                                            className={`w-full mb-2 px-4 py-3 text-center font-serif text-sm tracking-widest transition-all duration-200 brand-font ${activeTab === 'lexicon' ? 'bg-[#D4AF37] text-black border-2 border-[#D4AF37] shadow-[0_0_10px_#D4AF37]' : 'bg-black text-[#D4AF37] border-2 border-[#D4AF37] hover:bg-[#1a1a1a]'}`}
+                                        >
+                                            LEXICON
+                                        </button>
+                                        <button
+                                            onClick={() => { setActiveTab('campaigns'); setShowMenu(false); }}
+                                            className={`w-full mb-2 px-4 py-3 text-center font-serif text-sm tracking-widest transition-all duration-200 brand-font ${activeTab === 'campaigns' ? 'bg-[#D4AF37] text-black border-2 border-[#D4AF37] shadow-[0_0_10px_#D4AF37]' : 'bg-black text-[#D4AF37] border-2 border-[#D4AF37] hover:bg-[#1a1a1a]'}`}
+                                        >
+                                            CAMPAIGNS
+                                        </button>
+                                        <button
+                                            onClick={() => { setActiveTab('capital'); setShowMenu(false); }}
+                                            className={`w-full mb-2 px-4 py-3 text-center font-serif text-sm tracking-widest transition-all duration-200 brand-font ${activeTab === 'capital' ? 'bg-[#D4AF37] text-black border-2 border-[#D4AF37] shadow-[0_0_10px_#D4AF37]' : 'bg-black text-[#D4AF37] border-2 border-[#D4AF37] hover:bg-[#1a1a1a]'}`}
+                                        >
+                                            CAPITAL
+                                        </button>
+                                        <button
+                                            onClick={() => { setActiveTab('publications'); setShowMenu(false); }}
+                                            className={`w-full mb-2 px-4 py-3 text-center font-serif text-sm tracking-widest transition-all duration-200 brand-font ${activeTab === 'publications' ? 'bg-[#D4AF37] text-black border-2 border-[#D4AF37] shadow-[0_0_10px_#D4AF37]' : 'bg-black text-[#D4AF37] border-2 border-[#D4AF37] hover:bg-[#1a1a1a]'}`}
+                                        >
+                                            PUBLICATIONS
+                                        </button>
+                                        <button
+                                            onClick={() => { setActiveTab('directory'); setShowMenu(false); }}
+                                            className={`w-full mb-2 px-4 py-3 text-center font-serif text-sm tracking-widest transition-all duration-200 brand-font ${activeTab === 'directory' ? 'bg-[#D4AF37] text-black border-2 border-[#D4AF37] shadow-[0_0_10px_#D4AF37]' : 'bg-black text-[#D4AF37] border-2 border-[#D4AF37] hover:bg-[#1a1a1a]'}`}
+                                        >
+                                            DIRECTORY
+                                        </button>
+                                    </nav>
+
+                                    {/* Menu extras */}
+                                    <div className="border-t border-[#333] pt-6 mt-4">
+                                        <button onClick={() => { setActiveTab('profile'); setShowMenu(false); }} className="block w-full text-left text-lg text-gray-400 hover:text-[#D4AF37] font-serif py-2 transition-colors">Profile</button>
+                                        <button onClick={() => { setActiveTab('principles'); setShowMenu(false); }} className="block w-full text-left text-lg text-gray-400 hover:text-[#D4AF37] font-serif py-2 transition-colors">Principles</button>
+                                        <a href="https://allmer.miraheze.org/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 w-full text-left text-lg text-gray-400 hover:text-[#D4AF37] font-serif py-2 transition-colors">
+                                            Terminal <ExternalLink className="w-3 h-3" />
+                                        </a>
+                                    </div>
+                                </div>
+
+                                {/* Footer */}
+                                <div className="text-center opacity-40 mt-4">
+                                    <div className="w-6 h-6 mx-auto mb-1 text-[#D4AF37]">
+                                        <Scroll className="w-6 h-6" />
+                                    </div>
+                                    <p className="text-[8px] text-gray-500 uppercase tracking-widest leading-loose">
+                                        Paris • London • Vienna
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Mobile Navigation - Fixed at bottom */}
                         <div className="md:hidden fixed bottom-14 left-0 right-0 z-30 bg-[#050505] border-t border-[#333]">
                             <div className="overflow-x-auto overflow-y-hidden">
                                 <div className="flex gap-1 p-2 min-w-max">
@@ -1994,23 +2017,6 @@
                                         className={`px-3 py-2 text-[10px] uppercase tracking-wider whitespace-nowrap border transition-all ${activeTab === 'directory' ? 'bg-[#D4AF37] text-black border-[#D4AF37]' : 'bg-[#0a0a0a] text-[#D4AF37] border-[#333]'}`}
                                     >Directory</button>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div className="flex-1 relative overflow-y-auto bg-[#111] md:pb-0 pb-16">
-                            <div className="min-h-full flex flex-col border-l border-[#333]"> {/* Forced flex-col to ground backgrounds */}
-                                {activeTab === 'home' && <HomePillar navigate={setActiveTab} openMenu={() => setShowLeadership(true)} />}
-                                {activeTab === 'profile' && <ProfilePillar />}
-                                {activeTab === 'principles' && <PrinciplesPillar />}
-                                {/* Philosophy Removed */}
-                                {activeTab === 'arts' && <ArtsPillar onSelectStudio={setSelectedStudio} />}
-                                {activeTab === 'assets' && <AssetsPillar />}
-                                {activeTab === 'catalog' && <CatalogPillar />}
-                                {activeTab === 'lexicon' && <LexiconPillar />}
-                                {activeTab === 'campaigns' && <CampaignsPillar />}
-                                {activeTab === 'capital' && <CapitalPillar />}
-                                {activeTab === 'publications' && <PublicationsPillar />}
-                                {activeTab === 'directory' && <DirectoryPillar />}
                             </div>
                         </div>
                     </div>
