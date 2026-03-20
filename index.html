@@ -166,73 +166,117 @@
         );
 
         // --- COMPONENTS ---
-        const HomePillar = ({ navigate }) => (
-            <div className="flex-1 text-center space-y-10 py-10 px-8 pb-20 bg-black min-h-full flex flex-col items-center justify-center">
+        const HomePillar = ({ navigate }) => {
+            const [selectedPrinciple, setSelectedPrinciple] = useState(null);
 
-                <div className="border border-[#D4AF37] p-1 inline-block">
-                    <div className="border border-[#D4AF37] p-8 bg-[#0a0a0a]">
-                        <h1 className="text-5xl md:text-7xl font-serif text-[#D4AF37] mb-4 tracking-tighter brand-font">
-                            A L L M E R
-                        </h1>
-                    </div>
-                </div>
+            const principles = {
+                story: {
+                    title: 'Serve the Story',
+                    text: 'Creative decisions must strengthen the narrative and make it as engaging as possible.',
+                    icon: Feather
+                },
+                magic: {
+                    title: 'Magic is Real',
+                    text: 'The defining craft of each Studio is created by humans, not machines.',
+                    icon: Wand
+                },
+                invention: {
+                    title: 'Invent or Die',
+                    text: 'Products must be boldly original, bring true value to people, and be constantly improved to deliver the best experience.',
+                    icon: Lightbulb
+                }
+            };
 
-                <div className="max-w-xl mx-auto text-gray-300 font-serif leading-loose italic">
-                    <p>
-                        Committed to creative excellence, Allmer produces story-driven entertainment and consumer products for a global audience.
-                    </p>
-                </div>
+            return (
+                <div className="flex-1 text-center space-y-10 py-10 px-8 pb-20 bg-black min-h-full flex flex-col items-center justify-center">
 
-                {/* HOME NAVIGATION BUTTONS */}
-                <div className="flex flex-wrap justify-center gap-4 mt-4">
-                    <button
-                        onClick={() => navigate('arts')}
-                        className="border border-[#D4AF37] px-4 py-2 text-[#D4AF37] text-xs tracking-[0.2em] font-serif uppercase hover:bg-[#D4AF37] hover:text-black transition-all"
-                    >
-                        Subsidiaries
-                    </button>
-                    <button
-                        onClick={() => navigate('assets')}
-                        className="border border-[#D4AF37] px-4 py-2 text-[#D4AF37] text-xs tracking-[0.2em] font-serif uppercase hover:bg-[#D4AF37] hover:text-black transition-all"
-                    >
-                        Assets
-                    </button>
-                    <button
-                        onClick={() => navigate('catalog')}
-                        className="border border-[#D4AF37] px-4 py-2 text-[#D4AF37] text-xs tracking-[0.2em] font-serif uppercase hover:bg-[#D4AF37] hover:text-black transition-all"
-                    >
-                        Catalog
-                    </button>
-                    <button
-                        onClick={() => navigate('lexicon')}
-                        className="border border-[#D4AF37] px-4 py-2 text-[#D4AF37] text-xs tracking-[0.2em] font-serif uppercase hover:bg-[#D4AF37] hover:text-black transition-all"
-                    >
-                        Lexicon
-                    </button>
-                    <button
-                        onClick={() => navigate('publications')}
-                        className="border border-[#D4AF37] px-4 py-2 text-[#D4AF37] text-xs tracking-[0.2em] font-serif uppercase hover:bg-[#D4AF37] hover:text-black transition-all"
-                    >
-                        Publications
-                    </button>
-                </div>
+                    <div className="border border-[#D4AF37] p-1 inline-block">
+                        <div className="border border-[#D4AF37] p-8 bg-[#0a0a0a]">
+                            <h1 className="text-5xl md:text-7xl font-serif text-[#D4AF37] mb-4 tracking-tighter brand-font">
+                                A L L M E R
+                            </h1>
+                        </div>
+                    </div>
 
-                <div className="grid grid-cols-3 gap-12 max-w-2xl mx-auto pt-8 border-t border-[#333]">
-                    <div className="flex flex-col items-center group cursor-pointer">
-                        <Feather className="text-[#D4AF37] w-8 h-8 mb-4 group-hover:scale-110 transition-transform" />
-                        <span className="text-gray-400 font-serif text-xs uppercase tracking-widest group-hover:text-white brand-font">Story</span>
+                    <div className="max-w-xl mx-auto text-gray-300 font-serif leading-loose italic">
+                        <p>
+                            Committed to creative excellence, Allmer produces story-driven entertainment and consumer products for a global audience.
+                        </p>
                     </div>
-                    <div className="flex flex-col items-center group cursor-pointer">
-                        <Wand className="text-[#D4AF37] w-8 h-8 mb-4 group-hover:scale-110 transition-transform" />
-                        <span className="text-gray-400 font-serif text-xs uppercase tracking-widest group-hover:text-white brand-font">Magic</span>
+
+                    {/* HOME NAVIGATION BUTTONS */}
+                    <div className="flex flex-wrap justify-center gap-4 mt-4">
+                        <button
+                            onClick={() => navigate('arts')}
+                            className="border border-[#D4AF37] px-4 py-2 text-[#D4AF37] text-xs tracking-[0.2em] font-serif uppercase hover:bg-[#D4AF37] hover:text-black transition-all"
+                        >
+                            Subsidiaries
+                        </button>
+                        <button
+                            onClick={() => navigate('assets')}
+                            className="border border-[#D4AF37] px-4 py-2 text-[#D4AF37] text-xs tracking-[0.2em] font-serif uppercase hover:bg-[#D4AF37] hover:text-black transition-all"
+                        >
+                            Assets
+                        </button>
+                        <button
+                            onClick={() => navigate('catalog')}
+                            className="border border-[#D4AF37] px-4 py-2 text-[#D4AF37] text-xs tracking-[0.2em] font-serif uppercase hover:bg-[#D4AF37] hover:text-black transition-all"
+                        >
+                            Catalog
+                        </button>
+                        <button
+                            onClick={() => navigate('lexicon')}
+                            className="border border-[#D4AF37] px-4 py-2 text-[#D4AF37] text-xs tracking-[0.2em] font-serif uppercase hover:bg-[#D4AF37] hover:text-black transition-all"
+                        >
+                            Lexicon
+                        </button>
+                        <button
+                            onClick={() => navigate('publications')}
+                            className="border border-[#D4AF37] px-4 py-2 text-[#D4AF37] text-xs tracking-[0.2em] font-serif uppercase hover:bg-[#D4AF37] hover:text-black transition-all"
+                        >
+                            Publications
+                        </button>
                     </div>
-                    <div className="flex flex-col items-center group cursor-pointer">
-                        <Lightbulb className="text-[#D4AF37] w-8 h-8 mb-4 group-hover:scale-110 transition-transform" />
-                        <span className="text-gray-400 font-serif text-xs uppercase tracking-widest group-hover:text-white brand-font">Invention</span>
+
+                    <div className="grid grid-cols-3 gap-12 max-w-2xl mx-auto pt-8 border-t border-[#333]">
+                        <div 
+                            className={`flex flex-col items-center group cursor-pointer transition-all ${selectedPrinciple === 'story' ? 'scale-110' : ''}`}
+                            onClick={() => setSelectedPrinciple(selectedPrinciple === 'story' ? null : 'story')}
+                        >
+                            <Feather className={`w-8 h-8 mb-4 transition-all ${selectedPrinciple === 'story' ? 'text-white scale-110' : 'text-[#D4AF37] group-hover:scale-110'}`} />
+                            <span className={`font-serif text-xs uppercase tracking-widest brand-font transition-colors ${selectedPrinciple === 'story' ? 'text-white' : 'text-gray-400 group-hover:text-white'}`}>Story</span>
+                        </div>
+                        <div 
+                            className={`flex flex-col items-center group cursor-pointer transition-all ${selectedPrinciple === 'magic' ? 'scale-110' : ''}`}
+                            onClick={() => setSelectedPrinciple(selectedPrinciple === 'magic' ? null : 'magic')}
+                        >
+                            <Wand className={`w-8 h-8 mb-4 transition-all ${selectedPrinciple === 'magic' ? 'text-white scale-110' : 'text-[#D4AF37] group-hover:scale-110'}`} />
+                            <span className={`font-serif text-xs uppercase tracking-widest brand-font transition-colors ${selectedPrinciple === 'magic' ? 'text-white' : 'text-gray-400 group-hover:text-white'}`}>Magic</span>
+                        </div>
+                        <div 
+                            className={`flex flex-col items-center group cursor-pointer transition-all ${selectedPrinciple === 'invention' ? 'scale-110' : ''}`}
+                            onClick={() => setSelectedPrinciple(selectedPrinciple === 'invention' ? null : 'invention')}
+                        >
+                            <Lightbulb className={`w-8 h-8 mb-4 transition-all ${selectedPrinciple === 'invention' ? 'text-white scale-110' : 'text-[#D4AF37] group-hover:scale-110'}`} />
+                            <span className={`font-serif text-xs uppercase tracking-widest brand-font transition-colors ${selectedPrinciple === 'invention' ? 'text-white' : 'text-gray-400 group-hover:text-white'}`}>Invention</span>
+                        </div>
                     </div>
+
+                    {/* Principle Explanation */}
+                    {selectedPrinciple && (
+                        <div className="max-w-xl mx-auto mt-8 p-6 border border-[#D4AF37] bg-[#0a0a0a] animate-in fade-in slide-in-from-bottom-4 duration-300">
+                            <div className="flex items-start gap-4 text-left">
+                                <span className="text-[#D4AF37] text-lg">◈</span>
+                                <div>
+                                    <h3 className="text-[#D4AF37] brand-font text-lg mb-2">{principles[selectedPrinciple].title}</h3>
+                                    <p className="text-gray-300 text-sm leading-relaxed">{principles[selectedPrinciple].text}</p>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
-            </div>
-        );
+            );
+        };
 
         // --- NEW PAGES ---
         const ProfilePillar = () => (
@@ -326,8 +370,8 @@
                                 Simon Allmer Entertainment
                             </h3>
                             <p className="text-[#D4AF37] text-[10px] uppercase tracking-widest mb-1">Est. 2020</p>
-                            <a href="https://simonallmer.com" target="_blank" className="text-gray-600 text-[10px] font-mono block hover:text-[#D4AF37] transition-colors">
-                                simonallmer.com
+                            <a href="https://simonallmer.com" target="_blank" className="text-[#D4AF37] text-[10px] font-mono hover:text-white transition-colors flex items-center gap-1">
+                                simonallmer.com <ExternalLink className="w-3 h-3" />
                             </a>
                         </div>
 
