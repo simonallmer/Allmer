@@ -210,12 +210,6 @@
                         Lexicon
                     </button>
                     <button
-                        onClick={() => navigate('campaigns')}
-                        className="border border-[#D4AF37] px-4 py-2 text-[#D4AF37] text-xs tracking-[0.2em] font-serif uppercase hover:bg-[#D4AF37] hover:text-black transition-all"
-                    >
-                        Campaigns
-                    </button>
-                    <button
                         onClick={() => navigate('publications')}
                         className="border border-[#D4AF37] px-4 py-2 text-[#D4AF37] text-xs tracking-[0.2em] font-serif uppercase hover:bg-[#D4AF37] hover:text-black transition-all"
                     >
@@ -1240,107 +1234,6 @@
             );
         };
 
-        const CampaignsPillar = () => {
-            const [campaigns, setCampaigns] = useState([
-                {
-                    id: 1,
-                    name: 'Seven Wonders',
-                    description: 'Complete the series by finishing all 7 new wonders',
-                    items: [
-                        { name: 'Colosseum', completed: false },
-                        { name: 'Great Wall', completed: false },
-                        { name: 'Tower', completed: false },
-                        { name: 'Cathedral', completed: false },
-                        { name: 'Palace', completed: false },
-                        { name: 'Citadel', completed: false }
-                    ]
-                },
-                {
-                    id: 2,
-                    name: 'Kissinger: Chain Reaction',
-                    description: 'Finish the script for the next Kissinger comic book',
-                    items: [
-                        { name: 'Write Script', completed: false }
-                    ]
-                },
-                {
-                    id: 3,
-                    name: 'Sin Album',
-                    description: 'Finish the Sin album and shoot music videos',
-                    items: [
-                        { name: 'Finish Album', completed: false },
-                        { name: 'Shoot Music Videos', completed: false }
-                    ]
-                }
-            ]);
-
-            const toggleItem = (campaignId, itemIndex) => {
-                setCampaigns(campaigns.map(c => {
-                    if (c.id === campaignId) {
-                        const newItems = [...c.items];
-                        newItems[itemIndex].completed = !newItems[itemIndex].completed;
-                        return { ...c, items: newItems };
-                    }
-                    return c;
-                }));
-            };
-
-            return (
-                <div className="flex-1 bg-black min-h-full p-8 pb-20 text-white font-serif relative overflow-hidden">
-                    <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/dark-leather.png')] pointer-events-none"></div>
-
-                    <SectionHeader title="Campaigns" subtitle="Current Company Efforts" />
-
-                    <div className="max-w-3xl mx-auto space-y-8">
-                        {campaigns.map(campaign => {
-                            const completedCount = campaign.items.filter(i => i.completed).length;
-                            return (
-                                <div key={campaign.id} className="border border-[#222] bg-[#050505]">
-                                    <div className="p-4 border-b border-[#222]">
-                                        <div className="flex items-center justify-between mb-2">
-                                            <h3 className="text-[#D4AF37] brand-font text-lg">{campaign.name}</h3>
-                                            <span className="text-gray-500 text-xs">{completedCount} / {campaign.items.length}</span>
-                                        </div>
-                                        <p className="text-gray-400 text-sm">{campaign.description}</p>
-                                        <div className="w-full h-1.5 bg-[#222] mt-3">
-                                            <div 
-                                                className="h-full bg-[#D4AF37] transition-all"
-                                                style={{ width: `${(completedCount / campaign.items.length) * 100}%` }}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="p-4 space-y-2">
-                                        {campaign.items.map((item, idx) => (
-                                            <div 
-                                                key={idx}
-                                                onClick={() => toggleItem(campaign.id, idx)}
-                                                className={`border cursor-pointer transition-all p-3 flex items-center gap-3 ${
-                                                    item.completed 
-                                                        ? 'border-[#D4AF37] bg-[#D4AF37]/10' 
-                                                        : 'border-[#222] bg-[#0a0a0a] hover:border-[#D4AF37]'
-                                                }`}
-                                            >
-                                                <div className={`w-4 h-4 border flex items-center justify-center ${
-                                                    item.completed 
-                                                        ? 'border-[#D4AF37] bg-[#D4AF37]' 
-                                                        : 'border-gray-600'
-                                                }`}>
-                                                    {item.completed && <span className="text-black text-xs">✓</span>}
-                                                </div>
-                                                <span className={item.completed ? 'text-gray-500 line-through text-sm' : 'text-white text-sm'}>
-                                                    {item.name}
-                                                </span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>
-            );
-        };
-
         const PublicationsPillar = () => {
             const [showMagicReader, setShowMagicReader] = useState(false);
 
@@ -1984,7 +1877,6 @@
                                 {activeTab === 'assets' && <AssetsPillar />}
                                 {activeTab === 'catalog' && <CatalogPillar />}
                                 {activeTab === 'lexicon' && <LexiconPillar />}
-                                {activeTab === 'campaigns' && <CampaignsPillar />}
                                 {activeTab === 'publications' && <PublicationsPillar />}
                             </div>
                         </div>
@@ -2026,12 +1918,6 @@
                                             className={`w-full mb-2 px-4 py-3 text-center font-serif text-sm tracking-widest transition-all duration-200 brand-font ${activeTab === 'lexicon' ? 'bg-[#D4AF37] text-black border-2 border-[#D4AF37] shadow-[0_0_10px_#D4AF37]' : 'bg-black text-[#D4AF37] border-2 border-[#D4AF37] hover:bg-[#1a1a1a]'}`}
                                         >
                                             LEXICON
-                                        </button>
-                                        <button
-                                            onClick={() => { setActiveTab('campaigns'); setShowMenu(false); }}
-                                            className={`w-full mb-2 px-4 py-3 text-center font-serif text-sm tracking-widest transition-all duration-200 brand-font ${activeTab === 'campaigns' ? 'bg-[#D4AF37] text-black border-2 border-[#D4AF37] shadow-[0_0_10px_#D4AF37]' : 'bg-black text-[#D4AF37] border-2 border-[#D4AF37] hover:bg-[#1a1a1a]'}`}
-                                        >
-                                            CAMPAIGNS
                                         </button>
                                         <button
                                             onClick={() => { setActiveTab('publications'); setShowMenu(false); }}
