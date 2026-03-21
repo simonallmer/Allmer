@@ -370,7 +370,7 @@
             </div>
         );
 
-        const AssetsPillar = () => {
+        const AssetsPillar = ({ navigate }) => {
             const [city, setCity] = useState('Vienna');
             const [transactions, setTransactions] = useState([
                 { id: 1, date: '2026.03.15', description: 'Paradice am See, Vienna', studio: 'games', type: 'oneoff', amount: 30.00, transactionType: 'income' },
@@ -545,6 +545,12 @@
                         <div className="border border-[#222] bg-[#0a0a0a]">
                             <div className="flex items-center justify-between p-4 border-b border-[#222]">
                                 <h3 className="text-[#D4AF37] brand-font text-lg uppercase tracking-widest">Projected Revenue (April 2026)</h3>
+                                <button 
+                                    onClick={() => navigate('projected')}
+                                    className="px-3 py-1 bg-[#D4AF37] text-black text-xs uppercase tracking-wider hover:bg-[#D4AF37]/80"
+                                >
+                                    View Annual
+                                </button>
                             </div>
                             <div className="p-8 text-center text-gray-500">
                                 €0.00
@@ -709,6 +715,306 @@
                             </div>
                         </div>
                     )}
+                </div>
+            );
+        };
+
+        const ProjectedRevenuePillar = () => {
+            const daysInYear = 365;
+            const TODAY_INDEX = 79;
+            const [hoveredDay, setHoveredDay] = useState(null);
+            const [viewMode, setViewMode] = useState('year');
+            const [selectedMonth, setSelectedMonth] = useState(2);
+
+            const getDaysInYear = (year) => {
+                return ((year % 4 === 0 && year % 100 > 0) || year % 400 === 0) ? 366 : 365;
+            };
+
+            const polarToCartesian = (centerX, centerY, radius, angleInDegrees) => {
+                const angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180.0;
+                return {
+                    x: centerX + radius * Math.cos(angleInRadians),
+                    y: centerY + radius * Math.sin(angleInRadians)
+                };
+            };
+
+            const describeArc = (x, y, innerRadius, outerRadius, startAngle, endAngle) => {
+                const startOuter = polarToCartesian(x, y, outerRadius, endAngle);
+                const endOuter = polarToCartesian(x, y, outerRadius, startAngle);
+                const startInner = polarToCartesian(x, y, innerRadius, endAngle);
+                const endInner = polarToCartesian(x, y, innerRadius, startAngle);
+                const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+                const d = [
+                    "M", startOuter.x, startOuter.y,
+                    "A", outerRadius, outerRadius, 0, largeArcFlag, 0, endOuter.x, endOuter.y,
+                    "L", endInner.x, endInner.y,
+                    "A", innerRadius, innerRadius, 0, largeArcFlag, 1, startInner.x, startInner.y,
+                    "Z"
+                ].join(" ");
+                return d;
+            };
+
+            const getColorForRevenue = (revenue) => {
+                if (revenue === 0) return '#991b1b';
+                if (revenue < 5) return '#c2410c';
+                if (revenue < 10) return '#1d4ed8';
+                if (revenue < 20) return '#0d9488';
+                return '#15803d';
+            };
+
+            const getStatusText = (revenue) => {
+                if (revenue === 0) return 'No Revenue';
+                if (revenue < 5) return 'Below Threshold';
+                if (revenue < 10) return 'Basic Needs';
+                if (revenue < 20) return 'Comfortable';
+                return 'Antifragile';
+            };
+
+            const monthStarts = [
+                { name: 'Jan', day: 0, index: 0 }, { name: 'Feb', day: 31, index: 1 }, { name: 'Mar', day: 59, index: 2 },
+                { name: 'Apr', day: 90, index: 3 }, { name: 'May', day: 120, index: 4 }, { name: 'Jun', day: 151, index: 5 },
+                { name: 'Jul', day: 181, index: 6 }, { name: 'Aug', day: 212, index: 7 }, { name: 'Sep', day: 243, index: 8 },
+                { name: 'Oct', day: 273, index: 9 }, { name: 'Nov', day: 304, index: 10 }, { name: 'Dec', day: 334, index: 11 }
+            ];
+
+            const monthNamesFull = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+            const [data, setData] = useState(() => {
+                return Array.from({ length: daysInYear }).map((_, i) => {
+                    const date = new Date(2026, 0, 1);
+                    date.setDate(i + 1);
+                    let revenue = 0;
+                    if (i === TODAY_INDEX) revenue = 5.00;
+                    else if (i === TODAY_INDEX + 2) revenue = 3.00;
+                    else if (i === TODAY_INDEX + 3) revenue = 25.00;
+                    return { dayOfYear: i, date, revenue };
+                });
+            });
+
+            const simulateGrowth = () => {
+                setData(prev => prev.map((day, i) => {
+                    if (i <= TODAY_INDEX + 3) return day;
+                    const progress = (i - TODAY_INDEX) / (daysInYear - TODAY_INDEX);
+                    const isSubscribed = Math.random() < (0.2 + (progress * 0.8));
+                    let newRev = 0;
+                    if (isSubscribed) {
+                        const rand = Math.random();
+                        if (rand < 0.3 - (progress * 0.2)) newRev = Math.floor(Math.random() * 4) + 1;
+                        else if (rand < 0.6 - (progress * 0.1)) newRev = Math.floor(Math.random() * 5) + 5;
+                        else if (rand < 0.8) newRev = Math.floor(Math.random() * 10) + 10;
+                        else newRev = Math.floor(Math.random() * 30) + 20;
+                    }
+                    return { ...day, revenue: newRev };
+                }));
+            };
+
+            const currentDisplayDay = hoveredDay !== null ? data[hoveredDay] : data[TODAY_INDEX];
+
+            const handleMonthJump = (monthIndex) => {
+                setSelectedMonth(monthIndex);
+                setViewMode('month');
+            };
+
+            const getCardStylesForRevenue = (revenue) => {
+                if (revenue === 0) return 'bg-red-900/10 border-red-900/30 text-red-400 hover:bg-red-900/20';
+                if (revenue < 5) return 'bg-orange-900/10 border-orange-900/30 text-orange-400 hover:bg-orange-900/20';
+                if (revenue < 10) return 'bg-blue-900/10 border-blue-900/30 text-blue-400 hover:bg-blue-900/20';
+                if (revenue < 20) return 'bg-teal-900/10 border-teal-900/30 text-teal-400 hover:bg-teal-900/20';
+                return 'bg-green-900/10 border-green-900/30 text-green-400 hover:bg-green-900/20';
+            };
+
+            const monthDaysData = data.filter(d => d.date.getMonth() === selectedMonth);
+            const firstDayOfMonthObj = new Date(2026, selectedMonth, 1);
+            const firstDayOfWeek = firstDayOfMonthObj.getDay();
+            const emptyDaysStart = (firstDayOfWeek + 6) % 7;
+            const paddingArray = Array.from({ length: emptyDaysStart }).map((_, i) => i);
+
+            return (
+                <div className="flex-1 bg-black min-h-full p-8 pb-20 text-white font-serif relative overflow-hidden">
+                    <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/dark-leather.png')] pointer-events-none"></div>
+
+                    <SectionHeader title="Subscription Revenue" subtitle="Annual Revenue Projections" />
+
+                    <div className="max-w-6xl mx-auto">
+                        {/* View Toggle */}
+                        <div className="flex justify-center mb-8">
+                            <div className="flex items-center gap-2 bg-[#0a0a0a] p-1.5 rounded-full border border-[#333]">
+                                <button 
+                                    onClick={() => setViewMode('year')} 
+                                    className={`px-4 py-2 rounded-full text-xs font-bold tracking-wider transition-all ${viewMode === 'year' ? 'bg-[#D4AF37] text-black' : 'text-gray-400 hover:text-white'}`}
+                                >
+                                    YEAR WHEEL
+                                </button>
+                                <button 
+                                    onClick={() => handleMonthJump(2)}
+                                    className={`px-4 py-2 rounded-full text-xs font-bold tracking-wider transition-all ${viewMode === 'month' ? 'bg-[#D4AF37] text-black' : 'text-gray-400 hover:text-white'}`}
+                                >
+                                    MONTH GRID
+                                </button>
+                            </div>
+                        </div>
+
+                        {viewMode === 'year' ? (
+                            <div className="flex flex-col lg:flex-row gap-8">
+                                {/* Year Wheel */}
+                                <div className="flex-1 flex items-center justify-center">
+                                    <div className="relative w-full max-w-[500px] aspect-square">
+                                        <svg viewBox="0 0 800 800" className="w-full h-full drop-shadow-2xl">
+                                            <defs>
+                                                <filter id="glow">
+                                                    <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+                                                    <feMerge>
+                                                        <feMergeNode in="coloredBlur"/>
+                                                        <feMergeNode in="SourceGraphic"/>
+                                                    </feMerge>
+                                                </filter>
+                                            </defs>
+                                            <g transform="translate(400, 400)">
+                                                {/* Month Labels */}
+                                                {monthStarts.map((month, index) => {
+                                                    const nextMonthDay = monthStarts[index + 1]?.day || 365;
+                                                    const middleDay = month.day + (nextMonthDay - month.day) / 2;
+                                                    const angle = (middleDay / daysInYear) * 360;
+                                                    const pos = polarToCartesian(0, 0, 360, angle);
+                                                    const rotation = angle > 90 && angle < 270 ? angle + 180 : angle;
+                                                    return (
+                                                        <g key={month.name} onClick={() => handleMonthJump(month.index)} className="cursor-pointer group">
+                                                            <rect x={pos.x - 30} y={pos.y - 15} width="60" height="30" fill="transparent" transform={`rotate(${rotation}, ${pos.x}, ${pos.y})`}/>
+                                                            <text x={pos.x} y={pos.y} fill="#666" fontSize="14" fontWeight="bold" textAnchor="middle" alignmentBaseline="middle" transform={`rotate(${rotation}, ${pos.x}, ${pos.y})`} className="uppercase tracking-widest transition-colors group-hover:fill-[#D4AF37]">
+                                                                {month.name}
+                                                            </text>
+                                                        </g>
+                                                    );
+                                                })}
+
+                                                {/* 365 Wedges */}
+                                                {data.map((day, i) => {
+                                                    const anglePerDay = 360 / daysInYear;
+                                                    const startAngle = i * anglePerDay;
+                                                    const endAngle = (i + 1) * anglePerDay;
+                                                    const isHovered = hoveredDay === i;
+                                                    const isToday = i === TODAY_INDEX;
+                                                    const outerRad = isHovered ? 320 : (isToday ? 310 : 300);
+                                                    const innerRad = isHovered ? 180 : 190;
+                                                    const color = getColorForRevenue(day.revenue);
+                                                    return (
+                                                        <path
+                                                            key={i}
+                                                            d={describeArc(0, 0, innerRad, outerRad, startAngle, endAngle)}
+                                                            fill={color}
+                                                            stroke={isHovered || isToday ? "#D4AF37" : color}
+                                                            strokeWidth={isHovered ? 2 : (isToday ? 1.5 : 0.5)}
+                                                            className="transition-all duration-200 cursor-pointer"
+                                                            onMouseEnter={() => setHoveredDay(i)}
+                                                            onMouseLeave={() => setHoveredDay(null)}
+                                                            style={{ filter: (isHovered || isToday || day.revenue >= 20) ? 'url(#glow)' : 'none', opacity: hoveredDay !== null && !isHovered && !isToday ? 0.4 : 1 }}
+                                                        />
+                                                    );
+                                                })}
+
+                                                {/* Center Dashboard */}
+                                                <circle cx="0" cy="0" r="175" fill="#0a0a0a" stroke="#333" strokeWidth="4"/>
+                                                {currentDisplayDay && (
+                                                    <g className="transition-all duration-300">
+                                                        <text x="0" y="-40" textAnchor="middle" fill="#666" fontSize="14" fontWeight="600" className="uppercase tracking-widest">
+                                                            {currentDisplayDay.dayOfYear === TODAY_INDEX ? "TODAY" : currentDisplayDay.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                                                        </text>
+                                                        <text x="0" y="20" textAnchor="middle" fill={getColorForRevenue(currentDisplayDay.revenue)} fontSize="48" fontWeight="bold">
+                                                            €{currentDisplayDay.revenue.toFixed(2)}
+                                                        </text>
+                                                        <text x="0" y="60" textAnchor="middle" fill="#999" fontSize="12" fontWeight="500">
+                                                            {getStatusText(currentDisplayDay.revenue)}
+                                                        </text>
+                                                    </g>
+                                                )}
+                                            </g>
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                {/* Sidebar */}
+                                <div className="lg:w-80 space-y-6">
+                                    {/* Timeline */}
+                                    <div className="border border-[#222] bg-[#050505] p-6">
+                                        <h3 className="text-[#D4AF37] text-sm uppercase tracking-widest mb-4 font-bold">Current Subscribers</h3>
+                                        <ul className="space-y-3">
+                                            {[
+                                                { day: 'Today (Mar 21)', index: TODAY_INDEX, desc: 'Arcade Subscription', source: 'Customer 000000006' },
+                                                { day: 'Mar 23', index: TODAY_INDEX + 2, desc: '3 Monthly Subs', source: '' },
+                                                { day: 'Mar 24', index: TODAY_INDEX + 3, desc: '5 Annual Subs', source: '' }
+                                            ].map((item, idx) => {
+                                                const dayData = data[item.index];
+                                                if (!dayData) return null;
+                                                return (
+                                                    <li key={idx} className="flex items-center justify-between text-sm cursor-pointer group" onMouseEnter={() => setHoveredDay(item.index)} onMouseLeave={() => setHoveredDay(null)}>
+                                                        <div className="flex items-center gap-3">
+                                                            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: getColorForRevenue(dayData.revenue) }}></div>
+                                                            <div>
+                                                                <span className="text-gray-300 group-hover:text-white transition-colors block">{item.day}</span>
+                                                                {item.source && <span className="text-gray-500 text-[10px]">{item.source}</span>}
+                                                            </div>
+                                                        </div>
+                                                        <span className="font-bold text-white">€{dayData.revenue.toFixed(2)}</span>
+                                                    </li>
+                                                );
+                                            })}
+                                        </ul>
+                                    </div>
+
+                                    {/* Legend */}
+                                    <div className="border border-[#222] bg-[#050505] p-6">
+                                        <h3 className="text-[#D4AF37] text-sm uppercase tracking-widest mb-4 font-bold">Revenue Scale</h3>
+                                        <div className="space-y-3">
+                                            <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-red-900"></div><span className="text-gray-400 text-xs">€0</span></div>
+                                            <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-orange-900"></div><span className="text-gray-400 text-xs">€1-4.99</span></div>
+                                            <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-blue-900"></div><span className="text-gray-400 text-xs">€5-9.99</span></div>
+                                            <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-teal-900"></div><span className="text-gray-400 text-xs">€10-19.99</span></div>
+                                            <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-green-900"></div><span className="text-gray-400 text-xs">€20+</span></div>
+                                        </div>
+                                    </div>
+
+                                    {/* Simulate */}
+                                    <button onClick={simulateGrowth} className="w-full py-3 px-4 bg-[#D4AF37] text-black font-bold text-sm uppercase tracking-widest hover:bg-[#D4AF37]/80 transition-all">
+                                        Simulate Growth
+                                    </button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div>
+                                {/* Month Navigator */}
+                                <div className="flex items-center justify-between mb-6">
+                                    <button onClick={() => setSelectedMonth(prev => prev > 0 ? prev - 1 : 11)} className="p-2 border border-[#333] text-gray-400 hover:text-white hover:border-[#D4AF37] transition-colors">
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"/></svg>
+                                    </button>
+                                    <h3 className="text-2xl font-bold text-[#D4AF37]">{monthNamesFull[selectedMonth]} 2026</h3>
+                                    <button onClick={() => setSelectedMonth(prev => prev < 11 ? prev + 1 : 0)} className="p-2 border border-[#333] text-gray-400 hover:text-white hover:border-[#D4AF37] transition-colors">
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/></svg>
+                                    </button>
+                                </div>
+
+                                {/* Calendar Grid */}
+                                <div className="border border-[#222] bg-[#050505] p-6">
+                                    <div className="grid grid-cols-7 gap-2 mb-2">
+                                        {daysOfWeek.map(day => (<div key={day} className="text-center text-gray-500 font-bold text-xs uppercase">{day}</div>))}
+                                    </div>
+                                    <div className="grid grid-cols-7 gap-2">
+                                        {paddingArray.map(pad => (<div key={`pad-${pad}`} className="aspect-square"></div>))}
+                                        {monthDaysData.map((day) => {
+                                            const isToday = day.dayOfYear === TODAY_INDEX;
+                                            const cardStyles = getCardStylesForRevenue(day.revenue);
+                                            return (
+                                                <div key={day.dayOfYear} className={`aspect-square border rounded p-2 flex flex-col justify-between ${cardStyles} ${isToday ? 'ring-2 ring-[#D4AF37]' : ''}`}>
+                                                    <span className="text-xs opacity-70">{day.date.getDate()}</span>
+                                                    <span className="text-sm font-bold">€{day.revenue.toFixed(2)}</span>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
             );
         };
@@ -2027,7 +2333,8 @@
                                 {activeTab === 'profile' && <ProfilePillar />}
                                 {activeTab === 'principles' && <PrinciplesPillar />}
                                 {activeTab === 'arts' && <ArtsPillar onSelectStudio={setSelectedStudio} />}
-                                {activeTab === 'assets' && <AssetsPillar />}
+                                {activeTab === 'assets' && <AssetsPillar navigate={setActiveTab} />}
+                                {activeTab === 'projected' && <ProjectedRevenuePillar />}
                                 {activeTab === 'catalog' && <CatalogPillar />}
                                 {activeTab === 'lexicon' && <LexiconPillar />}
                                 {activeTab === 'publications' && <PublicationsPillar />}
@@ -2059,6 +2366,12 @@
                                             className={`w-full mb-2 px-4 py-3 text-center font-serif text-sm tracking-widest transition-all duration-200 brand-font ${activeTab === 'assets' ? 'bg-[#D4AF37] text-black border-2 border-[#D4AF37] shadow-[0_0_10px_#D4AF37]' : 'bg-black text-[#D4AF37] border-2 border-[#D4AF37] hover:bg-[#1a1a1a]'}`}
                                         >
                                             ASSETS
+                                        </button>
+                                        <button
+                                            onClick={() => { setActiveTab('projected'); setShowMenu(false); }}
+                                            className={`w-full mb-2 px-4 py-3 text-center font-serif text-sm tracking-widest transition-all duration-200 brand-font ${activeTab === 'projected' ? 'bg-[#D4AF37] text-black border-2 border-[#D4AF37] shadow-[0_0_10px_#D4AF37]' : 'bg-black text-[#D4AF37] border-2 border-[#D4AF37] hover:bg-[#1a1a1a]'}`}
+                                        >
+                                            PROJECTED
                                         </button>
                                         <button
                                             onClick={() => { setActiveTab('catalog'); setShowMenu(false); }}
