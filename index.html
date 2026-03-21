@@ -1157,16 +1157,20 @@
                 { name: 'Elements', description: '', tag: 'Brand' },
                 { name: 'Five-Club Juggling', description: '', tag: 'Skill' },
                 { name: 'Futory', description: '', tag: 'Brand' },
+                { name: 'Futory Cards', description: 'Collectible card game set in the world of Futory.', tag: 'Series', brand: 'Futory' },
                 { name: 'Library', description: 'Full access to Allmer Comics library', tag: 'Service' },
                 { name: 'Lunyra', description: '', tag: 'Brand' },
                 { name: 'Metropole', description: '', tag: 'Brand' },
                 { name: 'Motorcycle Stunts', description: '', tag: 'Skill' },
+                { name: 'Old Seven Wonders', description: 'The original seven wonders of the ancient world: Great Pyramid of Giza, Hanging Gardens of Babylon, Statue of Zeus at Olympia, Temple of Artemis, Mausoleum at Halicarnassus, Colossus of Rhodes, Lighthouse of Alexandria.', tag: 'Series', brand: 'Seven Wonders' },
                 { name: 'Piano Voice', description: 'The ability to sing across a 5 octave range. For men typically C2-C7, for women C3-C8. No falsetto is used but whistle register can be used in the last octave.', tag: 'Skill' },
+                { name: 'Riddle Novels', description: 'Puzzle-driven mystery novels set in Victorian London.', tag: 'Series', brand: 'Detective Noname' },
                 { name: 'Seven-Ball Juggling', description: 'Self-explanatory. The ability to juggle 7 balls continuously.', tag: 'Skill' },
                 { name: 'Seven Wonders', description: '', tag: 'Brand' },
                 { name: 'Simon Allmer Entertainment', description: '', tag: 'Company' },
                 { name: 'Society Review', description: '', tag: 'Brand' },
                 { name: 'Studio System', description: 'The unique approach of Simon Allmer Entertainment to create multimedia brands through the direct control and "orchestration" of the six Studios (no outsourcing). Each Studio can function independently to create unique IP (e.g. Seven Wonders is just Allmer Games) or play in tandem with others (American Portrait uses every studio to create unique products for each). Studio work doesn\'t always have to result in a product by the studio—e.g. Allmer Music can make sound design for a Game without releasing the soundtrack separately.', tag: 'Company' },
+                { name: 'New Seven Wonders', description: 'Seven architectural wonders of the modern world, reimagined as luxury physical games and decorative objects.', tag: 'Series', brand: 'Seven Wonders' },
                 { name: 'Water Lung', description: 'Ability to hold one\'s breath for over 5 minutes in static apnea without inhaling pure O2 and over 7 minutes with pure O2 inhalation.', tag: 'Skill' },
                 { name: 'Wire Walking', description: '', tag: 'Skill' }
             ].sort((a, b) => a.name.localeCompare(b.name));
@@ -1181,6 +1185,7 @@
                 'Brand': 'bg-blue-900/30 text-blue-400 border-blue-500',
                 'Company': 'bg-purple-900/30 text-purple-400 border-purple-500',
                 'General': 'bg-gray-700/30 text-gray-300 border-gray-500',
+                'Series': 'bg-cyan-900/30 text-cyan-400 border-cyan-500',
                 'Service': 'bg-orange-900/30 text-orange-400 border-orange-500',
                 'Skill': 'bg-green-900/30 text-green-400 border-green-500',
                 'Studio': 'bg-red-900/30 text-red-400 border-red-500'
@@ -1258,6 +1263,12 @@
                                                 {selectedEntry.tag}
                                             </span>
                                         </div>
+                                        {selectedEntry.brand && (
+                                            <div className="mb-4 flex items-center gap-2 text-xs">
+                                                <span className="text-gray-500">Brand:</span>
+                                                <span className={`px-2 py-0.5 border ${tagColors['Brand']}`}>{selectedEntry.brand}</span>
+                                            </div>
+                                        )}
                                         <p className="text-gray-300 text-sm leading-relaxed">{selectedEntry.description || 'Definition coming soon.'}</p>
                                     </div>
                                 ) : (
