@@ -219,12 +219,6 @@
                             Assets
                         </button>
                         <button
-                            onClick={() => navigate('customers')}
-                            className="border border-[#D4AF37] px-4 py-2 text-[#D4AF37] text-xs tracking-[0.2em] font-serif uppercase hover:bg-[#D4AF37] hover:text-black transition-all"
-                        >
-                            Customers
-                        </button>
-                        <button
                             onClick={() => navigate('catalog')}
                             className="border border-[#D4AF37] px-4 py-2 text-[#D4AF37] text-xs tracking-[0.2em] font-serif uppercase hover:bg-[#D4AF37] hover:text-black transition-all"
                         >
@@ -581,47 +575,6 @@
                             </div>
                         </div>
 
-                        {/* Projected Revenue - Next Month */}
-                        <div className="border border-[#222] bg-[#0a0a0a]">
-                            <div className="flex items-center justify-between p-4 border-b border-[#222]">
-                                <h3 className="text-[#D4AF37] brand-font text-lg uppercase tracking-widest">Projected Revenue (April 2026)</h3>
-                            </div>
-                            <div className="overflow-x-auto">
-                                <table className="w-full">
-                                    <thead>
-                                        <tr className="border-b border-[#222]">
-                                            <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">Date</th>
-                                            <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">Description</th>
-                                            <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">Customer</th>
-                                            <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">Studio</th>
-                                            <th className="text-right p-3 text-gray-500 text-[10px] uppercase tracking-wider">Amount</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {transactions.filter(t => t.type === 'recurring' && t.recurringPeriod).map(t => (
-                                            <tr key={t.id} className="border-b border-[#1a1a1a]">
-                                                <td className="p-3 text-gray-400 text-sm">2026.04.{String(t.recurringDay).padStart(2, '0')}</td>
-                                                <td className="p-3 text-white text-sm">{t.description}</td>
-                                                <td className="p-3 text-gray-400 text-sm">{t.description.split(' - ')[1] || '-'}</td>
-                                                <td className="p-3">
-                                                    <span className={`px-2 py-1 text-[10px] uppercase border ${studioColors[t.studio] || 'bg-gray-800 text-gray-400 border-gray-600'}`}>
-                                                        Allmer {t.studio.charAt(0).toUpperCase() + t.studio.slice(1)}
-                                                    </span>
-                                                </td>
-                                                <td className="p-3 text-right text-green-500 font-mono">+€{t.amount.toFixed(2)}</td>
-                                            </tr>
-                                        ))}
-                                        <tr className="border-b border-[#1a1a1a] bg-[#111]">
-                                            <td colSpan="4" className="p-3 text-white text-sm font-bold">Projected Total</td>
-                                            <td className="p-3 text-right text-[#D4AF37] font-mono font-bold">
-                                                €{transactions.filter(t => t.type === 'recurring' && t.recurringPeriod).reduce((sum, t) => sum + t.amount, 0).toFixed(2)}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
                         {/* Real Estate Holdings */}
                         <section>
                             <div className="flex items-center gap-4 mb-6">
@@ -784,114 +737,32 @@
             );
         };
 
-        const CustomersPillar = () => {
-            const [isAuthenticated, setIsAuthenticated] = useState(false);
-            const [password, setPassword] = useState('');
-            const [error, setError] = useState('');
+        const CatalogPillar = () => {
+            const [catalogSection, setCatalogSection] = useState('products');
+            const [isCustomerAuth, setIsCustomerAuth] = useState(() => localStorage.getItem('customerAuth') === 'true');
+            const [customerPassword, setCustomerPassword] = useState('');
+            const [customerError, setCustomerError] = useState('');
 
             const customers = [
                 { id: '000000006', name: 'Customer 000000006', email: '', subscription: 'Arcade (Yearly)', since: '2026.03.21', status: 'Active' }
             ];
 
-            const handleLogin = (e) => {
+            const handleCustomerLogin = (e) => {
                 e.preventDefault();
-                if (password === 'Allmer2026') {
-                    setIsAuthenticated(true);
-                    setError('');
+                if (customerPassword === '2020') {
+                    setIsCustomerAuth(true);
+                    localStorage.setItem('customerAuth', 'true');
+                    setCustomerError('');
                 } else {
-                    setError('Invalid password');
+                    setCustomerError('Invalid password');
                 }
             };
 
-            if (!isAuthenticated) {
-                return (
-                    <div className="flex-1 bg-black min-h-full p-8 pb-20 text-white font-serif relative overflow-hidden flex items-center justify-center">
-                        <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/dark-leather.png')] pointer-events-none"></div>
+            const handleLogout = () => {
+                setIsCustomerAuth(false);
+                localStorage.removeItem('customerAuth');
+            };
 
-                        <div className="max-w-md w-full">
-                            <SectionHeader title="Customers" subtitle="Protected Access" />
-                            
-                            <div className="border border-[#222] bg-[#050505] p-8">
-                                <form onSubmit={handleLogin} className="space-y-4">
-                                    <div>
-                                        <label className="block text-gray-500 text-xs uppercase tracking-wider mb-2">Password</label>
-                                        <input
-                                            type="password"
-                                            value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
-                                            className="w-full bg-[#111] border border-[#333] text-white px-4 py-3 text-sm focus:border-[#D4AF37] focus:outline-none"
-                                            placeholder="Enter password"
-                                        />
-                                    </div>
-                                    {error && <p className="text-red-500 text-sm">{error}</p>}
-                                    <button
-                                        type="submit"
-                                        className="w-full px-4 py-3 bg-[#D4AF37] text-black hover:bg-[#D4AF37]/80 transition-colors text-sm font-bold uppercase tracking-widest"
-                                    >
-                                        Access
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                );
-            }
-
-            return (
-                <div className="flex-1 bg-black min-h-full p-8 pb-20 text-white font-serif relative overflow-hidden">
-                    <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/dark-leather.png')] pointer-events-none"></div>
-
-                    <SectionHeader title="Customers" subtitle="Subscriber Database" />
-
-                    <div className="max-w-4xl mx-auto">
-                        <div className="flex justify-between items-center mb-6">
-                            <p className="text-gray-500 text-sm">Total Customers: {customers.length}</p>
-                            <button
-                                onClick={() => setIsAuthenticated(false)}
-                                className="text-gray-500 text-xs hover:text-[#D4AF37] uppercase tracking-widest"
-                            >
-                                Logout
-                            </button>
-                        </div>
-
-                        <div className="border border-[#222] bg-[#050505]">
-                            <div className="overflow-x-auto">
-                                <table className="w-full">
-                                    <thead>
-                                        <tr className="border-b border-[#222]">
-                                            <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">ID</th>
-                                            <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">Name</th>
-                                            <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">Email</th>
-                                            <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">Subscription</th>
-                                            <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">Since</th>
-                                            <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {customers.map(c => (
-                                            <tr key={c.id} className="border-b border-[#1a1a1a] hover:bg-[#111]">
-                                                <td className="p-3 text-[#D4AF37] font-mono text-sm">{c.id}</td>
-                                                <td className="p-3 text-white text-sm">{c.name}</td>
-                                                <td className="p-3 text-gray-400 text-sm">{c.email || '-'}</td>
-                                                <td className="p-3 text-white text-sm">{c.subscription}</td>
-                                                <td className="p-3 text-gray-400 text-sm">{c.since}</td>
-                                                <td className="p-3">
-                                                    <span className="px-2 py-1 text-[10px] uppercase bg-green-900/30 text-green-400 border border-green-500">
-                                                        {c.status}
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            );
-        };
-
-        const CatalogPillar = () => {
             const games = [
                 { number: 'G031', name: '(Colbu)', series: '', brand: 'Colbu', genre: 'World Builder', platforms: 'Web, App', year: 2028 },
                 { number: 'G030', name: 'Dangerous', series: '', brand: 'Danger', genre: 'Action-Adventure', platforms: 'Web, App', year: 2028 },
@@ -1006,7 +877,36 @@
 
                     <SectionHeader title="Catalog" subtitle="Allmer Studios Product Library" />
 
+                    {/* Catalog Section Tabs */}
+                    <div className="max-w-6xl mx-auto mb-8">
+                        <div className="flex items-center gap-4 border-b border-[#333] pb-4">
+                            <button
+                                onClick={() => setCatalogSection('products')}
+                                className={`px-4 py-2 text-sm uppercase tracking-widest transition-all brand-font ${catalogSection === 'products' ? 'text-[#D4AF37] border-b-2 border-[#D4AF37]' : 'text-gray-500 hover:text-gray-300'}`}
+                            >
+                                Products
+                            </button>
+                            {!isCustomerAuth ? (
+                                <button
+                                    onClick={() => setCatalogSection('customers')}
+                                    className={`px-4 py-2 text-sm uppercase tracking-widest transition-all brand-font ${catalogSection === 'customers' ? 'text-[#D4AF37] border-b-2 border-[#D4AF37]' : 'text-gray-500 hover:text-gray-300'}`}
+                                >
+                                    Customers
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={() => { setCatalogSection('customers'); }}
+                                    className="px-4 py-2 text-sm uppercase tracking-widest transition-all brand-font text-green-500"
+                                >
+                                    ✓ Customers
+                                </button>
+                            )}
+                        </div>
+                    </div>
+
                     <div className="max-w-6xl mx-auto">
+                        {catalogSection === 'products' ? (
+                        <>
                         {/* Products Section Header */}
                         <div className="mb-6 border-b border-[#333] pb-4">
                             <h3 className="text-[#D4AF37] text-xl font-serif uppercase tracking-[0.2em] brand-font">Products</h3>
@@ -1280,6 +1180,83 @@
                                     </button>
                                 </div>
                             </div>
+                        )}
+                    </div>
+                        </>
+                        ) : (
+                        <div className="max-w-6xl mx-auto">
+                            {!isCustomerAuth ? (
+                                <div className="max-w-md mx-auto">
+                                    <div className="border border-[#222] bg-[#050505] p-8">
+                                        <h3 className="text-[#D4AF37] brand-font text-xl mb-6 text-center uppercase tracking-widest">Customer Access</h3>
+                                        <form onSubmit={handleCustomerLogin} className="space-y-4">
+                                            <div>
+                                                <label className="block text-gray-500 text-xs uppercase tracking-wider mb-2">Password</label>
+                                                <input
+                                                    type="password"
+                                                    value={customerPassword}
+                                                    onChange={(e) => setCustomerPassword(e.target.value)}
+                                                    className="w-full bg-[#111] border border-[#333] text-white px-4 py-3 text-sm focus:border-[#D4AF37] focus:outline-none"
+                                                    placeholder="Enter password"
+                                                />
+                                            </div>
+                                            {customerError && <p className="text-red-500 text-sm">{customerError}</p>}
+                                            <button
+                                                type="submit"
+                                                className="w-full px-4 py-3 bg-[#D4AF37] text-black hover:bg-[#D4AF37]/80 transition-colors text-sm font-bold uppercase tracking-widest"
+                                            >
+                                                Access Customer Catalog
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div>
+                                    <div className="flex justify-between items-center mb-6">
+                                        <p className="text-gray-500 text-sm">Total Customers: {customers.length}</p>
+                                        <button
+                                            onClick={handleLogout}
+                                            className="text-gray-500 text-xs hover:text-[#D4AF37] uppercase tracking-widest"
+                                        >
+                                            Logout
+                                        </button>
+                                    </div>
+
+                                    <div className="border border-[#222] bg-[#050505]">
+                                        <div className="overflow-x-auto">
+                                            <table className="w-full">
+                                                <thead>
+                                                    <tr className="border-b border-[#222]">
+                                                        <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">ID</th>
+                                                        <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">Name</th>
+                                                        <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">Email</th>
+                                                        <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">Subscription</th>
+                                                        <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">Since</th>
+                                                        <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {customers.map(c => (
+                                                        <tr key={c.id} className="border-b border-[#1a1a1a] hover:bg-[#111]">
+                                                            <td className="p-3 text-[#D4AF37] font-mono text-sm">{c.id}</td>
+                                                            <td className="p-3 text-white text-sm">{c.name}</td>
+                                                            <td className="p-3 text-gray-400 text-sm">{c.email || '-'}</td>
+                                                            <td className="p-3 text-white text-sm">{c.subscription}</td>
+                                                            <td className="p-3 text-gray-400 text-sm">{c.since}</td>
+                                                            <td className="p-3">
+                                                                <span className="px-2 py-1 text-[10px] uppercase bg-green-900/30 text-green-400 border border-green-500">
+                                                                    {c.status}
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                         )}
                     </div>
                 </div>
@@ -2085,7 +2062,6 @@
                                 {activeTab === 'principles' && <PrinciplesPillar />}
                                 {activeTab === 'arts' && <ArtsPillar onSelectStudio={setSelectedStudio} />}
                                 {activeTab === 'assets' && <AssetsPillar />}
-                                {activeTab === 'customers' && <CustomersPillar />}
                                 {activeTab === 'catalog' && <CatalogPillar />}
                                 {activeTab === 'lexicon' && <LexiconPillar />}
                                 {activeTab === 'publications' && <PublicationsPillar />}
@@ -2117,12 +2093,6 @@
                                             className={`w-full mb-2 px-4 py-3 text-center font-serif text-sm tracking-widest transition-all duration-200 brand-font ${activeTab === 'assets' ? 'bg-[#D4AF37] text-black border-2 border-[#D4AF37] shadow-[0_0_10px_#D4AF37]' : 'bg-black text-[#D4AF37] border-2 border-[#D4AF37] hover:bg-[#1a1a1a]'}`}
                                         >
                                             ASSETS
-                                        </button>
-                                        <button
-                                            onClick={() => { setActiveTab('customers'); setShowMenu(false); }}
-                                            className={`w-full mb-2 px-4 py-3 text-center font-serif text-sm tracking-widest transition-all duration-200 brand-font ${activeTab === 'customers' ? 'bg-[#D4AF37] text-black border-2 border-[#D4AF37] shadow-[0_0_10px_#D4AF37]' : 'bg-black text-[#D4AF37] border-2 border-[#D4AF37] hover:bg-[#1a1a1a]'}`}
-                                        >
-                                            CUSTOMERS
                                         </button>
                                         <button
                                             onClick={() => { setActiveTab('catalog'); setShowMenu(false); }}
