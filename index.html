@@ -722,7 +722,7 @@
 
         const ProjectedRevenuePillar = () => {
             const daysInYear = 365;
-            const TODAY_INDEX = 81;
+            const TODAY_INDEX = 80;
             const [hoveredDay, setHoveredDay] = useState(null);
             const [hoveredMonthIndex, setHoveredMonthIndex] = useState(null);
             const [viewMode, setViewMode] = useState('year');
@@ -765,11 +765,27 @@
                 return '#15803d';
             };
 
+            const getColorForMonthlyRevenue = (revenue) => {
+                if (revenue === 0) return '#991b1b';
+                if (revenue < 150) return '#c2410c';
+                if (revenue < 300) return '#1d4ed8';
+                if (revenue < 600) return '#0d9488';
+                return '#15803d';
+            };
+
             const getStatusText = (revenue) => {
                 if (revenue === 0) return 'No Revenue';
                 if (revenue < 5) return 'Below Threshold';
                 if (revenue < 10) return 'Basic Needs';
                 if (revenue < 20) return 'Comfortable';
+                return 'Antifragile';
+            };
+
+            const getStatusTextForMonthly = (revenue) => {
+                if (revenue === 0) return 'No Revenue';
+                if (revenue < 150) return 'Below Threshold';
+                if (revenue < 300) return 'Basic Needs';
+                if (revenue < 600) return 'Comfortable';
                 return 'Antifragile';
             };
 
@@ -984,7 +1000,7 @@
                                                      
                                                      const isCurrentMonth = TODAY_INDEX >= startDay && TODAY_INDEX < endDay;
                                                      
-                                                     const color = getColorForRevenue(monthRev);
+                                                      const color = getColorForMonthlyRevenue(monthRev);
                                                      
                                                      return (
                                                          <path
@@ -996,7 +1012,7 @@
                                                              className="transition-all duration-200 cursor-pointer"
                                                              onMouseEnter={() => setHoveredMonthIndex(index)}
                                                              onMouseLeave={() => setHoveredMonthIndex(null)}
-                                                             style={{ filter: isCurrentMonth || monthRev >= 100 ? 'url(#glow)' : 'none', opacity: hoveredMonthIndex !== null && hoveredMonthIndex !== index ? 0.4 : 1 }}
+                                                             style={{ filter: isCurrentMonth || monthRev >= 600 ? 'url(#glow)' : 'none', opacity: hoveredMonthIndex !== null && hoveredMonthIndex !== index ? 0.4 : 1 }}
                                                          />
                                                      );
                                                  })}
@@ -1030,14 +1046,14 @@
                                                                 <text x="0" y="-40" textAnchor="middle" fill="#666" fontSize="14" fontWeight="600" className="uppercase tracking-widest">
                                                                     {currentDisplayMonth ? `${currentDisplayMonth.name} 2026` : 'Current Month'}
                                                                 </text>
-                                                                <text x="0" y="20" textAnchor="middle" fill={getColorForRevenue(currentDisplayMonthRevenue)} fontSize="48" fontWeight="bold">
+                                                                <text x="0" y="20" textAnchor="middle" fill={getColorForMonthlyRevenue(currentDisplayMonthRevenue)} fontSize="48" fontWeight="bold">
                                                                     {Math.round(currentDisplayMonthRevenue)}
                                                                 </text>
                                                                 <text x="0" y="45" textAnchor="middle" fill="#666" fontSize="12" fontWeight="500" className="uppercase tracking-widest">
                                                                     Projected Revenue (€)
                                                                 </text>
-                                                                <text x="0" y="70" textAnchor="middle" fill={getColorForRevenue(currentDisplayMonthRevenue)} fontSize="12" fontWeight="bold" className="uppercase tracking-widest">
-                                                                    {getStatusText(currentDisplayMonthRevenue)}
+                                                                <text x="0" y="70" textAnchor="middle" fill={getColorForMonthlyRevenue(currentDisplayMonthRevenue)} fontSize="12" fontWeight="bold" className="uppercase tracking-widest">
+                                                                    {getStatusTextForMonthly(currentDisplayMonthRevenue)}
                                                                 </text>
                                                             </>
                                                         )}
@@ -1080,13 +1096,25 @@
 
                                     {/* Legend */}
                                     <div className="border border-[#222] bg-[#050505] p-6">
-                                        <h3 className="text-[#D4AF37] text-sm uppercase tracking-widest mb-4 font-bold">Revenue Scale</h3>
+                                        <h3 className="text-[#D4AF37] text-sm uppercase tracking-widest mb-4 font-bold">Revenue Scale ({wheelViewMode === 'days' ? 'Daily' : 'Monthly'})</h3>
                                         <div className="space-y-3">
-                                            <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-red-900"></div><span className="text-gray-400 text-xs">€0</span></div>
-                                            <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-orange-900"></div><span className="text-gray-400 text-xs">€1-4.99</span></div>
-                                            <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-blue-900"></div><span className="text-gray-400 text-xs">€5-9.99</span></div>
-                                            <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-teal-900"></div><span className="text-gray-400 text-xs">€10-19.99</span></div>
-                                            <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-green-900"></div><span className="text-gray-400 text-xs">€20+</span></div>
+                                            {wheelViewMode === 'days' ? (
+                                                <>
+                                                    <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-red-900"></div><span className="text-gray-400 text-xs">€0</span></div>
+                                                    <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-orange-900"></div><span className="text-gray-400 text-xs">€1-4.99</span></div>
+                                                    <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-blue-900"></div><span className="text-gray-400 text-xs">€5-9.99</span></div>
+                                                    <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-teal-900"></div><span className="text-gray-400 text-xs">€10-19.99</span></div>
+                                                    <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-green-900"></div><span className="text-gray-400 text-xs">€20+</span></div>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-red-900"></div><span className="text-gray-400 text-xs">€0</span></div>
+                                                    <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-orange-900"></div><span className="text-gray-400 text-xs">€1-149</span></div>
+                                                    <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-blue-900"></div><span className="text-gray-400 text-xs">€150-299</span></div>
+                                                    <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-teal-900"></div><span className="text-gray-400 text-xs">€300-599</span></div>
+                                                    <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-green-900"></div><span className="text-gray-400 text-xs">€600+</span></div>
+                                                </>
+                                            )}
                                         </div>
                                     </div>
 
