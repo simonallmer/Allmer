@@ -722,9 +722,16 @@
 
         const ProjectedRevenuePillar = () => {
             const daysInYear = 365;
-            const TODAY_INDEX = 79;
+            const TODAY_INDEX = (() => {
+                const start = new Date(2026, 0, 1);
+                const today = new Date();
+                const diff = today - start;
+                return Math.floor(diff / (1000 * 60 * 60 * 24));
+            })();
             const [hoveredDay, setHoveredDay] = useState(null);
+            const [hoveredMonthIndex, setHoveredMonthIndex] = useState(null);
             const [viewMode, setViewMode] = useState('year');
+            const [wheelViewMode, setWheelViewMode] = useState('days');
             const [selectedMonth, setSelectedMonth] = useState(2);
 
             const getDaysInYear = (year) => {
@@ -813,6 +820,9 @@
             };
 
             const currentDisplayDay = hoveredDay !== null ? data[hoveredDay] : data[TODAY_INDEX];
+            const currentDisplayMonthIndex = hoveredMonthIndex !== null ? hoveredMonthIndex : (TODAY_INDEX >= 0 && TODAY_INDEX < 365 ? data[TODAY_INDEX].date.getMonth() : 0);
+            const currentDisplayMonth = wheelViewMode === 'months' ? monthStarts[currentDisplayMonthIndex] : null;
+            const currentDisplayMonthRevenue = wheelViewMode === 'months' && currentDisplayMonth ? data.filter(d => d.date.getMonth() === currentDisplayMonthIndex).reduce((sum, d) => sum + d.revenue, 0) : 0;
 
             const handleMonthJump = (monthIndex) => {
                 setSelectedMonth(monthIndex);
@@ -897,6 +907,22 @@
                         {viewMode === 'year' ? (
                             <div className="flex flex-col lg:flex-row gap-8">
                                 {/* Year Wheel */}
+                                <div className="flex justify-end mb-4 pr-4">
+                                    <div className="flex items-center bg-[#111] rounded-full border border-[#333] p-1">
+                                        <button 
+                                            onClick={() => setWheelViewMode('days')} 
+                                            className={`px-4 py-1.5 rounded-full text-[10px] font-bold tracking-wider transition-all ${wheelViewMode === 'days' ? 'bg-white text-black' : 'text-gray-400 hover:text-white'}`}
+                                        >
+                                            Days
+                                        </button>
+                                        <button 
+                                            onClick={() => setWheelViewMode('months')} 
+                                            className={`px-4 py-1.5 rounded-full text-[10px] font-bold tracking-wider transition-all ${wheelViewMode === 'months' ? 'bg-white text-black' : 'text-gray-400 hover:text-white'}`}
+                                        >
+                                            Months
+                                        </button>
+                                    </div>
+                                </div>
                                 <div className="flex-1 flex items-center justify-center">
                                     <div className="relative w-full max-w-[500px] aspect-square">
                                         <svg viewBox="0 0 800 800" className="w-full h-full drop-shadow-2xl">
@@ -927,44 +953,100 @@
                                                     );
                                                 })}
 
-                                                {/* 365 Wedges */}
-                                                {data.map((day, i) => {
-                                                    const anglePerDay = 360 / daysInYear;
-                                                    const startAngle = i * anglePerDay;
-                                                    const endAngle = (i + 1) * anglePerDay;
-                                                    const isHovered = hoveredDay === i;
-                                                    const isToday = i === TODAY_INDEX;
-                                                    const outerRad = isHovered ? 320 : (isToday ? 310 : 300);
-                                                    const innerRad = isHovered ? 180 : 190;
-                                                    const color = getColorForRevenue(day.revenue);
-                                                    return (
-                                                        <path
-                                                            key={i}
-                                                            d={describeArc(0, 0, innerRad, outerRad, startAngle, endAngle)}
-                                                            fill={color}
-                                                            stroke={isHovered || isToday ? "#D4AF37" : color}
-                                                            strokeWidth={isHovered ? 2 : (isToday ? 1.5 : 0.5)}
-                                                            className="transition-all duration-200 cursor-pointer"
-                                                            onMouseEnter={() => setHoveredDay(i)}
-                                                            onMouseLeave={() => setHoveredDay(null)}
-                                                            style={{ filter: (isHovered || isToday || day.revenue >= 20) ? 'url(#glow)' : 'none', opacity: hoveredDay !== null && !isHovered && !isToday ? 0.4 : 1 }}
-                                                        />
-                                                    );
-                                                })}
+                                                 {/* 365 Wedges */}
+                                                 {wheelViewMode === 'days' && data.map((day, i) => {
+                                                     const anglePerDay = 360 / daysInYear;
+                                                     const startAngle = i * anglePerDay;
+                                                     const endAngle = (i + 1) * anglePerDay;
+                                                     const isHovered = hoveredDay === i;
+                                                     const isToday = i === TODAY_INDEX;
+                                                     const outerRad = isHovered ? 320 : (isToday ? 310 : 300);
+                                                     const innerRad = isHovered ? 180 : 190;
+                                                     const color = getColorForRevenue(day.revenue);
+                                                     return (
+                                                         <path
+                                                             key={i}
+                                                             d={describeArc(0, 0, innerRad, outerRad, startAngle, endAngle)}
+                                                             fill={color}
+                                                             stroke={isHovered || isToday ? "#D4AF37" : color}
+                                                             strokeWidth={isHovered ? 2 : (isToday ? 1.5 : 0.5)}
+                                                             className="transition-all duration-200 cursor-pointer"
+                                                             onMouseEnter={() => setHoveredDay(i)}
+                                                             onMouseLeave={() => setHoveredDay(null)}
+                                                             style={{ filter: (isHovered || isToday || day.revenue >= 20) ? 'url(#glow)' : 'none', opacity: hoveredDay !== null && !isHovered && !isToday ? 0.4 : 1 }}
+                                                         />
+                                                     );
+                                                 })}
+
+                                                 {/* 12 Month Wedges */}
+                                                 {wheelViewMode === 'months' && monthStarts.map((month, index) => {
+                                                     const startDay = month.day;
+                                                     const endDay = monthStarts[index + 1]?.day || 365;
+                                                     const anglePerDay = 360 / daysInYear;
+                                                     const startAngle = startDay * anglePerDay;
+                                                     const endAngle = endDay * anglePerDay;
+                                                     const monthRev = data.filter(d => d.date.getMonth() === index).reduce((sum, d) => sum + d.revenue, 0);
+                                                     
+                                                     const isCurrentMonth = TODAY_INDEX >= startDay && TODAY_INDEX < endDay;
+                                                     
+                                                     // Color based on monthly revenue (scaled thresholds)
+                                                     const color = getColorForRevenue(monthRev / (endDay - startDay) * 30); // Scale to match daily logic roughly
+                                                     
+                                                     return (
+                                                         <path
+                                                             key={month.name}
+                                                             d={describeArc(0, 0, 180, isCurrentMonth ? 310 : 300, startAngle, endAngle)}
+                                                             fill={color}
+                                                             stroke={isCurrentMonth ? "#D4AF37" : color}
+                                                             strokeWidth={isCurrentMonth ? 1.5 : 0.5}
+                                                             className="transition-all duration-200 cursor-pointer"
+                                                             onMouseEnter={() => setHoveredMonthIndex(index)}
+                                                             onMouseLeave={() => setHoveredMonthIndex(null)}
+                                                             style={{ filter: isCurrentMonth || monthRev >= 100 ? 'url(#glow)' : 'none', opacity: hoveredMonthIndex !== null && hoveredMonthIndex !== index ? 0.4 : 1 }}
+                                                         />
+                                                     );
+                                                 })}
 
                                                 {/* Center Dashboard */}
                                                 <circle cx="0" cy="0" r="175" fill="#0a0a0a" stroke="#333" strokeWidth="4"/>
                                                 {currentDisplayDay && (
                                                     <g className="transition-all duration-300">
-                                                        <text x="0" y="-40" textAnchor="middle" fill="#666" fontSize="14" fontWeight="600" className="uppercase tracking-widest">
-                                                            {currentDisplayDay.dayOfYear === TODAY_INDEX ? "TODAY" : currentDisplayDay.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                                                        </text>
-                                                        <text x="0" y="20" textAnchor="middle" fill={getColorForRevenue(currentDisplayDay.revenue)} fontSize="48" fontWeight="bold">
-                                                            €{currentDisplayDay.revenue.toFixed(2)}
-                                                        </text>
-                                                        <text x="0" y="60" textAnchor="middle" fill="#999" fontSize="12" fontWeight="500">
-                                                            {getStatusText(currentDisplayDay.revenue)}
-                                                        </text>
+                                                        {wheelViewMode === 'days' ? (
+                                                            <>
+                                                                <text x="0" y="-40" textAnchor="middle" fill="#666" fontSize="14" fontWeight="600" className="uppercase tracking-widest">
+                                                                    {currentDisplayDay.dayOfYear === TODAY_INDEX ? "TODAY" : currentDisplayDay.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                                                                </text>
+                                                                <text x="0" y="20" textAnchor="middle" fill={getColorForRevenue(currentDisplayDay.revenue)} fontSize="48" fontWeight="bold">
+                                                                    {currentDisplayDay.revenue.toFixed(2)}
+                                                                </text>
+                                                                <text x="0" y="45" textAnchor="middle" fill="#666" fontSize="12" fontWeight="500" className="uppercase tracking-widest">
+                                                                    Revenue (€)
+                                                                </text>
+                                                                <text x="0" y="70" textAnchor="middle" fill={getColorForRevenue(currentDisplayDay.revenue)} fontSize="12" fontWeight="bold" className="uppercase tracking-widest">
+                                                                    {getStatusText(currentDisplayDay.revenue)}
+                                                                </text>
+                                                                {currentDisplayDay.source && (
+                                                                    <text x="0" y="100" textAnchor="middle" fill="#666" fontSize="10" className="truncate max-w-[150px]">
+                                                                        {currentDisplayDay.source}
+                                                                    </text>
+                                                                )}
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <text x="0" y="-40" textAnchor="middle" fill="#666" fontSize="14" fontWeight="600" className="uppercase tracking-widest">
+                                                                    {currentDisplayMonth ? `${currentDisplayMonth.name} 2026` : 'Current Month'}
+                                                                </text>
+                                                                <text x="0" y="20" textAnchor="middle" fill={getColorForRevenue(currentDisplayMonthRevenue)} fontSize="48" fontWeight="bold">
+                                                                    {currentDisplayMonthRevenue.toFixed(2)}
+                                                                </text>
+                                                                <text x="0" y="45" textAnchor="middle" fill="#666" fontSize="12" fontWeight="500" className="uppercase tracking-widest">
+                                                                    Projected Revenue (€)
+                                                                </text>
+                                                                <text x="0" y="70" textAnchor="middle" fill={getColorForRevenue(currentDisplayMonthRevenue)} fontSize="12" fontWeight="bold" className="uppercase tracking-widest">
+                                                                    {getStatusText(currentDisplayMonthRevenue)}
+                                                                </text>
+                                                            </>
+                                                        )}
                                                     </g>
                                                 )}
                                             </g>
@@ -979,7 +1061,7 @@
                                         <h3 className="text-[#D4AF37] text-sm uppercase tracking-widest mb-4 font-bold">Current Subscribers</h3>
                                         <ul className="space-y-3">
                                             {[
-                                                { day: 'Mar 21', index: TODAY_INDEX, desc: 'Arcade (Yearly)' }
+                                                { day: 'Today', index: TODAY_INDEX, desc: 'Arcade (Yearly)' }
                                             ].map((item, idx) => {
                                                 const dayData = data[item.index];
                                                 if (!dayData) return null;
@@ -1213,7 +1295,7 @@
                                                 <td className="p-3">
                                                     {c.subscription ? (
                                                         <span className="px-2 py-1 text-[10px] uppercase bg-green-900/30 text-green-400 border border-green-500">{c.subscription}</span>
-                                                    ) : (
+                        {viewMode === 'month' ? (
                                                         <span className="text-gray-600 text-xs">-</span>
                                                     )}
                                                 </td>
