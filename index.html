@@ -1081,6 +1081,8 @@
             const [isAuthenticated, setIsAuthenticated] = useState(false);
             const [password, setPassword] = useState('');
             const [error, setError] = useState('');
+            const [sortOrder, setSortOrder] = useState('desc');
+            const [searchQuery, setSearchQuery] = useState('');
 
             const customers = [
                 { id: '000000001', firstName: 'Bernhard', lastName: 'Brauner', email: 'bernhard.brauner@gmx.at', location: 'Heinrich-Lefler-Gasse 23/5/20, 1220 Vienna, Austria', products: 'Pyramid', studioFan: 'Allmer Games', brandFan: 'Seven Wonders', firstOrder: '2024.06.15', lastOrder: '', subscription: '', notes: '' },
@@ -1091,6 +1093,15 @@
                 { id: '000000006', firstName: 'Carlos Daniel', lastName: 'La Cruz Aranguren', email: 'tonu_16@hotmail.com', location: 'Austria', products: 'Arcade Subscription', studioFan: 'Allmer Music', brandFan: '', firstOrder: '2026.03.21', lastOrder: '', subscription: 'Arcade (Yearly)', notes: '' }
             ];
 
+            const getSexSymbol = (firstName, lastName) => {
+                const femaleNames = ['Fiona', 'Bennu'];
+                const fullName = `${firstName} ${lastName}`.toLowerCase();
+                if (femaleNames.includes(firstName)) {
+                    return <span className="text-pink-400" title="Female">♀</span>;
+                }
+                return <span className="text-blue-400" title="Male">♂</span>;
+            };
+
             const handleLogin = (e) => {
                 e.preventDefault();
                 if (password === '2020') {
@@ -1100,6 +1111,17 @@
                     setError('Invalid password');
                 }
             };
+
+            const filteredCustomers = customers
+                .filter(c => {
+                    const fullName = `${c.firstName} ${c.lastName}`.toLowerCase();
+                    return fullName.includes(searchQuery.toLowerCase());
+                })
+                .sort((a, b) => {
+                    const idA = parseInt(a.id);
+                    const idB = parseInt(b.id);
+                    return sortOrder === 'desc' ? idB - idA : idA - idB;
+                });
 
             if (!isAuthenticated) {
                 return (
@@ -1141,13 +1163,31 @@
 
                     <div className="max-w-6xl mx-auto">
                         <div className="flex justify-between items-center mb-6">
-                            <p className="text-gray-500 text-sm">Total Customers: {customers.length}</p>
+                            <p className="text-gray-500 text-sm">Total Customers: {filteredCustomers.length}</p>
                             <button
                                 onClick={() => setIsAuthenticated(false)}
                                 className="text-gray-500 text-xs hover:text-[#D4AF37] uppercase tracking-widest"
                             >
                                 Logout
                             </button>
+                        </div>
+
+                        <div className="flex gap-4 mb-6">
+                            <input
+                                type="text"
+                                placeholder="Search by name..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="flex-1 bg-[#111] border border-[#333] text-white px-4 py-2 text-sm focus:border-[#D4AF37] focus:outline-none"
+                            />
+                            <select
+                                value={sortOrder}
+                                onChange={(e) => setSortOrder(e.target.value)}
+                                className="bg-[#111] border border-[#333] text-white px-4 py-2 text-sm focus:border-[#D4AF37] focus:outline-none"
+                            >
+                                <option value="desc">ID: High to Low</option>
+                                <option value="asc">ID: Low to High</option>
+                            </select>
                         </div>
 
                         <div className="border border-[#222] bg-[#050505]">
@@ -1164,10 +1204,10 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {customers.map(c => (
+                                        {filteredCustomers.map(c => (
                                             <tr key={c.id} className="border-b border-[#1a1a1a] hover:bg-[#111]">
                                                 <td className="p-3 text-[#D4AF37] font-mono text-sm">{c.id}</td>
-                                                <td className="p-3 text-white text-sm">{c.firstName} {c.lastName}</td>
+                                                <td className="p-3 text-white text-sm flex items-center gap-2">{getSexSymbol(c.firstName, c.lastName)}{c.firstName} {c.lastName}</td>
                                                 <td className="p-3 text-gray-400 text-sm">{c.email || '-'}</td>
                                                 <td className="p-3 text-gray-300 text-sm">{c.products}</td>
                                                 <td className="p-3">
@@ -1810,7 +1850,8 @@
                                 </div>
                                 <div className="flex-1">
                                     <h3 className="text-[#D4AF37] brand-font text-2xl mb-2">Magic is Real</h3>
-                                    <p className="text-gray-500 text-xs uppercase tracking-wider mb-4">A Strategy for the Allmer Organization</p>
+                                    <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">A Strategy for the Allmer Organization</p>
+                                    <p className="text-gray-600 text-[10px] mb-4">Published: 2026.03.15</p>
                                     <p className="text-gray-400 text-sm leading-relaxed mb-6">
                                         Find the irreplaceable stuff in different artforms and double down on that. We pursue a dual strategy of effortful hand crafted work for a selected audience and AI assisted super programming for the whole world. The middlemen is dead.
                                     </p>
@@ -1829,7 +1870,8 @@
                                 </div>
                                 <div className="flex-1">
                                     <h3 className="text-[#D4AF37] brand-font text-2xl mb-2">Mercur 2026 Submission</h3>
-                                    <p className="text-gray-500 text-xs uppercase tracking-wider mb-4">Arcade Digital Service — Austrian Federal Economic Chamber</p>
+                                    <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Arcade Digital Service — Austrian Federal Economic Chamber</p>
+                                    <p className="text-gray-600 text-[10px] mb-4">Submitted: 2026.03.22</p>
                                     <p className="text-gray-400 text-sm leading-relaxed mb-6">
                                         The official submission document for the Mercur Prize, presenting the Arcade Digital Service as an innovative digital solution for the entertainment industry.
                                     </p>
