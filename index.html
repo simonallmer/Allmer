@@ -805,8 +805,10 @@
                     date.setDate(i + 1);
                     let revenue = 0;
                     let source = '';
-                    if (i === TODAY_INDEX) { revenue = 5.00; source = 'Arcade (Yearly) - 000000006'; }
-                    else if (date.getDate() === 22 && date.getMonth() >= 2) { revenue = 1.00; source = 'Arcade (Monthly) - 000000003'; }
+                    // Carlos (000000006) - Yearly subscription on March 21st, recurring every year
+                    if (date.getDate() === 21 && date.getMonth() === 2) { revenue = 5.00; source = 'Arcade (Yearly) - 000000006'; }
+                    // Bennu (000000003) - Monthly subscription on 22nd, active since June 2025
+                    else if (date.getDate() === 22) { revenue = 1.00; source = 'Arcade (Monthly) - 000000003'; }
                     return { dayOfYear: i, date, revenue, source };
                 });
             });
@@ -1071,7 +1073,8 @@
                                         <h3 className="text-[#D4AF37] text-sm uppercase tracking-widest mb-4 font-bold">Current Subscribers</h3>
                                         <ul className="space-y-3">
                                             {[
-                                                { day: 'Today', index: TODAY_INDEX, desc: 'Arcade (Yearly)' }
+                                                { day: 'Mar 21', index: 80, desc: '000000006 · Arcade (Yearly)' },
+                                                { day: 'Mar 22', index: 81, desc: '000000003 · Arcade (Monthly)' }
                                             ].map((item, idx) => {
                                                 const dayData = data[item.index];
                                                 if (!dayData) return null;
@@ -1089,7 +1092,8 @@
                                                 );
                                             })}
                                             <li className="pt-2 border-t border-[#333]">
-                                                <p className="text-gray-500 text-xs">Monthly (22nd): €1.00 recurring</p>
+                                                <p className="text-gray-500 text-[10px]">Monthly recurs every 22nd</p>
+                                                <p className="text-gray-500 text-[10px]">Yearly recurs every Mar 21st</p>
                                             </li>
                                         </ul>
                                     </div>
@@ -1198,9 +1202,8 @@
             ];
 
             const getSexSymbol = (firstName, lastName) => {
-                const femaleNames = ['Fiona', 'Bennu'];
-                const fullName = `${firstName} ${lastName}`.toLowerCase();
-                if (femaleNames.includes(firstName)) {
+                const femaleNames = ['Fiona', 'Bennu', 'Bennu Ceren'];
+                if (femaleNames.some(name => firstName.toLowerCase().startsWith(name.toLowerCase()))) {
                     return <span className="text-pink-400" title="Female">♀</span>;
                 }
                 return <span className="text-blue-400" title="Male">♂</span>;
