@@ -1791,6 +1791,7 @@
 
         const PublicationsPillar = () => {
             const [showMagicReader, setShowMagicReader] = useState(false);
+            const [showMercurReader, setShowMercurReader] = useState(false);
 
             return (
                 <div className="flex-1 bg-black min-h-full p-8 pb-20 text-white font-serif relative overflow-hidden">
@@ -1798,7 +1799,7 @@
 
                     <SectionHeader title="Publications" subtitle="Written Works & Concepts" />
 
-                    <div className="max-w-4xl mx-auto">
+                    <div className="max-w-4xl mx-auto space-y-6">
                         <div 
                             className="border border-[#D4AF37]/30 bg-gradient-to-b from-[#0a0a0a] to-black p-12 cursor-pointer hover:border-[#D4AF37] transition-all group"
                             onClick={() => setShowMagicReader(true)}
@@ -1814,6 +1815,25 @@
                                         Find the irreplaceable stuff in different artforms and double down on that. We pursue a dual strategy of effortful hand crafted work for a selected audience and AI assisted super programming for the whole world. The middlemen is dead.
                                     </p>
                                     <span className="text-[#D4AF37] text-xs uppercase tracking-widest border border-[#D4AF37] px-4 py-2 group-hover:bg-[#D4AF37] group-hover:text-black transition-all">Open Reader</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div 
+                            className="border border-[#D4AF37]/30 bg-gradient-to-b from-[#0a0a0a] to-black p-12 cursor-pointer hover:border-[#D4AF37] transition-all group"
+                            onClick={() => setShowMercurReader(true)}
+                        >
+                            <div className="flex items-center gap-8">
+                                <div className="w-32 h-44 border border-[#333] bg-gradient-to-b from-[#1a1a1a] to-[#0a0a0a] flex flex-col items-center justify-center p-4 group-hover:shadow-[0_0_30px_rgba(212,175,55,0.2)] transition-all">
+                                    <span className="text-[#D4AF37] brand-font text-[10px] text-center leading-tight">MERCUR<br/>2026<br/>SUBMISSION</span>
+                                </div>
+                                <div className="flex-1">
+                                    <h3 className="text-[#D4AF37] brand-font text-2xl mb-2">Mercur 2026 Submission</h3>
+                                    <p className="text-gray-500 text-xs uppercase tracking-wider mb-4">Arcade Digital Service — Austrian Federal Economic Chamber</p>
+                                    <p className="text-gray-400 text-sm leading-relaxed mb-6">
+                                        The official submission document for the Mercur Prize, presenting the Arcade Digital Service as an innovative digital solution for the entertainment industry.
+                                    </p>
+                                    <span className="text-[#D4AF37] text-xs uppercase tracking-widest border border-[#D4AF37] px-4 py-2 group-hover:bg-[#D4AF37] group-hover:text-black transition-all">View PDF</span>
                                 </div>
                             </div>
                         </div>
@@ -2032,65 +2052,109 @@
                                                 <div className="border border-[#222] p-6">
                                                     <h4 className="text-[#D4AF37] brand-font mb-2">Casino Camino</h4>
                                                     <p className="text-gray-300 leading-relaxed">
-                                                        A place you follow your vices. The word Camino is a road, a journey — you don't just play Casino Camino, you travel it.
+                                                        A casino at the edge of the known world. The westernmost point of the European rail network. A place where fortunes change hands and the Pacific stretches out to the left. Not a theme. A location.
+                                                    </p>
+                                                </div>
+                                                
+                                                <div className="border border-[#222] p-6">
+                                                    <h4 className="text-[#D4AF37] brand-font mb-2">Seven Seas</h4>
+                                                    <p className="text-gray-300 leading-relaxed">
+                                                        A fleet. Not a franchise of ships — a specific set of vessels, crewed by specific people, sailing specific routes. The nautical charts exist. The ships are being built. When they launch, the world will be able to board them.
+                                                    </p>
+                                                </div>
+                                                
+                                                <div className="border border-[#222] p-6">
+                                                    <h4 className="text-[#D4AF37] brand-font mb-2">Chronicle</h4>
+                                                    <p className="text-gray-300 leading-relaxed">
+                                                        A publication with an address. The offices are in Vienna, at the same address as Allmer Studios. The writers are there. The archives are there. The editorial voice comes from that room.
                                                     </p>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div className="mb-12">
-                                            <h3 className="text-xl text-white brand-font mb-4">Why This Changes Merchandising</h3>
+                                            <h3 className="text-xl text-white brand-font mb-4">The Argument</h3>
                                             <p className="text-gray-300 leading-relaxed mb-4">
-                                                Generic entertainment merchandise is the brand floating free of its world and landing on an object. Merchandise done outside the organization has no reason to exist. Allmer merchandise is done in house because only in house does anyone know what the object is supposed to feel like in the context of its world.
+                                                Every brand needs a somewhere. Not just a legal registration or a listed headquarters — a place the audience can feel, visit, or at least picture. A brand without a somewhere is a brand without a reason to exist outside of transactions. It is a name attached to products instead of a world attached to people.
                                             </p>
                                             <p className="text-gray-300 leading-relaxed mb-4">
-                                                The Metropole candy is made by Viennese artisans because Metropole is Viennese and Art Deco and handmade. The Futory bag carries the iconography of Lethargos Temple because that is the place the cards come from. The Seven Wonders physical editions are made of materials that belong to the ancient world — sandstone-finish casings, carved wood — because the game is not a representation of those places, it is an artifact of them.
+                                                Allmer's portfolio of brands — Seven Wonders with its ancient architecture, Arcade with its game room aesthetic, American Portrait with its Gallery, Lunyra with its lunar city, Detective Noname with its London fog, Metropole with its Viennese café, Casino Camino with its Pacific edge, Seven Seas with its fleet, Chronicle with its editorial room — is not a collection of IPs. It is an atlas. And the audience doesn't just consume content from this atlas. They travel.
                                             </p>
                                             <p className="text-[#D4AF37] font-semibold">
-                                                This is why outside agencies and generic manufacturers are cut. They do not know where the product comes from. They cannot.
+                                                Give every brand an address. Make the address real. Let the address become the marketing.
                                             </p>
                                         </div>
+                                    </div>
 
+                                    {/* Part III */}
+                                    <div className="mb-16">
+                                        <h2 className="text-2xl text-[#D4AF37] brand-font mb-8 uppercase tracking-widest">Part III — The Execution</h2>
+                                        
                                         <div className="mb-12">
-                                            <h3 className="text-xl text-white brand-font mb-4">The Center as Culmination</h3>
+                                            <h3 className="text-xl text-white brand-font mb-4">The Production Principle</h3>
                                             <p className="text-gray-300 leading-relaxed mb-4">
-                                                The 2028 Centers are not theme parks. They are not retail experiences. They are not brand activations. They are the point where every address in the Allmer atlas becomes a room you can physically enter. The Arcade as a hall. The Gallery with the American Portrait paintings on real walls. A Seven Wonders installation you can walk around. A Lunyra room that feels like a city on the Moon. Detective Noname's London rendered in enough physical detail to solve the puzzle in the space itself.
+                                                Use every technological advantage available — AI instrumentation, 3D printing, digital distribution, automated operations — to ruthlessly eliminate time spent on infrastructure. Reinvest every freed hour into the crafts that are visibly, provably, irreplaceably human. Build the Atelier objects that demonstrate the philosophy at its most extreme. Let them fund and market everything else. Cut the middle entirely.
                                             </p>
                                             <p className="text-gray-300 leading-relaxed mb-4">
-                                                Digital-native competitors cannot replicate this. Not because of cost — because they have no geography to build from. They have no address. You cannot construct a physical space around a brand that exists nowhere. Allmer has been building the addresses for years. The Centers are simply the moment those addresses open their doors.
+                                                The entertainment industry has spent twenty years making everything lighter — streaming instead of owning, digital instead of physical, global instead of local, everywhere instead of somewhere. The result is a landscape of brands that float free of any gravitational center, infinitely reproducible and almost impossible to feel strongly about.
+                                            </p>
+                                            <p className="text-gray-300 leading-relaxed mb-4">
+                                                Allmer moves in the opposite direction. Every brand has a place. Every product comes from that place. Every piece of merchandise respects that origin. The Arcade is a destination. The Gallery is a gallery. The City is a city.
+                                            </p>
+                                            <p className="text-[#D4AF37] font-semibold text-lg mb-6">
+                                                The skeleton is the art. Everything else serves the skeleton.
                                             </p>
                                             <p className="text-gray-300 leading-relaxed">
-                                                Events follow the same logic. A Seven Wonders tournament held in a Parisian café is not a marketing event. It is the game returning to its natural habitat. A live Allmer performance tied to a film release is not a promotional appearance. It is the music existing in the space it was written for. Real products, real places, real performances are structurally impossible to replicate by any competitor who built their entire identity inside a screen.
+                                                Magic is Real because it happened somewhere. The job is to keep building those somewheres — in objects, in interfaces, in events, and eventually in rooms you can walk into — until the audience understands that what Allmer offers is not content. It is a world. And the world has an address.
                                             </p>
                                         </div>
-                                    </div>
 
-                                    {/* Conclusion */}
-                                    <div className="mb-16 pt-16 border-t border-[#222]">
-                                        <h3 className="text-xl text-white brand-font mb-4">The Production Principle</h3>
-                                        <p className="text-gray-300 leading-relaxed mb-4">
-                                            Use every technological advantage available — AI instrumentation, 3D printing, digital distribution, automated operations — to ruthlessly eliminate time spent on infrastructure. Reinvest every freed hour into the crafts that are visibly, provably, irreplaceably human. Build the Atelier objects that demonstrate the philosophy at its most extreme. Let them fund and market everything else. Cut the middle entirely.
-                                        </p>
-                                        <p className="text-gray-300 leading-relaxed mb-4">
-                                            The entertainment industry has spent twenty years making everything lighter — streaming instead of owning, digital instead of physical, global instead of local, everywhere instead of somewhere. The result is a landscape of brands that float free of any gravitational center, infinitely reproducible and almost impossible to feel strongly about.
-                                        </p>
-                                        <p className="text-gray-300 leading-relaxed mb-4">
-                                            Allmer moves in the opposite direction. Every brand has a place. Every product comes from that place. Every piece of merchandise respects that origin. The Arcade is a destination. The Gallery is a gallery. The City is a city.
-                                        </p>
-                                        <p className="text-[#D4AF37] font-semibold text-lg mb-6">
-                                            The skeleton is the art. Everything else serves the skeleton.
-                                        </p>
-                                        <p className="text-gray-300 leading-relaxed">
-                                            Magic is Real because it happened somewhere. The job is to keep building those somewheres — in objects, in interfaces, in events, and eventually in rooms you can walk into — until the audience understands that what Allmer offers is not content. It is a world. And the world has an address.
-                                        </p>
-                                    </div>
-
-                                    {/* Signature */}
-                                    <div className="text-right pt-16 border-t border-[#222]">
-                                        <p className="text-[#D4AF37] brand-font text-lg mb-1">Simon Allmer</p>
-                                        <p className="text-gray-500 text-sm">Vienna, 2026</p>
+                                        {/* Signature */}
+                                        <div className="text-right pt-16 border-t border-[#222]">
+                                            <p className="text-[#D4AF37] brand-font text-lg mb-1">Simon Allmer</p>
+                                            <p className="text-gray-500 text-sm">Vienna, 2026</p>
+                                        </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Mercur 2026 PDF Reader Modal */}
+                    {showMercurReader && (
+                        <div 
+                            className="fixed inset-0 bg-black/95 z-50 flex flex-col"
+                            onClick={() => setShowMercurReader(false)}
+                        >
+                            {/* Reader Header */}
+                            <div className="flex items-center justify-between p-6 border-b border-[#222]">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-8 h-10 border border-[#D4AF37]/50 bg-gradient-to-b from-[#1a1a1a] to-[#0a0a0a] flex items-center justify-center">
+                                        <span className="text-[#D4AF37] brand-font text-[6px] leading-tight">M26</span>
+                                    </div>
+                                    <div>
+                                        <h4 className="text-[#D4AF37] brand-font text-sm">Mercur 2026 Submission</h4>
+                                        <p className="text-gray-500 text-[10px]">Arcade Digital Service</p>
+                                    </div>
+                                </div>
+                                <button 
+                                    onClick={() => setShowMercurReader(false)}
+                                    className="text-gray-500 hover:text-white text-2xl w-10 h-10 flex items-center justify-center border border-transparent hover:border-[#333] transition-all"
+                                >
+                                    ×
+                                </button>
+                            </div>
+
+                            {/* PDF Viewer */}
+                            <div 
+                                className="flex-1 bg-[#1a1a1a]"
+                                onClick={e => e.stopPropagation()}
+                            >
+                                <iframe 
+                                    src="Documents/simon-allmer-formular-mercur-einreichung.pdf"
+                                    className="w-full h-full"
+                                    title="Mercur 2026 Submission"
+                                />
                             </div>
                         </div>
                     )}
