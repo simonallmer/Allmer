@@ -903,7 +903,7 @@
                             <div className="flex flex-col lg:flex-row gap-8">
                                 {/* Year Wheel */}
                                 <div className="flex justify-end mb-4 pr-4">
-                                    <div className="flex items-center bg-[#111] rounded-full border border-[#333] p-1">
+                                    <div className="flex items-center bg-[#111] h-10 rounded-full border border-[#333] p-1">
                                         <button 
                                             onClick={() => setWheelViewMode('days')} 
                                             className={`px-4 py-1.5 rounded-full text-[10px] font-bold tracking-wider transition-all ${wheelViewMode === 'days' ? 'bg-white text-black' : 'text-gray-400 hover:text-white'}`}
@@ -984,7 +984,7 @@
                                                      
                                                      const isCurrentMonth = TODAY_INDEX >= startDay && TODAY_INDEX < endDay;
                                                      
-                                                     const color = getColorForRevenue(monthRev / (endDay - startDay) * 30);
+                                                     const color = getColorForRevenue(monthRev);
                                                      
                                                      return (
                                                          <path
@@ -1031,7 +1031,7 @@
                                                                     {currentDisplayMonth ? `${currentDisplayMonth.name} 2026` : 'Current Month'}
                                                                 </text>
                                                                 <text x="0" y="20" textAnchor="middle" fill={getColorForRevenue(currentDisplayMonthRevenue)} fontSize="48" fontWeight="bold">
-                                                                    {currentDisplayMonthRevenue.toFixed(2)}
+                                                                    {Math.round(currentDisplayMonthRevenue)}
                                                                 </text>
                                                                 <text x="0" y="45" textAnchor="middle" fill="#666" fontSize="12" fontWeight="500" className="uppercase tracking-widest">
                                                                     Projected Revenue (€)
@@ -2625,6 +2625,17 @@
             const [activeTab, setActiveTab] = useState('home');
             const [selectedStudio, setSelectedStudio] = useState(null);
             const [showMenu, setShowMenu] = useState(false);
+
+            React.useEffect(() => {
+                const handleKeyDown = (e) => {
+                    if (e.code === 'Space' && e.target === document.body) {
+                        e.preventDefault();
+                        setShowMenu(prev => !prev);
+                    }
+                };
+                window.addEventListener('keydown', handleKeyDown);
+                return () => window.removeEventListener('keydown', handleKeyDown);
+            }, []);
 
             return (
                 <div className="h-screen w-full flex flex-col font-serif overflow-hidden select-none bg-black text-gray-200">
