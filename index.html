@@ -31,6 +31,16 @@
             font-family: 'Cinzel', serif;
         }
 
+        @font-face {
+            font-family: 'Royal Signage';
+            src: url('./fonts/RoyalSignage-Rg.ttf') format('truetype');
+        }
+
+        .royal-font {
+            font-family: 'Royal Signage', serif;
+            letter-spacing: normal;
+        }
+
         /* Custom scrollbar to match the theme */
         ::-webkit-scrollbar {
             width: 8px;
@@ -192,8 +202,8 @@
 
                     <div className="border border-[#D4AF37] p-1 inline-block">
                         <div className="border border-[#D4AF37] p-8 bg-[#0a0a0a]">
-                            <h1 className="text-5xl md:text-7xl font-serif text-[#D4AF37] mb-4 tracking-tighter brand-font">
-                                A L L M E R
+                            <h1 className="text-5xl md:text-7xl text-[#D4AF37] leading-none tracking-normal royal-font">
+                                allmer
                             </h1>
                         </div>
                     </div>
@@ -373,10 +383,12 @@
         const AssetsPillar = ({ navigate }) => {
             const [city, setCity] = useState('Vienna');
             const [transactions, setTransactions] = useState([
-                { id: 1, date: '2026.03.15', description: 'Paradice am See, Vienna', studio: 'games', type: 'oneoff', amount: 30.00, transactionType: 'income' },
+                { id: 1, date: '2026.03.15', description: 'Various Game Sales - Paradice am See, Vienna', studio: 'games', type: 'oneoff', amount: 30.00, transactionType: 'income' },
                 { id: 2, date: '2026.03.21', description: 'Arcade Subscription - Customer 000000006', studio: 'games', type: 'recurring', amount: 5.00, transactionType: 'income', recurringPeriod: 'yearly', recurringDay: 21 },
-                { id: 3, date: '2026.03.22', description: 'Arcade Subscription - Customer 000000003', studio: 'games', type: 'recurring', amount: 1.00, transactionType: 'income', recurringPeriod: 'monthly', recurringDay: 22 }
+                { id: 3, date: '2026.03.22', description: 'Arcade Subscription - Customer 000000003', studio: 'games', type: 'recurring', amount: 1.00, transactionType: 'income', recurringPeriod: 'monthly', recurringDay: 22 },
+                { id: 4, date: '2026.03.23', description: 'Pyramid Sale - Customer 000000007, Munchy Bar, Vienna', studio: 'games', type: 'oneoff', amount: 10.00, transactionType: 'income' }
             ]);
+            const [sortOrder, setSortOrder] = useState('desc');
             const [showModal, setShowModal] = useState(false);
             const [formData, setFormData] = useState({ date: '2026.03.21', description: '', studio: 'games', type: 'oneoff', amount: '', transactionType: 'income' });
 
@@ -397,6 +409,7 @@
             const earnings = transactions.filter(t => t.transactionType === 'income').reduce((sum, t) => sum + t.amount, 0);
             const expenses = transactions.filter(t => t.transactionType === 'expense').reduce((sum, t) => sum + t.amount, 0);
             const balance = earnings - expenses;
+            const projectedNextMonth = transactions.filter(t => t.type === 'recurring' && t.transactionType === 'income' && t.recurringPeriod === 'monthly').reduce((sum, t) => sum + t.amount, 0);
 
             const studioColors = {
                 games: 'bg-red-900/30 text-red-400 border-red-500',
@@ -404,6 +417,14 @@
                 films: 'bg-yellow-900/30 text-yellow-400 border-yellow-500',
                 music: 'bg-purple-900/30 text-purple-400 border-purple-500'
             };
+
+            const sortedTransactions = [...transactions].sort((a, b) => {
+                const dateA = a.date.split('.').join('-');
+                const dateB = b.date.split('.').join('-');
+                return sortOrder === 'desc' 
+                    ? new Date(dateB) - new Date(dateA) 
+                    : new Date(dateA) - new Date(dateB);
+            });
 
             const handleSubmit = (e) => {
                 e.preventDefault();
@@ -448,7 +469,15 @@
                         {/* Income Statement */}
                         <div className="border border-[#222] bg-[#0a0a0a]">
                             <div className="flex items-center justify-between p-4 border-b border-[#222]">
-                                <h3 className="text-[#D4AF37] brand-font text-lg uppercase tracking-widest">Income Statement</h3>
+                                <div className="flex items-center gap-4">
+                                    <h3 className="text-[#D4AF37] brand-font text-lg uppercase tracking-widest">Income Statement</h3>
+                                    <button 
+                                        onClick={() => setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc')}
+                                        className="text-[10px] text-gray-500 hover:text-[#D4AF37] transition-colors border border-[#333] px-2 py-0.5"
+                                    >
+                                        SORT: {sortOrder === 'desc' ? 'NEWEST FIRST' : 'OLDEST FIRST'}
+                                    </button>
+                                </div>
                                 <button 
                                     onClick={() => setShowModal(true)}
                                     className="px-3 py-1 bg-[#D4AF37] text-black text-xs uppercase tracking-wider hover:bg-[#D4AF37]/80"
@@ -468,7 +497,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {transactions.filter(t => t.transactionType === 'income').map(t => (
+                                        {sortedTransactions.filter(t => t.transactionType === 'income').map(t => (
                                             <tr key={t.id} className="border-b border-[#1a1a1a]">
                                                 <td className="p-3 text-gray-400 text-sm">{t.date}</td>
                                                 <td className="p-3 text-white text-sm">{t.description}</td>
@@ -508,13 +537,13 @@
                                     </thead>
                                     <tbody>
                                         <tr className="border-b border-[#1a1a1a]">
-                                            <td className="p-3 text-gray-400 text-sm">2026.03.15</td>
+                                            <td className="p-3 text-gray-400 text-sm">{sortOrder === 'desc' ? sortedTransactions[sortedTransactions.length-1]?.date : sortedTransactions[0]?.date}</td>
                                             <td className="p-3 text-white text-sm">Starting Balance</td>
                                             <td className="p-3 text-gray-400 text-sm">Cash</td>
                                             <td className="p-3 text-gray-400 text-sm">Assets</td>
                                             <td className="p-3 text-right text-green-500 font-mono">€0.00</td>
                                         </tr>
-                                        {transactions.filter(t => t.transactionType === 'income').map(t => (
+                                        {sortedTransactions.filter(t => t.transactionType === 'income').map(t => (
                                             <tr key={t.id} className="border-b border-[#1a1a1a]">
                                                 <td className="p-3 text-gray-400 text-sm">{t.date}</td>
                                                 <td className="p-3 text-white text-sm">Sales Revenue - Allmer {t.studio.charAt(0).toUpperCase() + t.studio.slice(1)}</td>
@@ -553,8 +582,8 @@
                                     View Annual
                                 </button>
                             </div>
-                            <div className="p-8 text-center text-gray-500">
-                                €0.00
+                            <div className="p-8 text-center text-gray-500 font-serif text-xl">
+                                €{projectedNextMonth.toFixed(2)}
                             </div>
                         </div>
 
@@ -1198,7 +1227,8 @@
                 { id: '000000003', firstName: 'Bennu Ceren', lastName: 'Cevik', email: 'bennu_ceren@hotmail.com', location: 'Vienna, Austria', products: 'Seven Wonders, Elements, Chronicle: Years of Change', studioFan: 'Allmer', brandFan: 'Seven Wonders, Chronicle', firstOrder: '2025.06.06', lastOrder: '2026.03.22', subscription: 'Arcade (Monthly)', notes: '' },
                 { id: '000000004', firstName: 'Christopher', lastName: 'Klarmann', email: 'wery67564@gmail.com', location: 'South Fairfax Street 525, Alexandria, 22314 VA, USA', products: 'Pyramid Travel Edition, Gardens Travel Edition', studioFan: 'Allmer Games', brandFan: 'Seven Wonders', firstOrder: '2025.06.22', lastOrder: '', subscription: '', notes: '' },
                 { id: '000000005', firstName: 'Fiona', lastName: 'Strolz', email: '', location: 'Vienna, Austria', products: 'Pyramid', studioFan: 'Allmer Games', brandFan: 'Seven Wonders', firstOrder: '2026.02.12', lastOrder: '', subscription: '', notes: '' },
-                { id: '000000006', firstName: 'Carlos Daniel', lastName: 'La Cruz Aranguren', email: 'tonu_16@hotmail.com', location: 'Austria', products: 'Arcade Subscription', studioFan: 'Allmer Music', brandFan: '', firstOrder: '2026.03.21', lastOrder: '', subscription: 'Arcade (Yearly)', notes: '' }
+                { id: '000000006', firstName: 'Carlos Daniel', lastName: 'La Cruz Aranguren', email: 'tonu_16@hotmail.com', location: 'Austria', products: 'Arcade Subscription', studioFan: 'Allmer Music', brandFan: '', firstOrder: '2026.03.21', lastOrder: '', subscription: 'Arcade (Yearly)', notes: '' },
+                { id: '000000007', firstName: 'Rex', lastName: 'Rowan', email: '', location: 'Dublin, Ireland', products: 'Pyramid', studioFan: 'Allmer Games', brandFan: 'Seven Wonders', firstOrder: '2026.03.23', lastOrder: '', subscription: '', notes: 'Studies Prehistory' }
             ];
 
             const getSexSymbol = (firstName, lastName) => {
@@ -1308,6 +1338,7 @@
                                             <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">Products</th>
                                             <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">Subscription</th>
                                             <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">First Order</th>
+                                            <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">Notes</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -1325,6 +1356,7 @@
                                                     )}
                                                 </td>
                                                 <td className="p-3 text-gray-400 text-sm">{c.firstOrder}</td>
+                                                <td className="p-3 text-gray-400 text-xs italic">{c.notes || '-'}</td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -1733,13 +1765,12 @@
 
         const LexiconPillar = () => {
             const entries = [
-                { name: 'Allmer', description: 'The Holding Company that includes Simon Allmer Entertainment and future ventures. Manages the less artistic aspects of the business (Real Estate, Financials) so each subsidiary can focus on what they do best. Allmer also offers training to Partners (how to develop products) and manages relationships with key stakeholders. Clear Business to Business positioning.', tag: 'Company' },
+                { name: 'Allmer', description: 'The Holding Company that includes Simon Allmer Entertainment and future ventures. Company type: Holding Company. Legal status: EU Inc. beginning in 2027. Manages the less artistic aspects of the business (Real Estate, Financials) so each subsidiary can focus on what they do best. Allmer also offers training to Partners (how to develop products) and manages relationships with key stakeholders. Clear Business to Business positioning.', tag: 'Company' },
                 { name: 'Allmer Comics', description: 'Products: Comic Books, Digital Comics. Brands/Series: Futory, Detective Noname.', tag: 'Studio' },
                 { name: 'Allmer Films', description: 'Products: Feature Films, Limited Series. Brands/Series: Futory, Detective Noname, Danger.', tag: 'Studio' },
                 { name: 'Allmer Games', description: 'Products: Tabletop Games, Video Games. Brands/Series: Seven Wonders, Futory, Detective Noname, Believe, Elements, Casino Camino, Lunyra.', tag: 'Studio' },
                 { name: 'Allmer Journals', description: 'Products: Magazines, Books. Brands/Series: Society Review, Chronicle.', tag: 'Studio' },
                 { name: 'Allmer Music', description: 'Products: Studio Albums, Score Albums. Brands/Series: Danger.', tag: 'Studio' },
-                { name: 'Allmer Skill', description: 'A provable ability that places one in the top 1% of professionals in the field.', tag: 'General' },
                 { name: 'Allmer Snacks', description: 'Products: Food, Beverages. Brands/Series: Metropole, Solar-Soda.', tag: 'Studio' },
                 { name: 'American Portrait', description: 'Telling the greatest stories from the first 250 years of the country. Series include: Kissinger, Carter. Studios used: All (Comics, Films, Games, Journals, Music, Snacks).', goal: 'Highest Grossing Comic Book and Film Series.', tag: 'Brand' },
                 { name: 'Arcade', description: '15 Allmer Games, 5 Classic Games, 5 Third Party Games.', strategy: 'Phase 1 — Spread the rules: €5/year gets Seven Wonders and Futory Cards into as many hands as possible. People learn the games, teach their friends, bring them to events. Phase 2 — The community becomes the moat: Once "want to play a round of Seven Wonders?" is a phrase people actually say, the game has cultural gravity. You don\'t need to convince anyone of the value anymore — the community does it for you. Phase 3 — Price reflects the network, not just the software: Doubling to €10/year at that point isn\'t a price hike — it\'s joining a club that people already want to be in.', goal: 'Most Subscriptions for Gaming Service.', tag: 'Service' },
@@ -1767,25 +1798,31 @@
                 { name: 'Riddle Novels', description: 'Puzzle-driven mystery novels set in Victorian London.', tag: 'Series', brand: 'Detective Noname' },
                 { name: 'Seven-Ball Juggling', description: 'Self-explanatory. The ability to juggle 7 balls continuously.', tag: 'Skill' },
                 { name: 'Seven Wonders', description: 'Abstract Strategy game series for 2-4 players that uses the architecture of the buildings as a game board.', goal: 'Highest Grossing Tabletop Game Series.', series: ['Old Seven Wonders', 'New Seven Wonders'], tag: 'Brand' },
-                { name: 'Simon Allmer Entertainment', description: 'Committed to creative excellence, Simon Allmer produces story-driven entertainment and consumer products for a global audience.', tag: 'Company' },
+                { name: 'Simon Allmer Entertainment', description: 'Committed to creative excellence, Simon Allmer produces story-driven entertainment and consumer products for a global audience. Company type: Parent Operating Company. Legal status: EU Inc. beginning in 2027.', tag: 'Company' },
                 { name: 'Solar-Soda', description: 'A solar-powered beverage brand.', tag: 'Brand' },
                 { name: 'Society Review', description: 'A magazine that aims to transform information into knowledge through discussions on today\'s critical issues.', tag: 'Brand' },
                 { name: 'Studio System', description: 'The unique approach of Simon Allmer Entertainment to create multimedia brands through the direct control and "orchestration" of the six Studios (no outsourcing). Each Studio can function independently to create unique IP (e.g. Seven Wonders is just Allmer Games) or play in tandem with others (American Portrait uses every studio to create unique products for each). Studio work doesn\'t always have to result in a product by the studio—e.g. Allmer Music can make sound design for a Game without releasing the soundtrack separately.', tag: 'Company' },
                 { name: 'New Seven Wonders', description: 'Seven architectural wonders of the modern world, reimagined as luxury physical games and decorative objects.', tag: 'Series', brand: 'Seven Wonders' },
                 { name: 'Water Lung', description: 'Ability to hold one\'s breath for over 5 minutes in static apnea without inhaling pure O2 and over 7 minutes with pure O2 inhalation.', tag: 'Skill' },
                 { name: 'Wire Walking', description: '', tag: 'Skill' }
-            ].sort((a, b) => a.name.localeCompare(b.name));
+            ].sort((a, b) => {
+                const tagPriority = { 'Company': 1, 'Studio': 2, 'Brand': 3, 'Series': 4, 'Service': 5, 'Skill': 6 };
+                if (tagPriority[a.tag] !== tagPriority[b.tag]) {
+                    return tagPriority[a.tag] - tagPriority[b.tag];
+                }
+                return a.name.localeCompare(b.name);
+            });
 
             const [searchTerm, setSearchTerm] = useState('');
             const [filterTag, setFilterTag] = useState(null);
             const [selectedEntry, setSelectedEntry] = useState(null);
 
-            const tags = [...new Set(entries.map(e => e.tag))].sort();
+            const tagOrder = ['Company', 'Studio', 'Brand', 'Series', 'Service', 'Skill'];
+            const tags = tagOrder.filter(tag => entries.some(e => e.tag === tag));
 
             const tagColors = {
                 'Brand': 'bg-blue-900/30 text-blue-400 border-blue-500',
                 'Company': 'bg-purple-900/30 text-purple-400 border-purple-500',
-                'General': 'bg-gray-700/30 text-gray-300 border-gray-500',
                 'Series': 'bg-cyan-900/30 text-cyan-400 border-cyan-500',
                 'Service': 'bg-orange-900/30 text-orange-400 border-orange-500',
                 'Skill': 'bg-green-900/30 text-green-400 border-green-500',
@@ -2678,7 +2715,7 @@
                         <div className="flex items-center gap-4 cursor-pointer" onClick={() => setActiveTab('home')}>
                             <div className="flex items-center gap-2">
                                 <div className="w-8 h-8 border border-[#D4AF37] flex items-center justify-center">
-                                    <span className="text-[#D4AF37] font-bold brand-font">A</span>
+                                    <span className="text-[#D4AF37] text-xl royal-font">a</span>
                                 </div>
                             </div>
                         </div>
