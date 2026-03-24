@@ -386,7 +386,7 @@
                 { id: 1, date: '2026.03.15', description: 'Various Game Sales - Paradice am See, Vienna', studio: 'games', type: 'oneoff', amount: 30.00, transactionType: 'income' },
                 { id: 2, date: '2026.03.21', description: 'Arcade Subscription - Customer 000000006', studio: 'games', type: 'recurring', amount: 5.00, transactionType: 'income', recurringPeriod: 'yearly', recurringDay: 21 },
                 { id: 3, date: '2026.03.22', description: 'Arcade Subscription - Customer 000000003', studio: 'games', type: 'recurring', amount: 1.00, transactionType: 'income', recurringPeriod: 'monthly', recurringDay: 22 },
-                { id: 4, date: '2026.03.23', description: 'Pyramid Sale - Customer 000000007, Munchy Bar, Vienna', studio: 'games', type: 'oneoff', amount: 10.00, transactionType: 'income' }
+                { id: 4, date: '2026.03.23', description: 'Pyramid game (One-off) - Munchy Bar Vienna', studio: 'games', type: 'oneoff', amount: 10.00, transactionType: 'income' }
             ]);
             const [sortOrder, setSortOrder] = useState('desc');
             const [showModal, setShowModal] = useState(false);
@@ -1227,8 +1227,7 @@
                 { id: '000000003', firstName: 'Bennu Ceren', lastName: 'Cevik', email: 'bennu_ceren@hotmail.com', location: 'Vienna, Austria', products: 'Seven Wonders, Elements, Chronicle: Years of Change', studioFan: 'Allmer', brandFan: 'Seven Wonders, Chronicle', firstOrder: '2025.06.06', lastOrder: '2026.03.22', subscription: 'Arcade (Monthly)', notes: '' },
                 { id: '000000004', firstName: 'Christopher', lastName: 'Klarmann', email: 'wery67564@gmail.com', location: 'South Fairfax Street 525, Alexandria, 22314 VA, USA', products: 'Pyramid Travel Edition, Gardens Travel Edition', studioFan: 'Allmer Games', brandFan: 'Seven Wonders', firstOrder: '2025.06.22', lastOrder: '', subscription: '', notes: '' },
                 { id: '000000005', firstName: 'Fiona', lastName: 'Strolz', email: '', location: 'Vienna, Austria', products: 'Pyramid', studioFan: 'Allmer Games', brandFan: 'Seven Wonders', firstOrder: '2026.02.12', lastOrder: '', subscription: '', notes: '' },
-                { id: '000000006', firstName: 'Carlos Daniel', lastName: 'La Cruz Aranguren', email: 'tonu_16@hotmail.com', location: 'Austria', products: 'Arcade Subscription', studioFan: 'Allmer Music', brandFan: '', firstOrder: '2026.03.21', lastOrder: '', subscription: 'Arcade (Yearly)', notes: '' },
-                { id: '000000007', firstName: 'Rex', lastName: 'Rowan', email: '', location: 'Dublin, Ireland', products: 'Pyramid', studioFan: 'Allmer Games', brandFan: 'Seven Wonders', firstOrder: '2026.03.23', lastOrder: '', subscription: '', notes: 'Studies Prehistory' }
+                { id: '000000006', firstName: 'Carlos Daniel', lastName: 'La Cruz Aranguren', email: 'tonu_16@hotmail.com', location: 'Austria', products: 'Arcade Subscription', studioFan: 'Allmer Music', brandFan: '', firstOrder: '2026.03.21', lastOrder: '', subscription: 'Arcade (Yearly)', notes: '' }
             ];
 
             const getSexSymbol = (firstName, lastName) => {
@@ -1338,7 +1337,6 @@
                                             <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">Products</th>
                                             <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">Subscription</th>
                                             <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">First Order</th>
-                                            <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">Notes</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -1356,7 +1354,6 @@
                                                     )}
                                                 </td>
                                                 <td className="p-3 text-gray-400 text-sm">{c.firstOrder}</td>
-                                                <td className="p-3 text-gray-400 text-xs italic">{c.notes || '-'}</td>
                                             </tr>
                                         ))}
                                     </tbody>
