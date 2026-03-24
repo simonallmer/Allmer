@@ -17,6 +17,10 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- Leaflet CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;700&display=swap');
 
@@ -142,6 +146,7 @@
         const Club = (props) => <IconWrapper {...props}><path d="M12 2a3 3 0 0 1 3 3c0 1.5-1 3.5-3 5-2-1.5-3-3.5-3-5a3 3 0 0 1 3-3Z" /><path d="M7 10a3 3 0 1 1 3-3c0 1.5-1 3.5-3 5-2-1.5-3-3.5-3-5a3 3 0 0 1 3 3Z" /><path d="M17 10a3 3 0 1 1 3-3c0 1.5-1 3.5-3 5-2-1.5-3-3.5-3-5a3 3 0 0 1 3 3Z" /><path d="M12 12s-1 1-1 3v2h2v-2s0-3-1-3Z" /></IconWrapper>;
         const Dices = (props) => <IconWrapper {...props}><rect width="12" height="12" x="2" y="10" rx="2" /><rect width="12" height="12" x="10" y="2" rx="2" /><path d="m14 14 3-3" /><path d="M15 14h.01" /><path d="M18 11h.01" /><path d="M12 10.01h.01" /></IconWrapper>;
         const Search = (props) => <IconWrapper {...props}><circle cx="11" cy="11" r="8" /><line x1="21" x2="16.65" y1="21" y2="16.65" /></IconWrapper>;
+        const X = (props) => <IconWrapper {...props}><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></IconWrapper>;
         const Newspaper = (props) => <IconWrapper {...props}><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2" /><path d="M18 14h-8" /><path d="M15 18h-5" /><path d="M10 6h8v4h-8V6Z" /></IconWrapper>;
         const Circle = (props) => <IconWrapper {...props}><circle cx="12" cy="12" r="10" /></IconWrapper>;
 
@@ -200,12 +205,8 @@
             return (
                 <div className="flex-1 text-center space-y-10 py-10 px-8 pb-20 bg-black min-h-full flex flex-col items-center justify-center">
 
-                    <div className="border border-[#D4AF37] p-1 inline-block">
-                        <div className="border border-[#D4AF37] p-8 bg-[#0a0a0a]">
-                            <h1 className="text-5xl md:text-7xl text-[#D4AF37] leading-none tracking-normal royal-font">
-                                allmer
-                            </h1>
-                        </div>
+                    <div className="p-1 inline-block animate-in fade-in duration-1000">
+                        <img src="allmer_logo_new.png" alt="Allmer" className="h-16 md:h-20 object-contain gold-filter" />
                     </div>
 
                     <div className="max-w-xl mx-auto text-gray-300 font-serif leading-loose italic">
@@ -751,12 +752,17 @@
 
         const ProjectedRevenuePillar = () => {
             const daysInYear = 365;
-            const TODAY_INDEX = 80;
+            const TODAY_INDEX = (() => {
+                const now = new Date();
+                const start = new Date(now.getFullYear(), 0, 1);
+                const diff = (now - start) + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
+                return Math.floor(diff / (1000 * 60 * 60 * 24));
+            })();
             const [hoveredDay, setHoveredDay] = useState(null);
             const [hoveredMonthIndex, setHoveredMonthIndex] = useState(null);
             const [viewMode, setViewMode] = useState('year');
             const [wheelViewMode, setWheelViewMode] = useState('days');
-            const [selectedMonth, setSelectedMonth] = useState(2);
+            const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
 
             const getDaysInYear = (year) => {
                 return ((year % 4 === 0 && year % 100 > 0) || year % 400 === 0) ? 366 : 365;
@@ -1214,12 +1220,23 @@
             );
         };
 
-        const CustomersPillar = () => {
+        const StakeholdersPillar = () => {
+            const [activeStakeholder, setActiveStakeholder] = useState('manufacturers');
             const [isAuthenticated, setIsAuthenticated] = useState(false);
-            const [password, setPassword] = useState('');
-            const [error, setError] = useState('');
+            const [pin, setPin] = useState('');
+            const [error, setError] = useState(false);
             const [sortOrder, setSortOrder] = useState('desc');
             const [searchQuery, setSearchQuery] = useState('');
+
+            const manufacturers = [
+                { id: 'M001', name: 'Zuckerlwerkstatt', location: 'Vienna, Austria', contribution: 'Metropole Coffee Candy', status: 'Active', url: 'https://www.zuckerlwerkstatt.at' },
+                { id: 'M002', name: 'DoFine Games', location: 'Shanghai, China', contribution: 'Specialized Game Production', status: 'Active', url: 'https://www.dofinegames.com' }
+            ];
+
+            const partners = [
+                { id: 'P001', name: 'Paradice', location: 'Vienna, Austria', focus: 'Gaming Events & Board Game Culture', status: 'Strategic Partner', url: 'https://paradice.wien' },
+                { id: 'P002', name: 'Spielefest', location: 'Vienna, Austria', focus: 'Large-Scale Gaming Convention', status: 'Event Partner', url: 'https://www.spielefest.wien' }
+            ];
 
             const customers = [
                 { id: '000000001', firstName: 'Bernhard', lastName: 'Brauner', email: 'bernhard.brauner@gmx.at', location: 'Heinrich-Lefler-Gasse 23/5/20, 1220 Vienna, Austria', products: 'Pyramid', studioFan: 'Allmer Games', brandFan: 'Seven Wonders', firstOrder: '2024.06.15', lastOrder: '', subscription: '', notes: '' },
@@ -1231,22 +1248,30 @@
                 { id: '000000007', firstName: 'Rex', lastName: 'Rowan', email: '', location: 'Dublin, Ireland', products: 'Pyramid', studioFan: '', brandFan: '', firstOrder: '2026.03.23', lastOrder: '', subscription: '', notes: 'Studies prehistory, from Dublin, lives next to Cillian Murphy.' }
             ];
 
+            const handlePinClick = (num) => {
+                if (pin.length < 4) {
+                    const newPin = pin + num;
+                    setPin(newPin);
+                    if (newPin.length === 4) {
+                        if (newPin === '2020') {
+                            setIsAuthenticated(true);
+                        } else {
+                            setError(true);
+                            setTimeout(() => {
+                                setPin('');
+                                setError(false);
+                            }, 500);
+                        }
+                    }
+                }
+            };
+
             const getSexSymbol = (firstName, lastName) => {
                 const femaleNames = ['Fiona', 'Bennu', 'Bennu Ceren'];
                 if (femaleNames.some(name => firstName.toLowerCase().startsWith(name.toLowerCase()))) {
                     return <span className="text-pink-400" title="Female">♀</span>;
                 }
                 return <span className="text-blue-400" title="Male">♂</span>;
-            };
-
-            const handleLogin = (e) => {
-                e.preventDefault();
-                if (password === '2020') {
-                    setIsAuthenticated(true);
-                    setError('');
-                } else {
-                    setError('Invalid password');
-                }
             };
 
             const filteredCustomers = customers
@@ -1260,109 +1285,233 @@
                     return sortOrder === 'desc' ? idB - idA : idA - idB;
                 });
 
-            if (!isAuthenticated) {
-                return (
-                    <div className="flex-1 bg-black min-h-full p-8 pb-20 text-white font-serif relative overflow-hidden flex items-center justify-center">
-                        <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/dark-leather.png')] pointer-events-none"></div>
-                        <div className="max-w-md w-full">
-                            <SectionHeader title="Customers" subtitle="Protected Access" />
-                            <div className="border border-[#222] bg-[#050505] p-8">
-                                <form onSubmit={handleLogin} className="space-y-4">
-                                    <div>
-                                        <label className="block text-gray-500 text-xs uppercase tracking-wider mb-2">Password</label>
-                                        <input
-                                            type="password"
-                                            value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
-                                            className="w-full bg-[#111] border border-[#333] text-white px-4 py-3 text-sm focus:border-[#D4AF37] focus:outline-none"
-                                            placeholder="Enter password"
-                                        />
-                                    </div>
-                                    {error && <p className="text-red-500 text-sm">{error}</p>}
-                                    <button
-                                        type="submit"
-                                        className="w-full px-4 py-3 bg-[#D4AF37] text-black hover:bg-[#D4AF37]/80 transition-colors text-sm font-bold uppercase tracking-widest"
-                                    >
-                                        Access
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                );
-            }
-
             return (
-                <div className="flex-1 bg-black min-h-full p-8 pb-20 text-white font-serif relative overflow-hidden">
+                <div className="flex-1 bg-black min-h-full p-8 pb-20 text-white font-serif relative overflow-hidden flex flex-col items-center">
                     <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/dark-leather.png')] pointer-events-none"></div>
+                    
+                    <SectionHeader title="Stakeholders" subtitle="Operational Network" />
 
-                    <SectionHeader title="Customers" subtitle="Subscriber Database" />
-
-                    <div className="max-w-6xl mx-auto">
-                        <div className="flex justify-between items-center mb-6">
-                            <p className="text-gray-500 text-sm">Total Customers: {filteredCustomers.length}</p>
-                            <button
-                                onClick={() => setIsAuthenticated(false)}
-                                className="text-gray-500 text-xs hover:text-[#D4AF37] uppercase tracking-widest"
-                            >
-                                Logout
-                            </button>
+                    <div className="w-full max-w-6xl">
+                        {/* Sub-navigation */}
+                        <div className="flex gap-12 mb-12 border-b border-[#222]">
+                            {['manufacturers', 'partners', 'customers'].map(tab => (
+                                <button
+                                    key={tab}
+                                    onClick={() => setActiveStakeholder(tab)}
+                                    className={`pb-4 text-[10px] uppercase tracking-[0.4em] font-bold transition-all relative ${activeStakeholder === tab ? 'text-[#D4AF37]' : 'text-gray-500 hover:text-white'}`}
+                                >
+                                    {tab}
+                                    {activeStakeholder === tab && <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#D4AF37] animate-in slide-in-from-left duration-300"></div>}
+                                </button>
+                            ))}
                         </div>
 
-                        <div className="flex gap-4 mb-6">
-                            <input
-                                type="text"
-                                placeholder="Search by name..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="flex-1 bg-[#111] border border-[#333] text-white px-4 py-2 text-sm focus:border-[#D4AF37] focus:outline-none"
-                            />
-                            <select
-                                value={sortOrder}
-                                onChange={(e) => setSortOrder(e.target.value)}
-                                className="bg-[#111] border border-[#333] text-white px-4 py-2 text-sm focus:border-[#D4AF37] focus:outline-none"
-                            >
-                                <option value="desc">ID: High to Low</option>
-                                <option value="asc">ID: Low to High</option>
-                            </select>
-                        </div>
-
-                        <div className="border border-[#222] bg-[#050505]">
-                            <div className="overflow-x-auto">
-                                <table className="w-full">
-                                    <thead>
-                                        <tr className="border-b border-[#222]">
-                                            <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">ID</th>
-                                            <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">Name</th>
-                                            <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">Email</th>
-                                            <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">Products</th>
-                                            <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">Subscription</th>
-                                            <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">First Order</th>
-                                            <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">Notes</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {filteredCustomers.map(c => (
-                                            <tr key={c.id} className="border-b border-[#1a1a1a] hover:bg-[#111]">
-                                                <td className="p-3 text-[#D4AF37] font-mono text-sm">{c.id}</td>
-                                                <td className="p-3 text-white text-sm flex items-center gap-2">{getSexSymbol(c.firstName, c.lastName)}{c.firstName} {c.lastName}</td>
-                                                <td className="p-3 text-gray-400 text-sm">{c.email || '-'}</td>
-                                                <td className="p-3 text-gray-300 text-sm">{c.products}</td>
-                                                <td className="p-3">
-                                                    {c.subscription ? (
-                                                        <span className="px-2 py-1 text-[10px] uppercase bg-green-900/30 text-green-400 border border-green-500">{c.subscription}</span>
-                                                    ) : (
-                                                        <span className="text-gray-600 text-xs">-</span>
-                                                    )}
-                                                </td>
-                                                <td className="p-3 text-gray-400 text-sm">{c.firstOrder}</td>
-                                                <td className="p-3 text-gray-500 text-xs italic">{c.notes || '-'}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                        {activeStakeholder === 'manufacturers' && (
+                            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    {manufacturers.map(m => (
+                                        <div key={m.id} className="border border-[#D4AF37]/30 bg-[#0a0a0a] p-8 shadow-2xl relative overflow-hidden group">
+                                            <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:scale-110 transition-transform duration-700">
+                                                <Briefcase size={80} />
+                                            </div>
+                                            <p className="text-[#D4AF37] text-[10px] uppercase tracking-widest mb-2">Production Node {m.id}</p>
+                                            <h3 className="text-white brand-font text-2xl mb-6">
+                                                <a href={m.url} target="_blank" rel="noopener noreferrer" className="hover:text-[#D4AF37] transition-colors flex items-center gap-2">
+                                                    {m.name} <ExternalLink size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                                                </a>
+                                            </h3>
+                                            
+                                            <div className="space-y-4 border-t border-[#222] pt-6 text-sm">
+                                                <div className="flex justify-between">
+                                                    <span className="text-gray-500">Primary Contribution:</span>
+                                                    <span className="text-gray-300 font-serif italic text-right">{m.contribution}</span>
+                                                </div>
+                                                <div className="flex justify-between">
+                                                    <span className="text-gray-500">Hailing From:</span>
+                                                    <span className="text-gray-300">{m.location}</span>
+                                                </div>
+                                                <div className="flex justify-between">
+                                                    <span className="text-gray-500">Global Status:</span>
+                                                    <span className="text-green-500 uppercase text-[10px] tracking-widest font-bold">{m.status}</span>
+                                                </div>
+                                            </div>
+                                            
+                                            <a 
+                                                href={m.url} 
+                                                target="_blank" 
+                                                rel="noopener noreferrer"
+                                                className="block w-full mt-8 py-3 border border-[#333] text-gray-400 text-[10px] text-center uppercase tracking-widest hover:border-[#D4AF37] hover:text-[#D4AF37] transition-all bg-black"
+                                            >
+                                                View Production Ledger
+                                            </a>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
-                        </div>
+                        )}
+
+                        {activeStakeholder === 'partners' && (
+                            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    {partners.map(p => (
+                                        <div key={p.id} className="border border-[#D4AF37]/30 bg-[#0a0a0a] p-8 shadow-2xl relative overflow-hidden group">
+                                            <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:scale-110 transition-transform duration-700">
+                                                <Globe size={80} />
+                                            </div>
+                                            <p className="text-[#D4AF37] text-[10px] uppercase tracking-widest mb-2">Strategic Node {p.id}</p>
+                                            <h3 className="text-white brand-font text-2xl mb-6">
+                                                <a href={p.url} target="_blank" rel="noopener noreferrer" className="hover:text-[#D4AF37] transition-colors flex items-center gap-2">
+                                                    {p.name} <ExternalLink size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                                                </a>
+                                            </h3>
+                                            
+                                            <div className="space-y-4 border-t border-[#222] pt-6 text-sm">
+                                                <div className="flex justify-between">
+                                                    <span className="text-gray-500">Operational Focus:</span>
+                                                    <span className="text-gray-300 font-serif italic text-right">{p.focus}</span>
+                                                </div>
+                                                <div className="flex justify-between">
+                                                    <span className="text-gray-500">Regional HQ:</span>
+                                                    <span className="text-gray-300">{p.location}</span>
+                                                </div>
+                                                <div className="flex justify-between">
+                                                    <span className="text-gray-500">Affiliation:</span>
+                                                    <span className="text-[#D4AF37] uppercase text-[10px] tracking-widest font-bold">{p.status}</span>
+                                                </div>
+                                            </div>
+                                            
+                                            <a 
+                                                href={p.url} 
+                                                target="_blank" 
+                                                rel="noopener noreferrer"
+                                                className="block w-full mt-8 py-3 border border-[#333] text-gray-400 text-[10px] text-center uppercase tracking-widest hover:border-[#D4AF37] hover:text-[#D4AF37] transition-all bg-black"
+                                            >
+                                                Establish Sync
+                                            </a>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {activeStakeholder === 'customers' && (
+                            <div className="animate-in fade-in duration-500 w-full">
+                                {!isAuthenticated ? (
+                                    <div className="max-w-xs mx-auto relative z-10 py-10">
+                                        <div className="border border-[#D4AF37] p-8 bg-[#0a0a0a] text-center shadow-[0_0_80px_rgba(212,175,55,0.1)]">
+                                            <p className="text-gray-500 text-[10px] uppercase tracking-[0.4em] mb-8">Enter PIN to access</p>
+                                            
+                                            <div className="flex justify-center gap-4 mb-10">
+                                                {[...Array(4)].map((_, i) => (
+                                                    <div 
+                                                        key={i} 
+                                                        className={`w-4 h-4 rounded-full border-2 transition-all duration-300 ${pin.length > i ? (error ? 'bg-red-500 border-red-500 scale-110' : 'bg-[#D4AF37] border-[#D4AF37] scale-110 shadow-[0_0_10px_#D4AF37]') : 'border-[#333]'}`}
+                                                    ></div>
+                                                ))}
+                                            </div>
+
+                                            <div className="grid grid-cols-3 gap-3">
+                                                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
+                                                    <button 
+                                                        key={num}
+                                                        onClick={(e) => { e.stopPropagation(); handlePinClick(num.toString()); }}
+                                                        className="w-full py-4 border border-[#222] text-[#D4AF37] text-xl font-bold hover:bg-[#D4AF37]/10 hover:border-[#D4AF37] transition-all bg-black active:scale-95"
+                                                    >
+                                                        {num}
+                                                    </button>
+                                                ))}
+                                                <button 
+                                                    onClick={(e) => { e.stopPropagation(); setPin(''); }}
+                                                    className="w-full flex items-center justify-center border border-[#222] text-gray-500 hover:text-white transition-all bg-black"
+                                                >
+                                                    <X size={16} />
+                                                </button>
+                                                <button 
+                                                    onClick={(e) => { e.stopPropagation(); handlePinClick('0'); }}
+                                                    className="w-full py-4 border border-[#222] text-[#D4AF37] text-xl font-bold hover:bg-[#D4AF37]/10 hover:border-[#D4AF37] transition-all bg-black active:scale-95"
+                                                >
+                                                    0
+                                                </button>
+                                                <div className="w-full border border-transparent" />
+                                            </div>
+                                            {error && <p className="text-red-500 text-[10px] uppercase tracking-widest mt-6 animate-pulse">Invalid Sequence</p>}
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="animate-in fade-in duration-700">
+                                        <div className="flex justify-between items-center mb-6">
+                                            <p className="text-gray-500 text-sm italic">Total Customers: {filteredCustomers.length}</p>
+                                            <button
+                                                onClick={() => setIsAuthenticated(false)}
+                                                className="text-gray-500 text-[10px] hover:text-[#D4AF37] uppercase tracking-widest border border-[#333] px-3 py-1 hover:border-[#D4AF37] transition-all"
+                                            >
+                                                Logout Node
+                                            </button>
+                                        </div>
+
+                                        <div className="flex gap-4 mb-8">
+                                            <input
+                                                type="text"
+                                                placeholder="Search by name..."
+                                                value={searchQuery}
+                                                onChange={(e) => setSearchQuery(e.target.value)}
+                                                className="flex-1 bg-[#111] border border-[#222] text-white px-4 py-3 text-xs focus:border-[#D4AF37] focus:outline-none placeholder-gray-700 uppercase tracking-widest"
+                                            />
+                                            <select
+                                                value={sortOrder}
+                                                onChange={(e) => setSortOrder(e.target.value)}
+                                                className="bg-[#111] border border-[#222] text-white px-4 py-3 text-[10px] uppercase tracking-widest focus:border-[#D4AF37] focus:outline-none"
+                                            >
+                                                <option value="desc">NEWEST FIRST</option>
+                                                <option value="asc">OLDEST FIRST</option>
+                                            </select>
+                                        </div>
+
+                                        <div className="border border-[#222] bg-[#050505] shadow-2xl overflow-hidden">
+                                            <div className="overflow-x-auto">
+                                                <table className="w-full border-collapse">
+                                                    <thead>
+                                                        <tr className="border-b border-[#333] bg-black/40">
+                                                            <th className="text-left p-4 text-[#D4AF37] text-[10px] uppercase tracking-wider font-bold">Node ID</th>
+                                                            <th className="text-left p-4 text-[#D4AF37] text-[10px] uppercase tracking-wider font-bold">Individual</th>
+                                                            <th className="text-left p-4 text-[#D4AF37] text-[10px] uppercase tracking-wider font-bold">Communications</th>
+                                                            <th className="text-left p-4 text-[#D4AF37] text-[10px] uppercase tracking-wider font-bold">Acquisitions</th>
+                                                            <th className="text-left p-4 text-[#D4AF37] text-[10px] uppercase tracking-wider font-bold">Subscription</th>
+                                                            <th className="text-left p-4 text-[#D4AF37] text-[10px] uppercase tracking-wider font-bold">Notes</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody className="divide-y divide-[#1a1a1a]">
+                                                        {filteredCustomers.map(c => (
+                                                            <tr key={c.id} className="hover:bg-[#111] transition-colors group">
+                                                                <td className="p-4 text-[#D4AF37] font-mono text-[11px] font-bold group-hover:text-white transition-colors">{c.id}</td>
+                                                                <td className="p-4">
+                                                                    <div className="flex flex-col">
+                                                                        <span className="text-white text-xs brand-font">{getSexSymbol(c.firstName, c.lastName)} {c.firstName} {c.lastName}</span>
+                                                                        <span className="text-gray-500 text-[10px] mt-1 italic">{c.location}</span>
+                                                                    </div>
+                                                                </td>
+                                                                <td className="p-4 text-gray-400 font-mono text-[10px]">{c.email || '—'}</td>
+                                                                <td className="p-4">
+                                                                    <span className="text-gray-300 text-[10px] uppercase tracking-wider leading-relaxed">{c.products}</span>
+                                                                </td>
+                                                                <td className="p-4">
+                                                                    {c.subscription ? (
+                                                                        <span className="px-2 py-0.5 text-[8px] uppercase bg-green-900/10 text-green-400 border border-green-500/30 font-bold">{c.subscription}</span>
+                                                                    ) : (
+                                                                        <span className="text-gray-600 text-[8px] tracking-widest font-mono">NULL_SUB</span>
+                                                                    )}
+                                                                </td>
+                                                                <td className="p-4 text-gray-500 text-[10px] italic max-w-xs">{c.notes || '—'}</td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </div>
                 </div>
             );
@@ -2403,6 +2552,177 @@
             );
         };
 
+        const WorldMapPillar = () => {
+            const [selectedCity, setSelectedCity] = useState('London');
+            const mapRef = React.useRef(null);
+            const mapInstance = React.useRef(null);
+
+            const cities = {
+                'New York': {
+                    lat: 40.7128, lng: -74.0060,
+                    description: 'The primary western hub for distribution and media relations. Managing the North American portfolio.',
+                    status: 'Operational Hub',
+                    timezone: 'EST (UTC-5)'
+                },
+                'London': {
+                    lat: 51.5074, lng: -0.1278,
+                    description: 'Strategic center for European operations and global financial management.',
+                    status: 'Operational Hub',
+                    timezone: 'GMT (UTC+0)'
+                },
+                'Singapore': {
+                    lat: 1.3521, lng: 103.8198,
+                    description: 'Gateway to the East, managing rapid expansion and technological integration in the Asian market.',
+                    status: 'Operational Hub',
+                    timezone: 'SGT (UTC+8)'
+                }
+            };
+
+            React.useEffect(() => {
+                if (!mapRef.current) return;
+                
+                if (!mapInstance.current) {
+                    mapInstance.current = L.map(mapRef.current, {
+                        zoomControl: false,
+                        attributionControl: false,
+                        scrollWheelZoom: true
+                    }).setView([20, 10], 2);
+
+                    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                        subdomains: 'abcd',
+                        maxZoom: 20
+                    }).addTo(mapInstance.current);
+
+                    // Add markers
+                    Object.entries(cities).forEach(([name, city]) => {
+                        const markerIcon = L.divIcon({
+                            className: 'custom-marker',
+                            html: `<div class="w-5 h-5 rounded-full border-2 border-[#D4AF37] bg-black shadow-[0_0_20px_#D4AF37] flex items-center justify-center">
+                                    <div class="w-2 h-2 rounded-full bg-[#D4AF37]"></div>
+                                   </div>`,
+                            iconSize: [20, 20],
+                            iconAnchor: [10, 10]
+                        });
+
+                        L.marker([city.lat, city.lng], { icon: markerIcon }).addTo(mapInstance.current).on('click', () => {
+                            setSelectedCity(name);
+                        });
+                    });
+                }
+
+                return () => {
+                    if (mapInstance.current) {
+                        try {
+                            mapInstance.current.remove();
+                        } catch (e) {
+                            console.error("Leaflet cleanup error", e);
+                        }
+                        mapInstance.current = null;
+                    }
+                };
+            }, []);
+
+            React.useEffect(() => {
+                if (mapInstance.current) {
+                    const city = cities[selectedCity];
+                    mapInstance.current.setView([city.lat, city.lng], 10);
+                }
+            }, [selectedCity]);
+
+            return (
+                <div className="flex-1 bg-black min-h-full p-8 pb-20 text-white font-serif relative overflow-hidden flex flex-col items-center">
+                    <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/dark-leather.png')] pointer-events-none"></div>
+                    
+                    <SectionHeader title="World Map" subtitle="Global Operations" />
+                    
+                    <div className="w-full max-w-5xl relative mt-8 animate-in fade-in duration-700">
+                        {/* Leaflet Map Div */}
+                        <div className="relative aspect-[2/1] w-full border border-[#D4AF37]/30 bg-[#050505] overflow-hidden rounded-sm group shadow-[0_0_60px_rgba(0,0,0,1)]">
+                             <div id="map" ref={mapRef} className="w-full h-full z-0 cursor-crosshair"></div>
+                             
+                             {/* Floating Selection HUD */}
+                             <div className="absolute top-6 left-6 z-[400] flex flex-col gap-3">
+                                <div className="bg-black/80 backdrop-blur-md border border-[#D4AF37]/20 p-4">
+                                    <p className="text-[#D4AF37] text-[10px] uppercase tracking-[0.4em] mb-3 font-bold">Node Selection</p>
+                                    <div className="flex flex-col gap-2">
+                                        {Object.keys(cities).map(name => (
+                                            <button
+                                                key={name}
+                                                onClick={() => setSelectedCity(name)}
+                                                className={`px-4 py-2 text-[9px] uppercase tracking-widest border text-left transition-all ${selectedCity === name ? 'border-[#D4AF37] text-[#D4AF37] bg-black shadow-[0_0_10px_rgba(212,175,55,0.2)]' : 'border-[#333] text-gray-500 hover:border-gray-500'}`}
+                                            >
+                                                {name}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                             </div>
+
+                             {/* Map Overlay Vignette */}
+                             <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_100px_rgba(0,0,0,0.8)] z-10"></div>
+                        </div>
+
+                        {/* Info Card */}
+                        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                            <div className="border border-[#D4AF37] p-8 bg-[#0a0a0a] relative overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+                                <div className="absolute top-0 right-0 p-4 opacity-5">
+                                    <Globe className="w-32 h-32" />
+                                </div>
+                                <h3 className="text-[#D4AF37] brand-font text-3xl mb-2 uppercase tracking-widest tracking-normal">{selectedCity}</h3>
+                                <p className="text-gray-500 text-[10px] uppercase tracking-[0.4em] mb-6 border-b border-[#333] pb-4">Operational Hub</p>
+                                
+                                <p className="text-gray-300 text-sm leading-relaxed mb-8 italic">
+                                    "{cities[selectedCity].description}"
+                                </p>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="border border-[#222] p-4 bg-black">
+                                        <p className="text-gray-500 text-[8px] uppercase tracking-widest mb-1">Local Timezone</p>
+                                        <p className="text-white text-xs font-mono">{cities[selectedCity].timezone}</p>
+                                    </div>
+                                    <div className="border border-[#222] p-4 bg-black">
+                                        <p className="text-gray-500 text-[8px] uppercase tracking-widest mb-1">Status</p>
+                                        <p className="text-green-500 text-[8px] uppercase tracking-widest font-bold">Secure Connection</p>
+                                    </div>
+                                </div>
+                                
+                                <button 
+                                    className="w-full mt-8 py-4 border border-[#D4AF37] text-[#D4AF37] text-[10px] uppercase tracking-[0.4em] font-bold hover:bg-[#D4AF37] hover:text-black transition-all bg-black"
+                                >
+                                    Initiate Node Uplink
+                                </button>
+                            </div>
+
+                            <div className="space-y-4">
+                                <div className="border border-[#222] bg-[#050505] p-6">
+                                    <h4 className="text-[#D4AF37] brand-font text-sm mb-4 uppercase tracking-widest">Global Network Telemetry</h4>
+                                    <div className="space-y-3">
+                                        {Object.keys(cities).map(name => (
+                                            <div 
+                                                key={name}
+                                                className={`flex items-center justify-between p-4 border cursor-pointer transition-all ${selectedCity === name ? 'border-[#D4AF37] bg-[#D4AF37]/5' : 'border-[#222] hover:border-[#444]'}`}
+                                                onClick={() => setSelectedCity(name)}
+                                            >
+                                                <span className={`text-[10px] uppercase tracking-widest ${selectedCity === name ? 'text-[#D4AF37]' : 'text-gray-400'}`}>{name}</span>
+                                                <div className="flex items-center gap-2">
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] animate-pulse"></div>
+                                                    <span className="text-[8px] text-gray-500 uppercase tracking-widest">Uplink Active</span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="p-6 border border-dashed border-[#333] text-center bg-[#050505]/50">
+                                    <p className="text-[9px] text-gray-500 uppercase tracking-[0.5em] mb-1">Spectral Analysis Mode</p>
+                                    <p className="text-[8px] text-gray-700 italic">Satellite Position Verified — Orbital Sync Complete</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
         const MusicStudioRoom = () => {
             const [activeTool, setActiveTool] = useState(null);
 
@@ -2694,10 +3014,65 @@
             { id: 'assets', label: 'ASSETS' },
             { id: 'projected', label: 'SUBSCRIPTIONS' },
             { id: 'catalog', label: 'CATALOG' },
-            { id: 'customers', label: 'CUSTOMERS' },
+            { id: 'stakeholders', label: 'STAKEHOLDERS' },
             { id: 'lexicon', label: 'LEXICON' },
             { id: 'publications', label: 'PUBLICATIONS' },
+            { id: 'worldmap', label: 'WORLD MAP' },
         ];
+
+        const LoginScreen = ({ onAuthorize }) => {
+            const [password, setPassword] = useState('');
+            const [error, setError] = useState(false);
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                if (password === '2020') {
+                    onAuthorize();
+                } else {
+                    setError(true);
+                    setPassword('');
+                }
+            };
+
+            return (
+                <div className="fixed inset-0 bg-black flex items-center justify-center z-[100] animate-in fade-in duration-500">
+                    <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/dark-leather.png')] pointer-events-none"></div>
+                    
+                    <div className="max-w-md w-full p-12 border border-[#D4AF37] bg-[#0a0a0a] shadow-[0_0_80px_rgba(212,175,55,0.1)] relative text-center">
+                        <div className="mb-8 p-1 inline-block">
+                            <img src="allmer_logo.png" alt="Allmer" className="h-16 object-contain" />
+                        </div>
+                        
+                        <h2 className="text-[#D4AF37] brand-font text-lg mb-8 uppercase tracking-[0.4em]">Secure Access</h2>
+                        
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                            <div className="relative">
+                                <input 
+                                    autoFocus
+                                    type="password"
+                                    value={password}
+                                    onChange={(e) => { setPassword(e.target.value); setError(false); }}
+                                    className={`w-full bg-black border ${error ? 'border-red-500' : 'border-[#333] focus:border-[#D4AF37]'} p-4 text-center text-white text-xl tracking-[1em] outline-none transition-all duration-300 placeholder-transparent select-all`}
+                                    placeholder="••••"
+                                / >
+                                <p className="text-gray-600 text-[8px] uppercase tracking-widest mt-2">Enter credentials to establish uplink</p>
+                            </div>
+
+                            {error && (
+                                <p className="text-red-500 text-[10px] uppercase tracking-widest animate-pulse">Access Denied — Invalid Sequence</p>
+                            )}
+                            
+                            <button 
+                                type="submit"
+                                className="w-full py-4 border border-[#D4AF37] text-[#D4AF37] text-[10px] uppercase tracking-[0.5em] font-bold hover:bg-[#D4AF37] hover:text-black transition-all bg-black cursor-pointer"
+                            >
+                                Authorize
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            );
+        };
 
         const App = () => {
             const [activeTab, setActiveTab] = useState('home');
@@ -2756,10 +3131,8 @@
                     {/* Header */}
                     <div className={`bg-black border-b border-[#333] py-4 z-20 flex justify-between items-center px-8 shadow-2xl relative transition-all duration-500 ${showMenu ? 'pr-80' : ''}`}>
                         <div className="flex items-center gap-4 cursor-pointer" onClick={() => setActiveTab('home')}>
-                            <div className="flex items-center gap-2">
-                                <div className="w-8 h-8 border border-[#D4AF37] flex items-center justify-center">
-                                    <span className="text-[#D4AF37] text-xl royal-font">a</span>
-                                </div>
+                            <div className="w-8 h-8 border border-[#D4AF37] flex items-center justify-center transition-all hover:bg-[#D4AF37]/10">
+                                <span className="text-[#D4AF37] text-xl font-serif brand-font">A</span>
                             </div>
                         </div>
 
@@ -2802,9 +3175,10 @@
                                 {activeTab === 'assets' && <AssetsPillar navigate={setActiveTab} />}
                                 {activeTab === 'projected' && <ProjectedRevenuePillar />}
                                 {activeTab === 'catalog' && <CatalogPillar />}
-                                {activeTab === 'customers' && <CustomersPillar />}
+                                {activeTab === 'stakeholders' && <StakeholdersPillar />}
                                 {activeTab === 'lexicon' && <LexiconPillar />}
                                 {activeTab === 'publications' && <PublicationsPillar />}
+                                {activeTab === 'worldmap' && <WorldMapPillar />}
                             </div>
                         </div>
 
