@@ -2122,6 +2122,114 @@
             );
         };
 
+        const KnowledgePillar = () => {
+            const [view, setView] = React.useState('main');
+
+            const categories = [
+                { id: 'strategy', title: 'Business Strategy', desc: 'The architectural foundations of the Allmer organization.' },
+                { id: 'production', title: 'Artisanal Production', desc: 'Crafting the extraordinary at the two ends of the value chain.' }
+            ];
+
+            return (
+                <div className="flex-1 bg-black min-h-full p-8 pb-20 text-white font-serif relative overflow-hidden">
+                    <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/dark-leather.png')] pointer-events-none"></div>
+                    
+                    {view === 'main' && (
+                        <>
+                            <SectionHeader title="Knowledge" subtitle="Organizational Architecture" />
+                            <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+                                {categories.map(cat => (
+                                    <div 
+                                        key={cat.id}
+                                        className="border border-[#D4AF37]/30 bg-gradient-to-b from-[#0a0a0a] to-black p-12 cursor-pointer hover:border-[#D4AF37] transition-all group flex flex-col items-center text-center"
+                                        onClick={() => setView(cat.id)}
+                                    >
+                                        <div className="w-16 h-16 border border-[#D4AF37]/30 flex items-center justify-center mb-6 group-hover:border-[#D4AF37] transition-all">
+                                            <div className="w-2 h-2 bg-[#D4AF37]"></div>
+                                        </div>
+                                        <h3 className="text-[#D4AF37] brand-font text-2xl mb-4 uppercase tracking-widest">{cat.title}</h3>
+                                        <p className="text-gray-400 text-sm leading-relaxed mb-8">{cat.desc}</p>
+                                        <span className="text-[#D4AF37] text-[10px] uppercase tracking-widest border border-[#D4AF37] px-8 py-3 group-hover:bg-[#D4AF37] group-hover:text-black transition-all">Open Archives</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </>
+                    )}
+
+                    {view === 'strategy' && (
+                        <>
+                            <SectionHeader title="Business Strategy" subtitle="Intellectual Capital" />
+                            <div className="max-w-2xl mx-auto flex flex-col items-center">
+                                <div className="w-full border border-[#D4AF37]/20 bg-[#0a0a0a] p-16 text-center mb-12">
+                                    <p className="text-gray-500 italic mb-4">Content Synchronization in Progress...</p>
+                                    <h4 className="text-white brand-font text-xl mb-8">Strategic Frameworks</h4>
+                                    <p className="text-gray-400 text-sm leading-relaxed">
+                                        The proprietary models defining the Allmer operational philosophy and market positioning. 
+                                        Text coming soon.
+                                    </p>
+                                </div>
+                                <button 
+                                    onClick={() => setView('main')}
+                                    className="text-[#D4AF37] text-[10px] uppercase tracking-widest border border-[#D4AF37] px-8 py-3 hover:bg-[#D4AF37] hover:text-black transition-all"
+                                >
+                                    Back to Knowledge
+                                </button>
+                            </div>
+                        </>
+                    )}
+
+                    {view === 'production' && (
+                        <>
+                            <SectionHeader title="Artisanal Production" subtitle="Manufacturing Philosophy" />
+                            <div className="max-w-3xl mx-auto space-y-6">
+                                <div 
+                                    className="border border-[#D4AF37]/30 bg-gradient-to-r from-[#0a0a0a] to-black p-8 cursor-pointer hover:border-[#D4AF37] transition-all group flex items-center justify-between"
+                                    onClick={() => setView('salon-production')}
+                                >
+                                    <div>
+                                        <h4 className="text-[#D4AF37] brand-font text-xl mb-1 uppercase tracking-widest">Seven Wonders Salon Edition</h4>
+                                        <p className="text-gray-500 text-xs italic">Production Logistics & Material Excellence</p>
+                                    </div>
+                                    <span className="text-[#D4AF37] text-xl group-hover:translate-x-2 transition-transform">→</span>
+                                </div>
+                                
+                                <div className="text-center pt-12">
+                                    <button 
+                                        onClick={() => setView('main')}
+                                        className="text-[#D4AF37] text-[10px] uppercase tracking-widest border border-[#D4AF37] px-8 py-3 hover:bg-[#D4AF37] hover:text-black transition-all"
+                                    >
+                                        Back to Knowledge
+                                    </button>
+                                </div>
+                            </div>
+                        </>
+                    )}
+
+                    {view === 'salon-production' && (
+                        <>
+                            <SectionHeader title="Production" subtitle="Seven Wonders Salon Edition" />
+                            <div className="max-w-2xl mx-auto flex flex-col items-center">
+                                <div className="w-full border border-[#D4AF37]/20 bg-[#0a0a0a] p-16 text-center mb-12">
+                                    <div className="w-12 h-1 bg-[#D4AF37] mx-auto mb-8"></div>
+                                    <h4 className="text-white brand-font text-2xl mb-8 uppercase tracking-widest">Salon Edition Production</h4>
+                                    <p className="text-gray-500 italic mb-8">Detailed documentation on the hand-carving process, material selection, and assembly protocols.</p>
+                                    <p className="text-gray-300 text-sm leading-relaxed mb-4">
+                                        Text coming soon.
+                                    </p>
+                                </div>
+                                <button 
+                                    onClick={() => setView('production')}
+                                    className="text-[#D4AF37] text-[10px] uppercase tracking-widest border border-[#D4AF37] px-8 py-3 hover:bg-[#D4AF37] hover:text-black transition-all"
+                                >
+                                    Back to Artisanal Production
+                                </button>
+                            </div>
+                        </>
+                    )}
+                </div>
+            );
+        };
+
         const PublicationsPillar = () => {
             const [showMagicReader, setShowMagicReader] = useState(false);
             const [showMercurReader, setShowMercurReader] = useState(false);
@@ -2553,28 +2661,112 @@
         };
 
         const WorldMapPillar = () => {
-            const [selectedCity, setSelectedCity] = useState('London');
+            const [selectedCity, setSelectedCity] = React.useState('Vienna');
             const mapRef = React.useRef(null);
             const mapInstance = React.useRef(null);
 
+            const continentStyles = {
+                na: { border: 'border-blue-500/30', text: 'text-blue-400', bg: 'bg-blue-500/10', marker: '#3b82f6' },
+                eu: { border: 'border-[#D4AF37]/30', text: 'text-[#D4AF37]', bg: 'bg-[#D4AF37]/10', marker: '#D4AF37' },
+                apac: { border: 'border-red-500/30', text: 'text-red-400', bg: 'bg-red-500/10', marker: '#ef4444' }
+            };
+
             const cities = {
-                'New York': {
-                    lat: 40.7128, lng: -74.0060,
-                    description: 'The primary western hub for distribution and media relations. Managing the North American portfolio.',
-                    status: 'Operational Hub',
-                    timezone: 'EST (UTC-5)'
+                'Vienna': {
+                    lat: 48.2082, lng: 16.3738, continent: 'eu',
+                    description: 'The Allmer HQ and creative workshop. Where the vision is forged and the core architectural decisions are made.',
+                    status: 'Main Headquarters',
+                    timezone: 'CET (UTC+1)'
                 },
                 'London': {
-                    lat: 51.5074, lng: -0.1278,
+                    lat: 51.5074, lng: -0.1278, continent: 'eu',
                     description: 'Strategic center for European operations and global financial management.',
                     status: 'Operational Hub',
                     timezone: 'GMT (UTC+0)'
                 },
+                'Paris': {
+                    lat: 48.8566, lng: 2.3522, continent: 'eu',
+                    description: 'The Atelier epicenter. Managing artisanal production and luxury partnerships across the continent.',
+                    status: 'Operational Node',
+                    timezone: 'CET (UTC+1)'
+                },
+                'Madrid': {
+                    lat: 40.4168, lng: -3.7038, continent: 'eu',
+                    description: 'Hub for Spanish-speaking markets and Mediterranean cultural exchange.',
+                    status: 'Operational Node',
+                    timezone: 'CET (UTC+1)'
+                },
+                'Frankfurt': {
+                    lat: 50.1109, lng: 8.6821, continent: 'eu',
+                    description: 'Central European connectivity hub and financial node.',
+                    status: 'Operational Node',
+                    timezone: 'CET (UTC+1)'
+                },
+                'Milan': {
+                    lat: 45.4642, lng: 9.1900, continent: 'eu',
+                    description: 'Design and fashion capital, leading aesthetics and material sourcing.',
+                    status: 'Operational Node',
+                    timezone: 'CET (UTC+1)'
+                },
+                'New York': {
+                    lat: 40.7128, lng: -74.0060, continent: 'na',
+                    description: 'The primary western hub for distribution and media relations. Managing the North American portfolio.',
+                    status: 'Establishment: Chess Forum — Supply: Seven Wonders Salon Editions',
+                    timezone: 'EST (UTC-5)'
+                },
+                'Los Angeles': {
+                    lat: 34.0522, lng: -118.2437, continent: 'na',
+                    description: 'Strategic node for West Coast media and cinematic production.',
+                    status: 'Operational Node',
+                    timezone: 'PST (UTC-8)'
+                },
+                'Chicago': {
+                    lat: 41.8781, lng: -87.6298, continent: 'na',
+                    description: 'Key logistics and distribution center for the American Midwest.',
+                    status: 'Operational Node',
+                    timezone: 'CST (UTC-6)'
+                },
                 'Singapore': {
-                    lat: 1.3521, lng: 103.8198,
+                    lat: 1.3521, lng: 103.8198, continent: 'apac',
                     description: 'Gateway to the East, managing rapid expansion and technological integration in the Asian market.',
                     status: 'Operational Hub',
                     timezone: 'SGT (UTC+8)'
+                },
+                'Hong Kong': {
+                    lat: 22.3193, lng: 114.1694, continent: 'apac',
+                    description: 'Financial gateway and hub for maritime logistics in the APAC region.',
+                    status: 'Operational Node',
+                    timezone: 'HKT (UTC+8)'
+                },
+                'Shanghai': {
+                    lat: 31.2304, lng: 121.4737, continent: 'apac',
+                    description: 'Mainland China operational center and industrial design node.',
+                    status: 'Operational Node',
+                    timezone: 'CST (UTC+8)'
+                },
+                'Beijing': {
+                    lat: 39.9042, lng: 116.4074, continent: 'apac',
+                    description: 'Strategic node for governmental relations and cultural preservation.',
+                    status: 'Operational Node',
+                    timezone: 'CST (UTC+8)'
+                },
+                'Seoul': {
+                    lat: 37.5665, lng: 126.9780, continent: 'apac',
+                    description: 'Hub for digital innovation and East Asian creative media.',
+                    status: 'Operational Node',
+                    timezone: 'KST (UTC+9)'
+                },
+                'Tokyo': {
+                    lat: 35.6762, lng: 139.6503, continent: 'apac',
+                    description: 'Center for high-tech development and Japanese traditional craft synergy.',
+                    status: 'Operational Node',
+                    timezone: 'JST (UTC+9)'
+                },
+                'Sydney': {
+                    lat: -33.8688, lng: 151.2093, continent: 'apac',
+                    description: 'Oceania hub, bridge between the Pacific and East Asian markets.',
+                    status: 'Operational Node',
+                    timezone: 'AEST (UTC+10)'
                 }
             };
 
@@ -2595,10 +2787,11 @@
 
                     // Add markers
                     Object.entries(cities).forEach(([name, city]) => {
+                        const style = continentStyles[city.continent];
                         const markerIcon = L.divIcon({
                             className: 'custom-marker',
-                            html: `<div class="w-5 h-5 rounded-full border-2 border-[#D4AF37] bg-black shadow-[0_0_20px_#D4AF37] flex items-center justify-center">
-                                    <div class="w-2 h-2 rounded-full bg-[#D4AF37]"></div>
+                            html: `<div class="w-5 h-5 rounded-full border-2 bg-black flex items-center justify-center transition-all duration-500" style="border-color: ${style.marker}; box-shadow: 0 0 15px ${style.marker}44">
+                                    <div class="w-2 h-2 rounded-full" style="background-color: ${style.marker}"></div>
                                    </div>`,
                             iconSize: [20, 20],
                             iconAnchor: [10, 10]
@@ -2633,7 +2826,7 @@
                 <div className="flex-1 bg-black min-h-full p-8 pb-20 text-white font-serif relative overflow-hidden flex flex-col items-center">
                     <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/dark-leather.png')] pointer-events-none"></div>
                     
-                    <SectionHeader title="World Map" subtitle="Global Operations" />
+                    <SectionHeader title="Maps" subtitle="Global Operations" />
                     
                     <div className="w-full max-w-5xl relative mt-8 animate-in fade-in duration-700">
                         {/* Leaflet Map Div */}
@@ -2642,18 +2835,21 @@
                              
                              {/* Floating Selection HUD */}
                              <div className="absolute top-6 left-6 z-[400] flex flex-col gap-3">
-                                <div className="bg-black/80 backdrop-blur-md border border-[#D4AF37]/20 p-4">
-                                    <p className="text-[#D4AF37] text-[10px] uppercase tracking-[0.4em] mb-3 font-bold">Node Selection</p>
-                                    <div className="flex flex-col gap-2">
-                                        {Object.keys(cities).map(name => (
-                                            <button
-                                                key={name}
-                                                onClick={() => setSelectedCity(name)}
-                                                className={`px-4 py-2 text-[9px] uppercase tracking-widest border text-left transition-all ${selectedCity === name ? 'border-[#D4AF37] text-[#D4AF37] bg-black shadow-[0_0_10px_rgba(212,175,55,0.2)]' : 'border-[#333] text-gray-500 hover:border-gray-500'}`}
-                                            >
-                                                {name}
-                                            </button>
-                                        ))}
+                                <div className="bg-black/90 backdrop-blur-md border border-[#D4AF37]/20 p-4 max-h-[400px] overflow-y-auto custom-scrollbar">
+                                    <p className="text-[#D4AF37] text-[10px] uppercase tracking-[0.4em] mb-4 font-bold border-b border-[#D4AF37]/20 pb-2">Node Selection</p>
+                                    <div className="grid grid-cols-1 gap-1.5">
+                                        {Object.entries(cities).map(([name, city]) => {
+                                            const style = continentStyles[city.continent];
+                                            return (
+                                                <button
+                                                    key={name}
+                                                    onClick={() => setSelectedCity(name)}
+                                                    className={`px-4 py-2 text-[9px] uppercase tracking-widest border text-left transition-all duration-300 ${selectedCity === name ? `${style.border} ${style.text} ${style.bg} shadow-[0_0_15px_rgba(0,0,0,0.5)]` : 'border-[#222] text-gray-600 hover:border-gray-500 hover:text-gray-300'}`}
+                                                >
+                                                    {name}
+                                                </button>
+                                            );
+                                        })}
                                     </div>
                                 </div>
                              </div>
@@ -2664,16 +2860,23 @@
 
                         {/* Info Card */}
                         <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                            <div className="border border-[#D4AF37] p-8 bg-[#0a0a0a] relative overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+                            <div className={`border p-8 bg-[#0a0a0a] relative overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] transition-all duration-500 ${continentStyles[cities[selectedCity].continent].border}`}>
                                 <div className="absolute top-0 right-0 p-4 opacity-5">
                                     <Globe className="w-32 h-32" />
                                 </div>
-                                <h3 className="text-[#D4AF37] brand-font text-3xl mb-2 uppercase tracking-widest tracking-normal">{selectedCity}</h3>
-                                <p className="text-gray-500 text-[10px] uppercase tracking-[0.4em] mb-6 border-b border-[#333] pb-4">Operational Hub</p>
+                                <h3 className={`brand-font text-3xl mb-2 uppercase tracking-widest transition-colors duration-500 ${continentStyles[cities[selectedCity].continent].text}`}>{selectedCity}</h3>
+                                <p className="text-gray-500 text-[10px] uppercase tracking-[0.4em] mb-6 border-b border-[#333] pb-4">{cities[selectedCity].status.includes('Establishment') ? 'Active Establishment' : 'Operational Node'}</p>
                                 
                                 <p className="text-gray-300 text-sm leading-relaxed mb-8 italic">
                                     "{cities[selectedCity].description}"
                                 </p>
+
+                                <div className="grid grid-cols-1 gap-4 mb-8">
+                                    <div className="border border-[#222] p-4 bg-black">
+                                        <p className="text-gray-500 text-[8px] uppercase tracking-widest mb-1">Status Report</p>
+                                        <p className="text-white text-[10px] font-mono leading-relaxed">{cities[selectedCity].status}</p>
+                                    </div>
+                                </div>
 
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="border border-[#222] p-4 bg-black">
@@ -2681,13 +2884,17 @@
                                         <p className="text-white text-xs font-mono">{cities[selectedCity].timezone}</p>
                                     </div>
                                     <div className="border border-[#222] p-4 bg-black">
-                                        <p className="text-gray-500 text-[8px] uppercase tracking-widest mb-1">Status</p>
-                                        <p className="text-green-500 text-[8px] uppercase tracking-widest font-bold">Secure Connection</p>
+                                        <p className="text-gray-500 text-[8px] uppercase tracking-widest mb-1">Uplink Status</p>
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] animate-pulse"></div>
+                                            <p className="text-green-500 text-[8px] uppercase tracking-widest font-bold">Encrypted</p>
+                                        </div>
                                     </div>
                                 </div>
                                 
                                 <button 
-                                    className="w-full mt-8 py-4 border border-[#D4AF37] text-[#D4AF37] text-[10px] uppercase tracking-[0.4em] font-bold hover:bg-[#D4AF37] hover:text-black transition-all bg-black"
+                                    className={`w-full mt-8 py-4 border text-[10px] uppercase tracking-[0.4em] font-bold transition-all bg-black hover:text-black ${continentStyles[cities[selectedCity].continent].border} ${continentStyles[cities[selectedCity].continent].text} hover:bg-current`}
+                                    style={{ '--tw-hover-bg': continentStyles[cities[selectedCity].continent].marker }}
                                 >
                                     Initiate Node Uplink
                                 </button>
@@ -2696,25 +2903,28 @@
                             <div className="space-y-4">
                                 <div className="border border-[#222] bg-[#050505] p-6">
                                     <h4 className="text-[#D4AF37] brand-font text-sm mb-4 uppercase tracking-widest">Global Network Telemetry</h4>
-                                    <div className="space-y-3">
-                                        {Object.keys(cities).map(name => (
-                                            <div 
-                                                key={name}
-                                                className={`flex items-center justify-between p-4 border cursor-pointer transition-all ${selectedCity === name ? 'border-[#D4AF37] bg-[#D4AF37]/5' : 'border-[#222] hover:border-[#444]'}`}
-                                                onClick={() => setSelectedCity(name)}
-                                            >
-                                                <span className={`text-[10px] uppercase tracking-widest ${selectedCity === name ? 'text-[#D4AF37]' : 'text-gray-400'}`}>{name}</span>
-                                                <div className="flex items-center gap-2">
-                                                    <div className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] animate-pulse"></div>
-                                                    <span className="text-[8px] text-gray-500 uppercase tracking-widest">Uplink Active</span>
+                                    <div className="space-y-2 max-h-[460px] overflow-y-auto pr-2 custom-scrollbar">
+                                        {Object.entries(cities).map(([name, city]) => {
+                                            const style = continentStyles[city.continent];
+                                            return (
+                                                <div 
+                                                    key={name}
+                                                    className={`flex items-center justify-between p-3 border cursor-pointer transition-all duration-300 ${selectedCity === name ? `${style.border} ${style.bg}` : 'border-[#222] hover:border-[#333]'}`}
+                                                    onClick={() => setSelectedCity(name)}
+                                                >
+                                                    <span className={`text-[9px] uppercase tracking-widest ${selectedCity === name ? style.text : 'text-gray-500'}`}>{name}</span>
+                                                    <div className="flex items-center gap-2">
+                                                        <div className={`w-1 h-1 rounded-full ${selectedCity === name ? 'bg-green-500 animate-pulse' : 'bg-gray-800'}`}></div>
+                                                        <span className="text-[7px] text-gray-700 uppercase tracking-widest">Active</span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        ))}
+                                            );
+                                        })}
                                     </div>
                                 </div>
                                 <div className="p-6 border border-dashed border-[#333] text-center bg-[#050505]/50">
-                                    <p className="text-[9px] text-gray-500 uppercase tracking-[0.5em] mb-1">Spectral Analysis Mode</p>
-                                    <p className="text-[8px] text-gray-700 italic">Satellite Position Verified — Orbital Sync Complete</p>
+                                    <p className="text-[9px] text-gray-500 uppercase tracking-[0.5em] mb-1">Orbital Verification</p>
+                                    <p className="text-[8px] text-gray-800 italic uppercase">Sync Ratio: 99.9% — Position Locked</p>
                                 </div>
                             </div>
                         </div>
@@ -3017,7 +3227,8 @@
             { id: 'stakeholders', label: 'STAKEHOLDERS' },
             { id: 'lexicon', label: 'LEXICON' },
             { id: 'publications', label: 'PUBLICATIONS' },
-            { id: 'worldmap', label: 'WORLD MAP' },
+            { id: 'knowledge', label: 'KNOWLEDGE' },
+            { id: 'worldmap', label: 'MAPS' },
         ];
 
         const LoginScreen = ({ onAuthorize }) => {
@@ -3178,6 +3389,7 @@
                                 {activeTab === 'stakeholders' && <StakeholdersPillar />}
                                 {activeTab === 'lexicon' && <LexiconPillar />}
                                 {activeTab === 'publications' && <PublicationsPillar />}
+                                {activeTab === 'knowledge' && <KnowledgePillar />}
                                 {activeTab === 'worldmap' && <WorldMapPillar />}
                             </div>
                         </div>
