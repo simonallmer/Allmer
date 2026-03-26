@@ -1935,6 +1935,7 @@
                 { name: 'Danger', description: 'Practical Action series with death-defying stunts. Studio used: Allmer Films, Allmer Music.', tag: 'Brand' },
                 { name: 'Detective Noname', description: 'Story of a 19th century detective and his mysterious cases throughout London.', tag: 'Brand' },
                 { name: 'Elements', description: 'A simple samurai card game where players can lay out many cards at once by following either shape or color.', goal: 'Highest Grossing Card Game.', tag: 'Brand' },
+                { name: 'Extension', description: 'A brand experience that doesn\'t qualify as a full product produced by a Studio but nevertheless has to be taken care of as it enhances the customer\'s satisfaction. For example, on the Metropole (Allmer Snacks) page, there is a digital Metropole crossword puzzle. A simple crossword with cool styling doesn\'t qualify as its own game (which would demand originality), but there should be someone responsible for taking care of that extension and not simply treating it like a temporary web design element.', tag: 'Company' },
                 { name: 'Five-Club Juggling', description: '', tag: 'Skill' },
                 { name: 'Futory', description: 'Fantasy universe that follows the Hero Kyro on his odyssey to restore harmony.', tag: 'Brand' },
                 { name: 'Futory Cards', description: 'Deckbuilding Game with Future History mechanic. Each part in the series is standalone but can also be linked with Fusion Play.', goal: 'Highest Grossing Card Game Series.', tag: 'Series', brand: 'Futory' },
@@ -1952,6 +1953,7 @@
                 { name: 'Society Review', description: 'A magazine that aims to transform information into knowledge through discussions on today\'s critical issues.', tag: 'Brand' },
                 { name: 'Studio System', description: 'The unique approach of Simon Allmer Entertainment to create multimedia brands through the direct control and "orchestration" of the six Studios (no outsourcing). Each Studio can function independently to create unique IP (e.g. Seven Wonders is just Allmer Games) or play in tandem with others (American Portrait uses every studio to create unique products for each). Studio work doesn\'t always have to result in a product by the studio—e.g. Allmer Music can make sound design for a Game without releasing the soundtrack separately.', tag: 'Company' },
                 { name: 'New Seven Wonders', description: 'Seven architectural wonders of the modern world, reimagined as luxury physical games and decorative objects.', tag: 'Series', brand: 'Seven Wonders' },
+                { name: 'Virtual Sports', description: 'Virtual Sports are a new genre of competitive entertainment that merge the physical intensity of traditional sports with the immersive environments of digital worlds. Unlike esports, where players remain mostly stationary behind screens, virtual sports require athletes to physically move and react within mixed-reality arenas while wearing VR headsets and body-tracking gear.\n\nDeveloped and popularized by Simon Allmer Entertainment, virtual sports aim to restore the spectacle, suspense, and audience engagement found in traditional sports, while offering endlessly dynamic environments. The playing fields can shift in real-time—introducing elements such as nightfall, snowfall, shifting platforms, or urban warfare zones—created through a hybrid of digital simulations and practical effects.\n\nEach match is unpredictable, with players forced to adapt on the fly, testing reflexes, endurance, and strategic thinking. Disciplines can range from fast-paced obstacle reactions to simulated combat missions, with formal training programs and athletic conditioning for serious competitors.\n\nSimon Allmer Entertainment not only develops the virtual environments and game systems, but also produces and broadcasts the events globally, blending sports broadcasting, cinematic storytelling, and live audience interaction to redefine competitive entertainment for the modern era.', tag: 'Brand' },
                 { name: 'Water Lung', description: 'Ability to hold one\'s breath for over 5 minutes in static apnea without inhaling pure O2 and over 7 minutes with pure O2 inhalation.', tag: 'Skill' },
                 { name: 'Wire Walking', description: '', tag: 'Skill' }
             ].sort((a, b) => {
@@ -2083,7 +2085,7 @@
                                                 </div>
                                             </div>
                                         )}
-                                        <p className="text-gray-300 text-sm leading-relaxed">{selectedEntry.description || 'Definition coming soon.'}</p>
+                                        <p className="text-gray-300 text-sm leading-relaxed whitespace-pre-line">{selectedEntry.description || 'Definition coming soon.'}</p>
                                         {selectedEntry.strategy && (
                                             <div className="mt-4 pt-4 border-t border-[#333]">
                                                 <span className="text-[#D4AF37] text-xs uppercase tracking-widest block mb-2 font-bold">Strategy</span>
@@ -3324,8 +3326,8 @@
                         setShowMenu(false);
                     }
 
-                    // Hyphen (Home/Main Menu)
-                    if (e.key === '-') {
+                    // 0 (Home/Main Menu)
+                    if (e.key === '0') {
                         setActiveTab('home');
                         setShowMenu(false);
                     }
