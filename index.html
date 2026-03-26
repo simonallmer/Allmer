@@ -1936,6 +1936,7 @@
                 { name: 'Detective Noname', description: 'Story of a 19th century detective and his mysterious cases throughout London.', tag: 'Brand' },
                 { name: 'Elements', description: 'A simple samurai card game where players can lay out many cards at once by following either shape or color.', goal: 'Highest Grossing Card Game.', tag: 'Brand' },
                 { name: 'Extension', description: 'A brand experience that doesn\'t qualify as a full product produced by a Studio but nevertheless has to be taken care of as it enhances the customer\'s satisfaction. For example, on the Metropole (Allmer Snacks) page, there is a digital Metropole crossword puzzle. A simple crossword with cool styling doesn\'t qualify as its own game (which would demand originality), but there should be someone responsible for taking care of that extension and not simply treating it like a temporary web design element.', tag: 'Company' },
+                { name: 'In-Camera Effort (ICE)', description: 'In-Camera Effort (ICE) refers to the cumulative volume of physical preparation, technical training, and manual craftsmanship invested by the cast and crew prior to or during the capturing of a frame. Unlike "Production Value," which measures the perceived expensive-ness of the final image, ICE measures the human-hours of specialized skill required to manifest a moment without digital augmentation.\n\n// Key Dimensions\n\nSomatic Training: Actors learning a skill (e.g., ballet, scuba diving, linguistics).\n\nTactical Choreography: Long-form, complex physical sequences practiced for months.\n\nAnalog Craft: Hand-sewn costumes or physical sets that dictate how actors move.', tag: 'Principles' },
                 { name: 'Five-Club Juggling', description: '', tag: 'Skill' },
                 { name: 'Futory', description: 'Fantasy universe that follows the Hero Kyro on his odyssey to restore harmony.', tag: 'Brand' },
                 { name: 'Futory Cards', description: 'Deckbuilding Game with Future History mechanic. Each part in the series is standalone but can also be linked with Fusion Play.', goal: 'Highest Grossing Card Game Series.', tag: 'Series', brand: 'Futory' },
@@ -1957,7 +1958,7 @@
                 { name: 'Water Lung', description: 'Ability to hold one\'s breath for over 5 minutes in static apnea without inhaling pure O2 and over 7 minutes with pure O2 inhalation.', tag: 'Skill' },
                 { name: 'Wire Walking', description: '', tag: 'Skill' }
             ].sort((a, b) => {
-                const tagPriority = { 'Company': 1, 'Studio': 2, 'Brand': 3, 'Series': 4, 'Service': 5, 'Skill': 6 };
+                const tagPriority = { 'Company': 1, 'Principles': 2, 'Studio': 3, 'Brand': 4, 'Series': 5, 'Service': 6, 'Skill': 7 };
                 if (tagPriority[a.tag] !== tagPriority[b.tag]) {
                     return tagPriority[a.tag] - tagPriority[b.tag];
                 }
@@ -1968,12 +1969,13 @@
             const [filterTag, setFilterTag] = useState(null);
             const [selectedEntry, setSelectedEntry] = useState(null);
 
-            const tagOrder = ['Company', 'Studio', 'Brand', 'Series', 'Service', 'Skill'];
+            const tagOrder = ['Company', 'Principles', 'Studio', 'Brand', 'Series', 'Service', 'Skill'];
             const tags = tagOrder.filter(tag => entries.some(e => e.tag === tag));
 
             const tagColors = {
                 'Brand': 'bg-blue-900/30 text-blue-400 border-blue-500',
                 'Company': 'bg-purple-900/30 text-purple-400 border-purple-500',
+                'Principles': 'bg-yellow-900/30 text-yellow-400 border-yellow-500',
                 'Series': 'bg-cyan-900/30 text-cyan-400 border-cyan-500',
                 'Service': 'bg-orange-900/30 text-orange-400 border-orange-500',
                 'Skill': 'bg-green-900/30 text-green-400 border-green-500',
