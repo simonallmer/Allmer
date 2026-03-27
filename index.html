@@ -2238,6 +2238,7 @@
         };
 
         const PublicationsPillar = () => {
+            const [showArcadeReader, setShowArcadeReader] = useState(false);
             const [showMagicReader, setShowMagicReader] = useState(false);
             const [showMercurReader, setShowMercurReader] = useState(false);
             const [order, setOrder] = useState('desc');
@@ -2258,8 +2259,27 @@
                             </div>
                         </div>
                         {order === 'desc' ? (
-                            // Mercur first
+                            // Arcade Masterplan (2026.03.27) first
                             <>
+                                <div 
+                                    className="border border-[#D4AF37]/30 bg-gradient-to-b from-[#0a0a0a] to-black p-12 cursor-pointer hover:border-[#D4AF37] transition-all group"
+                                    onClick={() => setShowArcadeReader(true)}
+                                >
+                                    <div className="flex items-center gap-8">
+                                        <div className="w-32 h-44 border border-[#333] bg-gradient-to-b from-[#1a1a1a] to-[#0a0a0a] flex flex-col items-center justify-center p-4 group-hover:shadow-[0_0_30px_rgba(212,175,55,0.2)] transition-all">
+                                            <span className="text-[#D4AF37] brand-font text-xs text-center leading-tight">ARCADE<br/>MASTERPLAN</span>
+                                        </div>
+                                        <div className="flex-1">
+                                            <h3 className="text-[#D4AF37] brand-font text-2xl mb-2">Arcade Masterplan</h3>
+                                            <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">The Architecture of Allmer Games</p>
+                                            <p className="text-gray-600 text-[10px] mb-4">Published: 2026.03.27</p>
+                                            <p className="text-gray-400 text-sm leading-relaxed mb-6">
+                                                A single, browser-based platform uniting every dimension of the Allmer Games universe without lock-in, without compromise and without middlemen.
+                                            </p>
+                                            <span className="text-[#D4AF37] text-xs uppercase tracking-widest border border-[#D4AF37] px-4 py-2 group-hover:bg-[#D4AF37] group-hover:text-black transition-all">Open Reader</span>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div 
                                     className="border border-[#D4AF37]/30 bg-gradient-to-b from-[#0a0a0a] to-black p-12 cursor-pointer hover:border-[#D4AF37] transition-all group"
                                     onClick={() => setShowMercurReader(true)}
@@ -2340,9 +2360,203 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div 
+                                    className="border border-[#D4AF37]/30 bg-gradient-to-b from-[#0a0a0a] to-black p-12 cursor-pointer hover:border-[#D4AF37] transition-all group"
+                                    onClick={() => setShowArcadeReader(true)}
+                                >
+                                    <div className="flex items-center gap-8">
+                                        <div className="w-32 h-44 border border-[#333] bg-gradient-to-b from-[#1a1a1a] to-[#0a0a0a] flex flex-col items-center justify-center p-4 group-hover:shadow-[0_0_30px_rgba(212,175,55,0.2)] transition-all">
+                                            <span className="text-[#D4AF37] brand-font text-xs text-center leading-tight">ARCADE<br/>MASTERPLAN</span>
+                                        </div>
+                                        <div className="flex-1">
+                                            <h3 className="text-[#D4AF37] brand-font text-2xl mb-2">Arcade Masterplan</h3>
+                                            <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">The Architecture of Allmer Games</p>
+                                            <p className="text-gray-600 text-[10px] mb-4">Published: 2026.03.27</p>
+                                            <p className="text-gray-400 text-sm leading-relaxed mb-6">
+                                                A single, browser-based platform uniting every dimension of the Allmer Games universe without lock-in, without compromise and without middlemen.
+                                            </p>
+                                            <span className="text-[#D4AF37] text-xs uppercase tracking-widest border border-[#D4AF37] px-4 py-2 group-hover:bg-[#D4AF37] group-hover:text-black transition-all">Open Reader</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </>
                         )}
                     </div>
+
+                    {/* Arcade Masterplan Reader Modal */}
+                    {showArcadeReader && (
+                        <div 
+                            className="fixed inset-0 bg-black/95 z-50 flex flex-col"
+                            onClick={() => setShowArcadeReader(false)}
+                        >
+                            {/* Reader Header */}
+                            <div className="flex items-center justify-between p-6 border-b border-[#222]">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-8 h-10 border border-[#D4AF37]/50 bg-gradient-to-b from-[#1a1a1a] to-[#0a0a0a] flex items-center justify-center">
+                                        <span className="text-[#D4AF37] brand-font text-[6px] leading-tight">AMP</span>
+                                    </div>
+                                    <div>
+                                        <h4 className="text-[#D4AF37] brand-font text-sm">Arcade Masterplan</h4>
+                                        <p className="text-gray-500 text-[10px]">Simon Allmer Entertainment — 2026</p>
+                                    </div>
+                                </div>
+                                <button 
+                                    onClick={() => setShowArcadeReader(false)}
+                                    className="text-gray-500 hover:text-white text-2xl w-10 h-10 flex items-center justify-center border border-transparent hover:border-[#333] transition-all"
+                                >
+                                    ×
+                                </button>
+                            </div>
+
+                            {/* Reader Content */}
+                            <div 
+                                className="flex-1 overflow-y-auto"
+                                onClick={e => e.stopPropagation()}
+                            >
+                                <div className="max-w-2xl mx-auto p-8 md:p-16">
+                                    {/* Title Page */}
+                                    <div className="text-center mb-16 pb-16 border-b border-[#222]">
+                                        <h1 className="text-4xl md:text-5xl text-[#D4AF37] brand-font mb-8 tracking-wider uppercase">Arcade Masterplan</h1>
+                                        <p className="text-xl text-gray-300 mb-2">Vision</p>
+                                        <p className="text-gray-500">The walls between Console Gaming, PC Gaming and Mobile Gaming are dissolving. Most platforms responded by building higher fences. Arcade takes the opposite path — a single, browser-based platform uniting every dimension of the Allmer Games universe without lock-in, without compromise and without middlemen.</p>
+                                    </div>
+
+                                    <div className="mb-12">
+                                        <h2 className="text-2xl text-[#D4AF37] brand-font mb-8 uppercase tracking-widest">The Platform</h2>
+                                        <p className="text-gray-300 leading-relaxed mb-4">
+                                            Arcade is a curated gaming platform exclusive to Simon Allmer Entertainment and its Partner Studios. It is not a marketplace. It is not an app store. It is a membership — built around original IP, cultural depth and a living community.
+                                        </p>
+                                    </div>
+
+                                    <div className="mb-12">
+                                        <h2 className="text-2xl text-[#D4AF37] brand-font mb-8 uppercase tracking-widest">Content Tiers</h2>
+                                        <div className="space-y-6">
+                                            <div className="border border-[#222] p-6">
+                                                <h4 className="text-[#D4AF37] brand-font mb-2">Allmer Games</h4>
+                                                <p className="text-gray-300 leading-relaxed">
+                                                    The core catalog. Every title developed in-house by Simon Allmer Entertainment — original game design, original illustrations, original soundtracks. The creative and quality standard everything else is measured against. Currently 15 titles including Seven Wonders, Elements, Futory Cards, Casino Camino, Believe and Detective Noname.
+                                                </p>
+                                            </div>
+                                            <div className="border border-[#222] p-6">
+                                                <h4 className="text-[#D4AF37] brand-font mb-2">Games Chronicle</h4>
+                                                <p className="text-gray-300 leading-relaxed">
+                                                    A curated collection of historically significant games from across human civilisation, selected and adapted by Simon Allmer. Each title is redesigned for the digital medium with original visuals, a commissioned soundtrack and historical context drawn from the Chronicle journals. Current and planned entries include Pachisi and Tamerlane Chess. The Games Chronicle sits at the intersection of interactive entertainment and cultural documentation — making history not just readable, but playable.
+                                                </p>
+                                            </div>
+                                            <div className="border border-[#222] p-6">
+                                                <h4 className="text-[#D4AF37] brand-font mb-2">Partner Studios</h4>
+                                                <p className="text-gray-300 leading-relaxed">
+                                                    A carefully selected network of independently operated game studios with exclusive access to the Arcade platform. Partner Studios are not third party developers — they are collaborators held to Allmer standards. Each partner is chosen for creative alignment, original IP and quality of craft. Simon Allmer Entertainment retains full editorial control over what enters the platform.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="mb-12">
+                                        <h2 className="text-2xl text-[#D4AF37] brand-font mb-8 uppercase tracking-widest">Membership Model</h2>
+                                        <p className="text-gray-300 leading-relaxed mb-6">
+                                            Arcade operates on a subscription model with a free demo tier, designed to maximise reach without compromising perceived value.
+                                        </p>
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                            <div className="border border-[#D4AF37]/30 p-4 bg-[#D4AF37]/5">
+                                                <h4 className="text-[#D4AF37] brand-font text-sm mb-2">Free Demo</h4>
+                                                <p className="text-gray-300 text-xs text-center">Every game accessible, limited to 10 minutes per day with reduced features. No subscription required. Play before you commit.</p>
+                                            </div>
+                                            <div className="border border-[#D4AF37]/30 p-4 bg-[#D4AF37]/5">
+                                                <h4 className="text-[#D4AF37] brand-font text-sm mb-2">Monthly</h4>
+                                                <p className="text-gray-300 text-xs text-center">€1 per month. Full access, maximum flexibility.</p>
+                                            </div>
+                                            <div className="border border-[#D4AF37]/30 p-4 bg-[#D4AF37]/5">
+                                                <h4 className="text-[#D4AF37] brand-font text-sm mb-2">Annual</h4>
+                                                <p className="text-gray-300 text-xs text-center">€6 per year. Full access, 50% saving versus monthly.</p>
+                                            </div>
+                                        </div>
+                                        <p className="text-gray-400 text-sm italic">
+                                            The pricing reflects the penetration strategy: keep the barrier low, let the games and community build the loyalty, adjust pricing as the network matures.
+                                        </p>
+                                    </div>
+
+                                    <div className="mb-12">
+                                        <h2 className="text-2xl text-[#D4AF37] brand-font mb-8 uppercase tracking-widest">The Community</h2>
+                                        <p className="text-gray-300 leading-relaxed mb-6">
+                                            Arcade is not a subscription. It is a membership. The distinction matters.
+                                        </p>
+                                        <div className="space-y-6">
+                                            <div className="border-l-2 border-[#D4AF37] pl-6">
+                                                <h4 className="text-[#D4AF37] brand-font mb-2">Online Events</h4>
+                                                <p className="text-gray-300 leading-relaxed">
+                                                    Hosted by charismatic showmasters, Arcade presents a gameshow format accessible to anyone but interactive exclusively for members. Subscribers do not just watch — they participate. Online tournaments across the Allmer Games catalog are currently in development.
+                                                </p>
+                                            </div>
+                                            <div className="border-l-2 border-[#D4AF37] pl-6">
+                                                <h4 className="text-[#D4AF37] brand-font mb-2">Offline Events</h4>
+                                                <p className="text-gray-300 leading-relaxed">
+                                                    Arcade members gain access to real world gaming events — Seven Wonders Meetups, Futory Cards Tournaments and partner events such as Spielefest — at no additional cost. As Arcade membership grows, event organisers gain a pre-qualified audience of engaged players. Members get free entry. Organisers get guaranteed attendance. The value flows both ways.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="mb-12">
+                                        <h2 className="text-2xl text-[#D4AF37] brand-font mb-8 uppercase tracking-widest">Partner Studio Model</h2>
+                                        <p className="text-gray-300 leading-relaxed mb-4">
+                                            Inspired by the A24 model in film — not every title is made by the same hands, but every title feels like it belongs. Partner Studios operate independently but exclusively on Arcade, bringing their own creative identity while meeting the curatorial standard Simon Allmer Entertainment has established.
+                                        </p>
+                                        <p className="text-[#D4AF37] font-semibold">
+                                            This is not the Disney Plus mistake — no catalog acquisitions, no legacy content that dilutes the platform identity. Every title on Arcade is there by deliberate choice.
+                                        </p>
+                                    </div>
+
+                                    <div className="mb-12">
+                                        <h2 className="text-2xl text-[#D4AF37] brand-font mb-8 uppercase tracking-widest">Technology & Production</h2>
+                                        <p className="text-gray-300 leading-relaxed mb-4">
+                                            AI is used as a development tool — accelerating programming and allowing Simon Allmer Entertainment to build lean and build fast. Every game concept, narrative and illustration remains purely human. This model eliminates traditional intermediaries, reduces structural costs and allows rapid response to changes in the industry.
+                                        </p>
+                                    </div>
+
+                                    <div className="mb-12">
+                                        <h2 className="text-2xl text-[#D4AF37] brand-font mb-8 uppercase tracking-widest">Roadmap</h2>
+                                        <div className="space-y-8">
+                                            <div className="relative pl-8 border-l border-[#D4AF37]/50">
+                                                <div className="absolute left-[-5px] top-0 w-2.5 h-2.5 rounded-full bg-[#D4AF37]"></div>
+                                                <h4 className="text-[#D4AF37] brand-font text-sm mb-1">Now</h4>
+                                                <p className="text-gray-300 text-sm">15 Allmer Games titles live. Free demo tier active. Annual and monthly subscriptions available. Offline event integration underway.</p>
+                                            </div>
+                                            <div className="relative pl-8 border-l border-[#333]">
+                                                <div className="absolute left-[-5px] top-0 w-2.5 h-2.5 rounded-full bg-gray-600"></div>
+                                                <h4 className="text-gray-400 brand-font text-sm mb-1">2025</h4>
+                                                <p className="text-gray-300 text-sm">Futory Cards arrives on Arcade in August. Player Profiles, Gamepad Support and Online Multiplayer in development. Games Chronicle launches with first historical titles.</p>
+                                            </div>
+                                            <div className="relative pl-8 border-l border-[#333]">
+                                                <div className="absolute left-[-5px] top-0 w-2.5 h-2.5 rounded-full bg-gray-800"></div>
+                                                <h4 className="text-gray-500 brand-font text-sm mb-1">Next</h4>
+                                                <p className="text-gray-300 text-sm">First Partner Studio collaborations. Online gameshow format launches. Spielefest and further event partnerships activated. Pricing reviewed as network matures.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="mb-12">
+                                        <h2 className="text-2xl text-[#D4AF37] brand-font mb-8 uppercase tracking-widest">Long Term Vision</h2>
+                                        <p className="text-gray-300 leading-relaxed mb-4">
+                                            Once Seven Wonders and Futory Cards become shared cultural vocabulary — games people teach each other, reference in conversation and seek out at events — the community becomes the moat. The platform becomes the infrastructure for a growing global audience that does not just play Allmer Games but belongs to the world Simon Allmer Entertainment is building.
+                                        </p>
+                                        <p className="text-[#D4AF37] font-semibold text-lg italic">
+                                            The goal was never to be the biggest platform. It was to be the one worth belonging to.
+                                        </p>
+                                        <p className="text-gray-500 text-sm mt-8 italic">
+                                            This is a living document. As the platform grows, the masterplan grows with it.
+                                        </p>
+                                    </div>
+
+                                    {/* Signature */}
+                                    <div className="text-right pt-16 border-t border-[#222]">
+                                        <p className="text-[#D4AF37] brand-font text-lg mb-1">Simon Allmer Entertainment</p>
+                                        <p className="text-gray-500 text-sm">simonallmer.com/aboutarcade</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
 
                     {/* Magic is Real Reader Modal */}
                     {showMagicReader && (
