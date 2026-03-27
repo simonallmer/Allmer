@@ -385,7 +385,7 @@
             const [city, setCity] = useState('Vienna');
             const [transactions, setTransactions] = useState([
                 { id: 1, date: '2026.03.15', description: 'Various Game Sales - Paradice am See, Vienna - Various Customers', studio: 'games', type: 'oneoff', amount: 30.00, transactionType: 'income' },
-                { id: 2, date: '2026.03.21', description: 'Arcade Subscription - Austria - Customer 000000006', studio: 'games', type: 'recurring', amount: 5.00, transactionType: 'income', recurringPeriod: 'yearly', recurringDay: 21 },
+                { id: 2, date: '2026.03.21', description: 'Arcade Subscription - Austria - Customer 000000006', studio: 'games', type: 'recurring', amount: 6.00, transactionType: 'income', recurringPeriod: 'yearly', recurringDay: 21 },
                 { id: 3, date: '2026.03.22', description: 'Arcade Subscription - Vienna, Austria - Customer 000000003', studio: 'games', type: 'recurring', amount: 1.00, transactionType: 'income', recurringPeriod: 'monthly', recurringDay: 22 },
                 { id: 4, date: '2026.03.23', description: 'Pyramid Sale - Munchy Bar, Vienna - Customer 000000007', studio: 'games', type: 'oneoff', amount: 10.00, transactionType: 'income' }
             ]);
@@ -841,7 +841,7 @@
                     let revenue = 0;
                     let source = '';
                     // Carlos (000000006) - Yearly subscription on March 21st, recurring every year
-                    if (date.getDate() === 21 && date.getMonth() === 2) { revenue = 5.00; source = 'Arcade (Yearly) - 000000006'; }
+                    if (date.getDate() === 21 && date.getMonth() === 2) { revenue = 6.00; source = 'Arcade (Yearly) - 000000006'; }
                     // Bennu (000000003) - Monthly subscription on 22nd, active since June 2025
                     else if (date.getDate() === 22) { revenue = 1.00; source = 'Arcade (Monthly) - 000000003'; }
                     return { dayOfYear: i, date, revenue, source };
@@ -904,25 +904,25 @@
                                 <div className="border border-[#222] bg-[#050505] p-4 text-center">
                                     <h4 className="text-[#D4AF37] brand-font text-sm mb-2">ARCADE</h4>
                                     <p className="text-gray-500 text-[10px] uppercase mb-2">Allmer Games</p>
-                                    <p className="text-white font-bold">5€ / year</p>
+                                    <p className="text-white font-bold">6€ / year</p>
                                     <p className="text-gray-500 text-xs">1€ / month</p>
                                 </div>
                                 <div className="border border-[#222] bg-[#050505] p-4 text-center">
                                     <h4 className="text-[#D4AF37] brand-font text-sm mb-2">CLUB</h4>
                                     <p className="text-gray-500 text-[10px] uppercase mb-2">Allmer Music</p>
-                                    <p className="text-white font-bold">5€ / year</p>
+                                    <p className="text-white font-bold">6€ / year</p>
                                     <p className="text-gray-500 text-xs">1€ / month</p>
                                 </div>
                                 <div className="border border-[#222] bg-[#050505] p-4 text-center">
                                     <h4 className="text-[#D4AF37] brand-font text-sm mb-2">CINEMA</h4>
                                     <p className="text-gray-500 text-[10px] uppercase mb-2">Allmer Films</p>
-                                    <p className="text-white font-bold">5€ / year</p>
+                                    <p className="text-white font-bold">6€ / year</p>
                                     <p className="text-gray-500 text-xs">1€ / month</p>
                                 </div>
                                 <div className="border border-[#222] bg-[#050505] p-4 text-center">
                                     <h4 className="text-[#D4AF37] brand-font text-sm mb-2">LIBRARY</h4>
                                     <p className="text-gray-500 text-[10px] uppercase mb-2">Allmer Comics</p>
-                                    <p className="text-white font-bold">5€ / year</p>
+                                    <p className="text-white font-bold">6€ / year</p>
                                     <p className="text-gray-500 text-xs">1€ / month</p>
                                 </div>
                                 <div className="border border-[#222] bg-[#D4AF37]/10 p-4 text-center">
@@ -931,6 +931,11 @@
                                     <p className="text-white font-bold">15€ / year</p>
                                     <p className="text-gray-500 text-xs">2.50€ / month</p>
                                 </div>
+                            </div>
+                            <div className="mt-6 text-center">
+                                <p className="text-[#D4AF37] text-[10px] uppercase tracking-[0.2em] italic">
+                                    * All subscriptions are now 6€ per year. Old subscribers will also pay 6€ in the future.
+                                </p>
                             </div>
                         </div>
 
@@ -1797,7 +1802,7 @@
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 <div 
                                     className="border border-[#222] hover:border-[#D4AF37] transition-all bg-[#050505] p-6 group cursor-pointer"
-                                    onClick={() => setSelectedProduct({ number: 'SUB-ARC', name: 'Arcade Subscription', brand: 'Allmer Games', genre: 'Subscription', description: '15 Allmer Games, 5 Classic Games, 5 Third Party Games', price: '5€/year or 1€/month' })}
+                                    onClick={() => setSelectedProduct({ number: 'SUB-ARC', name: 'Arcade Subscription', brand: 'Allmer Games', genre: 'Subscription', description: '15 Allmer Games, 5 Classic Games, 5 Third Party Games', price: '6€/year or 1€/month' })}
                                 >
                                     <div className="flex items-start justify-between mb-4">
                                         <div>
@@ -1807,12 +1812,12 @@
                                     </div>
                                     <h3 className="text-white brand-font text-lg mb-4 group-hover:text-[#D4AF37] transition-colors">Arcade Subscription</h3>
                                     <p className="text-gray-500 text-xs">15 Allmer Games, 5 Classic Games, 5 Third Party Games</p>
-                                    <p className="text-[#D4AF37] text-xs mt-2">5€/year or 1€/month</p>
+                                    <p className="text-[#D4AF37] text-xs mt-2">6€/year or 1€/month</p>
                                 </div>
 
                                 <div 
                                     className="border border-[#222] hover:border-[#D4AF37] transition-all bg-[#050505] p-6 group cursor-pointer"
-                                    onClick={() => setSelectedProduct({ number: 'SUB-CIN', name: 'Cinema Subscription', brand: 'Allmer Films', genre: 'Subscription', description: 'Full access to Allmer Films library', price: '5€/year or 1€/month' })}
+                                    onClick={() => setSelectedProduct({ number: 'SUB-CIN', name: 'Cinema Subscription', brand: 'Allmer Films', genre: 'Subscription', description: 'Full access to Allmer Films library', price: '6€/year or 1€/month' })}
                                 >
                                     <div className="flex items-start justify-between mb-4">
                                         <div>
@@ -1822,12 +1827,12 @@
                                     </div>
                                     <h3 className="text-white brand-font text-lg mb-4 group-hover:text-[#D4AF37] transition-colors">Cinema Subscription</h3>
                                     <p className="text-gray-500 text-xs">Full access to Allmer Films library</p>
-                                    <p className="text-[#D4AF37] text-xs mt-2">5€/year or 1€/month</p>
+                                    <p className="text-[#D4AF37] text-xs mt-2">6€/year or 1€/month</p>
                                 </div>
 
                                 <div 
                                     className="border border-[#222] hover:border-[#D4AF37] transition-all bg-[#050505] p-6 group cursor-pointer"
-                                    onClick={() => setSelectedProduct({ number: 'SUB-CLB', name: 'Club Subscription', brand: 'Allmer Music', genre: 'Subscription', description: 'Full access to Allmer Music library', price: '5€/year or 1€/month' })}
+                                    onClick={() => setSelectedProduct({ number: 'SUB-CLB', name: 'Club Subscription', brand: 'Allmer Music', genre: 'Subscription', description: 'Full access to Allmer Music library', price: '6€/year or 1€/month' })}
                                 >
                                     <div className="flex items-start justify-between mb-4">
                                         <div>
@@ -1837,12 +1842,12 @@
                                     </div>
                                     <h3 className="text-white brand-font text-lg mb-4 group-hover:text-[#D4AF37] transition-colors">Club Subscription</h3>
                                     <p className="text-gray-500 text-xs">Full access to Allmer Music library</p>
-                                    <p className="text-[#D4AF37] text-xs mt-2">5€/year or 1€/month</p>
+                                    <p className="text-[#D4AF37] text-xs mt-2">6€/year or 1€/month</p>
                                 </div>
 
                                 <div 
                                     className="border border-[#222] hover:border-[#D4AF37] transition-all bg-[#050505] p-6 group cursor-pointer"
-                                    onClick={() => setSelectedProduct({ number: 'SUB-LIB', name: 'Library Subscription', brand: 'Allmer Comics', genre: 'Subscription', description: 'Full access to Allmer Comics library', price: '5€/year or 1€/month' })}
+                                    onClick={() => setSelectedProduct({ number: 'SUB-LIB', name: 'Library Subscription', brand: 'Allmer Comics', genre: 'Subscription', description: 'Full access to Allmer Comics library', price: '6€/year or 1€/month' })}
                                 >
                                     <div className="flex items-start justify-between mb-4">
                                         <div>
@@ -1852,7 +1857,7 @@
                                     </div>
                                     <h3 className="text-white brand-font text-lg mb-4 group-hover:text-[#D4AF37] transition-colors">Library Subscription</h3>
                                     <p className="text-gray-500 text-xs">Full access to Allmer Comics library</p>
-                                    <p className="text-[#D4AF37] text-xs mt-2">5€/year or 1€/month</p>
+                                    <p className="text-[#D4AF37] text-xs mt-2">6€/year or 1€/month</p>
                                 </div>
 
                                 <div 
@@ -1922,7 +1927,7 @@
                 { name: 'Allmer Music', description: 'Products: Studio Albums, Score Albums. Brands/Series: Danger.', tag: 'Studio' },
                 { name: 'Allmer Snacks', description: 'Products: Food, Beverages. Brands/Series: Metropole, Solar-Soda.', tag: 'Studio' },
                 { name: 'American Portrait', description: 'Telling the greatest stories from the first 250 years of the country. Series include: Kissinger, Carter. Studios used: All (Comics, Films, Games, Journals, Music, Snacks).', goal: 'Highest Grossing Comic Book and Film Series.', tag: 'Brand' },
-                { name: 'Arcade', description: '15 Allmer Games, 5 Classic Games, 5 Third Party Games.', strategy: 'Phase 1 — Spread the rules: €5/year gets Seven Wonders and Futory Cards into as many hands as possible. People learn the games, teach their friends, bring them to events. Phase 2 — The community becomes the moat: Once "want to play a round of Seven Wonders?" is a phrase people actually say, the game has cultural gravity. You don\'t need to convince anyone of the value anymore — the community does it for you. Phase 3 — Price reflects the network, not just the software: Doubling to €10/year at that point isn\'t a price hike — it\'s joining a club that people already want to be in.', goal: 'Most Subscriptions for Gaming Service.', tag: 'Service' },
+                { name: 'Arcade', description: '15 Allmer Games, 5 Classic Games, 5 Third Party Games.', strategy: 'Phase 1 — Spread the rules: €6/year gets Seven Wonders and Futory Cards into as many hands as possible. People learn the games, teach their friends, bring them to events. Phase 2 — The community becomes the moat: Once "want to play a round of Seven Wonders?" is a phrase people actually say, the game has cultural gravity. You don\'t need to convince anyone of the value anymore — the community does it for you. Phase 3 — Price reflects the network, not just the software: Doubling to €10/year at that point isn\'t a price hike — it\'s joining a club that people already want to be in.', goal: 'Most Subscriptions for Gaming Service.', tag: 'Service' },
                 { name: 'Believe', description: 'Card game where deception is the objective. Players build stories that can be true or false but only get points by fooling people. Includes 3 distinct game modes.', tag: 'Brand' },
                 { name: 'Car Stunts', description: '', tag: 'Skill' },
                 { name: 'Casino Camino', description: 'Reimagining the gamble experience through unique titles.', tag: 'Brand' },
@@ -1936,7 +1941,7 @@
                 { name: 'Detective Noname', description: 'Story of a 19th century detective and his mysterious cases throughout London.', tag: 'Brand' },
                 { name: 'Elements', description: 'A simple samurai card game where players can lay out many cards at once by following either shape or color.', goal: 'Highest Grossing Card Game.', tag: 'Brand' },
                 { name: 'Extension', description: 'A brand experience that doesn\'t qualify as a full product produced by a Studio but nevertheless has to be taken care of as it enhances the customer\'s satisfaction. For example, on the Metropole (Allmer Snacks) page, there is a digital Metropole crossword puzzle. A simple crossword with cool styling doesn\'t qualify as its own game (which would demand originality), but there should be someone responsible for taking care of that extension and not simply treating it like a temporary web design element.', tag: 'Company' },
-                { name: 'In-Camera Effort (ICE)', description: 'In-Camera Effort (ICE) refers to the cumulative volume of physical preparation, technical training, and manual craftsmanship invested by the cast and crew prior to or during the capturing of a frame. Unlike "Production Value," which measures the perceived expensive-ness of the final image, ICE measures the human-hours of specialized skill required to manifest a moment without digital augmentation.\n\n// Key Dimensions\n\nSomatic Training: Actors learning a skill (e.g., ballet, scuba diving, linguistics).\n\nTactical Choreography: Long-form, complex physical sequences practiced for months.\n\nAnalog Craft: Hand-sewn costumes or physical sets that dictate how actors move.', tag: 'Principles' },
+                { name: 'In-Camera Effort (ICE)', description: 'In-Camera Effort (ICE) refers to the cumulative volume of physical preparation, technical training, and manual craftsmanship invested by the cast and crew prior to or during the capturing of a frame. Unlike "Production Value," which measures the perceived expensive-ness of the final image, ICE measures the human-hours of specialized skill required to manifest a moment without digital augmentation.\n\nKey Dimensions\n\nSomatic Training: Actors learning a skill (e.g., ballet, scuba diving, linguistics).\n\nTactical Choreography: Long-form, complex physical sequences practiced for months.\n\nAnalog Craft: Hand-sewn costumes or physical sets that dictate how actors move.', tag: 'Principles' },
                 { name: 'Invent or Die', description: 'Products must be boldly original, bring true value to people, and be constantly improved to deliver the best experience.', tag: 'Principles' },
                 { name: 'Magic is Real', description: 'The defining craft of each Studio is created by humans, not machines. In a world of digital abundance, the claim that something was made with years of skill and deep obsession becomes radical. Allmer makes that claim and proves it — in objects, interfaces, and events. Magic is Real because it happened somewhere.', tag: 'Principles' },
                 { name: 'Serve the Story', description: 'Creative decisions must strengthen the narrative and make it as engaging as possible.', tag: 'Principles' },
@@ -1989,6 +1994,40 @@
                 (!filterTag || e.tag === filterTag) &&
                 e.name.toLowerCase().includes(searchTerm.toLowerCase())
             );
+
+            const renderDescription = (text) => {
+                if (!text) return <p className="italic text-gray-500">Definition coming soon.</p>;
+                
+                const sections = text.split('\n\n');
+                return sections.map((section, idx) => {
+                    // Check if it's a known header
+                    if (section.trim() === 'Key Dimensions') {
+                        return (
+                            <h4 key={idx} className="text-[#D4AF37] text-[10px] uppercase tracking-[0.2em] font-bold mt-8 mb-4 border-b border-[#D4AF37]/30 pb-2 brand-font">
+                                {section}
+                            </h4>
+                        );
+                    }
+                    
+                    // Check for Label: Content format
+                    if (section.includes(': ') && section.length < 200 && !section.includes('\n')) {
+                        const [label, ...rest] = section.split(': ');
+                        const content = rest.join(': ');
+                        return (
+                            <div key={idx} className="mb-4 pl-4 border-l border-[#D4AF37]/20">
+                                <span className="text-[#D4AF37] text-xs font-bold uppercase tracking-widest block mb-1 brand-font">{label}</span>
+                                <p className="text-gray-400 text-sm leading-relaxed">{content}</p>
+                            </div>
+                        );
+                    }
+                    
+                    return (
+                        <p key={idx} className="text-gray-300 text-sm leading-relaxed mb-4 whitespace-pre-line font-serif italic">
+                            {section}
+                        </p>
+                    );
+                });
+            };
 
             return (
                 <div className="flex-1 bg-black min-h-full p-8 pb-20 text-white font-serif relative overflow-hidden">
@@ -2048,32 +2087,32 @@
                             </div>
 
                             {/* Right Side - Definition */}
-                            <div className="w-1/2 border border-[#222] bg-[#050505] p-6 min-h-[300px]">
+                            <div className="w-1/2 border border-[#222] bg-[#050505] p-6 min-h-[300px] overflow-y-auto max-h-[60vh]">
                                 {selectedEntry ? (
-                                    <div>
-                                        <div className="flex items-center justify-between mb-4">
-                                            <h3 className="text-[#D4AF37] brand-font text-xl">{selectedEntry.name}</h3>
-                                            <span className={`px-2 py-1 text-xs uppercase tracking-wider border ${tagColors[selectedEntry.tag] || 'bg-gray-800 text-gray-400 border-gray-600'}`}>
+                                    <div className="animate-in fade-in duration-500">
+                                        <div className="flex items-center justify-between mb-8 border-b border-[#333] pb-4">
+                                            <h3 className="text-[#D4AF37] brand-font text-2xl tracking-widest">{selectedEntry.name}</h3>
+                                            <span className={`px-3 py-1 text-[10px] uppercase tracking-widest border font-bold ${tagColors[selectedEntry.tag] || 'bg-gray-800 text-gray-400 border-gray-600'}`}>
                                                 {selectedEntry.tag}
                                             </span>
                                         </div>
                                         {selectedEntry.brand && (
-                                            <div className="mb-4 flex items-center gap-2 text-xs">
+                                            <div className="mb-6 flex items-center gap-2 text-[10px] uppercase tracking-widest">
                                                 <span className="text-gray-500">Brand:</span>
                                                 <button 
                                                     onClick={() => {
                                                         const linked = entries.find(e => e.name === selectedEntry.brand);
                                                         if (linked) setSelectedEntry(linked);
                                                     }}
-                                                    className={`px-2 py-0.5 border cursor-pointer hover:bg-[#D4AF37]/20 transition-colors ${tagColors['Brand']}`}
+                                                    className={`px-3 py-1 border border-[#D4AF37]/30 text-[#D4AF37] cursor-pointer hover:bg-[#D4AF37]/10 transition-colors brand-font`}
                                                 >
                                                     {selectedEntry.brand}
                                                 </button>
                                             </div>
                                         )}
                                         {selectedEntry.series && selectedEntry.series.length > 0 && (
-                                            <div className="mb-4">
-                                                <span className="text-gray-500 text-xs block mb-2">Series:</span>
+                                            <div className="mb-8">
+                                                <span className="text-gray-500 text-[10px] uppercase tracking-widest block mb-3">Series Hierarchy</span>
                                                 <div className="flex flex-wrap gap-2">
                                                     {selectedEntry.series.map(s => (
                                                         <button 
@@ -2082,7 +2121,7 @@
                                                                 const linked = entries.find(e => e.name === s);
                                                                 if (linked) setSelectedEntry(linked);
                                                             }}
-                                                            className="px-2 py-0.5 border border-cyan-500 bg-cyan-900/20 text-cyan-400 text-xs cursor-pointer hover:bg-cyan-900/40 transition-colors"
+                                                            className="px-3 py-1 border border-cyan-900 text-cyan-500 text-[10px] uppercase tracking-widest cursor-pointer hover:bg-cyan-900/40 transition-colors brand-font"
                                                         >
                                                             {s}
                                                         </button>
@@ -2090,30 +2129,38 @@
                                                 </div>
                                             </div>
                                         )}
-                                        <p className="text-gray-300 text-sm leading-relaxed whitespace-pre-line">{selectedEntry.description || 'Definition coming soon.'}</p>
+                                        
+                                        <div className="lexicon-content">
+                                            {renderDescription(selectedEntry.description)}
+                                        </div>
+
                                         {selectedEntry.strategy && (
-                                            <div className="mt-4 pt-4 border-t border-[#333]">
-                                                <span className="text-[#D4AF37] text-xs uppercase tracking-widest block mb-2 font-bold">Strategy</span>
-                                                <div className="space-y-3">
+                                            <div className="mt-8 pt-8 border-t border-[#333]">
+                                                <span className="text-[#D4AF37] text-[10px] uppercase tracking-[0.2em] block mb-6 font-bold brand-font">Phased Strategy</span>
+                                                <div className="space-y-6">
                                                     {selectedEntry.strategy.split('Phase ').filter(p => p.trim()).map((phase, idx) => (
-                                                        <p key={idx} className="text-gray-400 text-sm">
-                                                            <span className="text-white font-semibold">Phase {phase.split(':')[0]}</span>
-                                                            <span className="text-gray-500">: {phase.split(':').slice(1).join(':').trim()}</span>
-                                                        </p>
+                                                        <div key={idx} className="relative pl-8 border-l border-[#D4AF37]/20">
+                                                            <div className="absolute -left-[5px] top-0 w-2 h-2 bg-[#D4AF37] transform rotate-45"></div>
+                                                            <p className="text-gray-400 text-sm leading-relaxed">
+                                                                <span className="text-[#D4AF37] font-bold uppercase tracking-widest text-[10px] block mb-1">Phase {phase.split(':')[0]}</span>
+                                                                <span className="text-gray-300 italic">{phase.split(':').slice(1).join(':').trim()}</span>
+                                                            </p>
+                                                        </div>
                                                     ))}
                                                 </div>
                                             </div>
                                         )}
                                         {selectedEntry.goal && (
-                                            <div className="mt-4 pt-4 border-t border-[#333]">
-                                                <span className="text-[#D4AF37] text-xs uppercase tracking-widest block mb-2 font-bold">Goal</span>
-                                                <p className="text-gray-400 text-sm italic">{selectedEntry.goal}</p>
+                                            <div className="mt-8 pt-8 border-t border-[#D4AF37]/20 bg-[#D4AF37]/5 p-6 border-dashed">
+                                                <span className="text-[#D4AF37] text-[10px] uppercase tracking-[0.2em] block mb-3 font-bold brand-font">Legacy Goal</span>
+                                                <p className="text-white text-lg italic brand-font tracking-wide">"{selectedEntry.goal}"</p>
                                             </div>
                                         )}
                                     </div>
                                 ) : (
-                                    <div className="flex items-center justify-center h-full">
-                                        <p className="text-gray-500 text-sm">Select a term to view its definition</p>
+                                    <div className="flex flex-col items-center justify-center h-full opacity-30">
+                                        <Scroll className="w-12 h-12 text-[#D4AF37] mb-4" />
+                                        <p className="text-[#D4AF37] text-xs uppercase tracking-[0.3em] brand-font">Select Archive Entry</p>
                                     </div>
                                 )}
                             </div>
