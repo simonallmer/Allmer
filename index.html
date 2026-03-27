@@ -278,7 +278,7 @@
                                 </tr>
                                 <tr>
                                     <th>Financial Assets</th>
-                                    <td>€100.00 (Liquid Assets)</td>
+                                    <td>€110.00 (Liquid Assets)</td>
                                 </tr>
                                 <tr>
                                     <th>Main Business Activities</th>
@@ -384,14 +384,15 @@
         const AssetsPillar = ({ navigate }) => {
             const [city, setCity] = useState('Vienna');
             const [transactions, setTransactions] = useState([
-                { id: 1, date: '2026.03.15', description: 'Various Game Sales - Paradice am See, Vienna - Various Customers', studio: 'games', type: 'oneoff', amount: 30.00, transactionType: 'income' },
-                { id: 2, date: '2026.03.21', description: 'Arcade Subscription - Austria - Customer 000000006', studio: 'games', type: 'recurring', amount: 6.00, transactionType: 'income', recurringPeriod: 'yearly', recurringDay: 21 },
-                { id: 3, date: '2026.03.22', description: 'Arcade Subscription - Vienna, Austria - Customer 000000003', studio: 'games', type: 'recurring', amount: 1.00, transactionType: 'income', recurringPeriod: 'monthly', recurringDay: 22 },
-                { id: 4, date: '2026.03.23', description: 'Pyramid Sale - Munchy Bar, Vienna - Customer 000000007', studio: 'games', type: 'oneoff', amount: 10.00, transactionType: 'income' }
+                { id: 1, date: '2026.03.15', description: 'Various Game Sales - Paradice am See, Vienna - Various Customers', studio: 'games', event: 'Paradice am See', type: 'oneoff', amount: 30.00, transactionType: 'income' },
+                { id: 2, date: '2026.03.21', description: 'Arcade Subscription - Austria - Customer 000000006', studio: 'games', event: '', type: 'recurring', amount: 6.00, transactionType: 'income', recurringPeriod: 'yearly', recurringDay: 21 },
+                { id: 3, date: '2026.03.22', description: 'Arcade Subscription - Vienna, Austria - Customer 000000003', studio: 'games', event: '', type: 'recurring', amount: 1.00, transactionType: 'income', recurringPeriod: 'monthly', recurringDay: 22 },
+                { id: 4, date: '2026.03.23', description: 'Pyramid Sale - Munchy Bar, Vienna - Customer 000000007', studio: 'games', event: '', type: 'oneoff', amount: 10.00, transactionType: 'income' },
+                { id: 5, date: '2026.03.27', description: 'Game Sales - Jo&Joe, Vienna (Paradice Board Game Night)', studio: 'games', event: 'Paradice Board Game Night', type: 'oneoff', amount: 10.00, transactionType: 'income' }
             ]);
             const [sortOrder, setSortOrder] = useState('desc');
             const [showModal, setShowModal] = useState(false);
-            const [formData, setFormData] = useState({ date: '2026.03.21', description: '', studio: 'games', type: 'oneoff', amount: '', transactionType: 'income' });
+            const [formData, setFormData] = useState({ date: '2026.03.27', description: '', studio: 'games', event: '', type: 'oneoff', amount: '', transactionType: 'income' });
 
             const estates = {
                 Vienna: [
@@ -436,7 +437,7 @@
                 };
                 setTransactions([...transactions, newTransaction]);
                 setShowModal(false);
-                setFormData({ date: '2026.03.15', description: '', studio: 'games', type: 'oneoff', amount: '', transactionType: 'income' });
+                setFormData({ date: '2026.03.27', description: '', studio: 'games', event: '', type: 'oneoff', amount: '', transactionType: 'income' });
             };
 
             return (
@@ -493,6 +494,7 @@
                                             <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">Date</th>
                                             <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">Description</th>
                                             <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">Studio</th>
+                                            <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">Event</th>
                                             <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">Type</th>
                                             <th className="text-right p-3 text-gray-500 text-[10px] uppercase tracking-wider">Amount</th>
                                         </tr>
@@ -506,6 +508,13 @@
                                                     <span className={`px-2 py-1 text-[10px] uppercase border ${studioColors[t.studio] || 'bg-gray-800 text-gray-400 border-gray-600'}`}>
                                                         Allmer {t.studio.charAt(0).toUpperCase() + t.studio.slice(1)}
                                                     </span>
+                                                </td>
+                                                <td className="p-3">
+                                                    {t.event && (
+                                                        <span className="px-2 py-1 text-[10px] uppercase bg-gray-900 border border-[#333] text-gray-400">
+                                                            {t.event}
+                                                        </span>
+                                                    )}
                                                 </td>
                                                 <td className="p-3">
                                                     <span className={`px-2 py-1 text-[10px] uppercase ${t.type === 'oneoff' ? 'bg-blue-900/30 text-blue-400 border border-blue-500' : 'bg-green-900/30 text-green-400 border border-green-500'}`}>
@@ -693,6 +702,16 @@
                                             <option value="films">Allmer Films</option>
                                             <option value="music">Allmer Music</option>
                                         </select>
+                                    </div>
+                                    <div>
+                                        <label className="block text-gray-500 text-xs uppercase tracking-wider mb-1">Event (Optional)</label>
+                                        <input 
+                                            type="text" 
+                                            value={formData.event}
+                                            onChange={e => setFormData({...formData, event: e.target.value})}
+                                            className="w-full bg-[#111] border border-[#333] text-white px-3 py-2 text-sm focus:border-[#D4AF37] focus:outline-none"
+                                            placeholder="e.g. Paradice am See"
+                                        />
                                     </div>
                                     <div>
                                         <label className="block text-gray-500 text-xs uppercase tracking-wider mb-1">Type</label>
