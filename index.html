@@ -470,8 +470,14 @@
 
                         {/* Income Statement */}
                         <div className="border border-[#222] bg-[#0a0a0a]">
-                            <div className="p-4 border-b border-[#222]">
+                            <div className="flex items-center justify-between p-4 border-b border-[#222]">
                                 <h3 className="text-[#D4AF37] brand-font text-lg uppercase tracking-widest">Income Statement</h3>
+                                <button 
+                                    onClick={() => setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc')}
+                                    className="text-[10px] text-gray-500 hover:text-[#D4AF37] border border-[#333] px-2 py-1"
+                                >
+                                    SORT: {sortOrder === 'desc' ? 'NEWEST' : 'OLDEST'}
+                                </button>
                             </div>
                             <div className="overflow-x-auto">
                                 <table className="w-full">
@@ -483,7 +489,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {transactions.filter(t => t.transactionType === 'income').map(t => (
+                                        {sortedTransactions.filter(t => t.transactionType === 'income').map(t => (
                                             <tr key={t.id} className="border-b border-[#1a1a1a]">
                                                 <td className="p-3 text-gray-400 text-sm">{t.date}</td>
                                                 <td className="p-3 text-white text-sm">{t.description}</td>
@@ -502,6 +508,26 @@
                         {/* Projected Revenue removed per public version requirements */}
 
                         {/* Real Estate Holdings removed per public version requirements */}
+
+                        {/* Office Location */}
+                        <div className="border border-[#222] bg-[#0a0a0a] p-6">
+                            <h3 className="text-[#D4AF37] brand-font text-lg uppercase tracking-widest mb-4">Office Location</h3>
+                            <div className="flex flex-col md:flex-row gap-6 items-start">
+                                <div>
+                                    <p className="text-white font-serif text-lg">Kolschitzkygasse 14-18</p>
+                                    <p className="text-gray-400 font-serif">1020 Vienna, Austria</p>
+                                    <p className="text-gray-500 text-sm mt-2">Headquarters</p>
+                                </div>
+                                <a 
+                                    href="https://maps.app.goo.gl/FRvLW6r8Fa4GVb1i6" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="inline-block text-[#D4AF37] text-sm border border-[#D4AF37] px-4 py-2 hover:bg-[#D4AF37] hover:text-black transition-colors"
+                                >
+                                    View on Google Maps
+                                </a>
+                            </div>
+                        </div>
 
                     </div>
 
