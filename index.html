@@ -3532,7 +3532,7 @@
                                     </div>
 
                                     <nav className="flex flex-col gap-2">
-                                        {menuItems.map((item, index) => (
+                                        {visibleMenuItems.map((item, index) => (
                                             <button
                                                 key={item.id}
                                                 onClick={() => { setActiveTab(item.id); setShowMenu(false); }}
