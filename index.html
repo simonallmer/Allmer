@@ -3314,7 +3314,7 @@ const publicMenuItems = [
             { id: 'worldmap', label: 'LOCATIONS' },
         ];
 
-        const menuItems = publicMenuItems;
+        let menuItems = publicMenuItems;
 
         const LoginScreen = ({ onAuthorize }) => {
             const [password, setPassword] = useState('');
@@ -3403,6 +3403,8 @@ const publicMenuItems = [
             const handleAuthenticatedAccess = () => {
                 authenticatePrivate(pinInput);
             };
+
+            const currentMenuItems = isPrivateMode ? privateMenuItems : publicMenuItems;
 
             React.useEffect(() => {
                 // Check auth on mount
