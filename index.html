@@ -3378,6 +3378,7 @@ const publicMenuItems = [
             const [showPinModal, setShowPinModal] = useState(false);
             const [pinInput, setPinInput] = useState('');
 
+            // Menu items: use privateMenuItems when authenticated, otherwise publicMenuItems
             const currentMenuItems = isPrivateMode ? privateMenuItems : publicMenuItems;
 
             const authenticatePrivate = (pin) => {
