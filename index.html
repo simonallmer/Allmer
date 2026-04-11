@@ -2908,7 +2908,7 @@
                         { name: 'London', country: 'UK', description: 'Strategic center for European operations and global financial management.', status: 'Operational Hub', timezone: 'GMT (UTC+0)', active: false },
                         { name: 'Paris', country: 'France', description: 'The Atelier epicenter. Managing artisanal production and luxury partnerships across the continent.', status: 'Operational Node', timezone: 'CET (UTC+1)', active: false },
                         { name: 'Madrid', country: 'Spain', description: 'Hub for Spanish-speaking markets and Mediterranean cultural exchange.', status: 'Operational Node', timezone: 'CET (UTC+1)', active: false },
-                        { name: 'Milan', country: 'Italy', description: 'Design and fashion capital, leading aesthetics and material sourcing.', status: 'Operational Node', timezone: 'CET (UTC+1)', active: false }
+                        { name: 'Rome', country: 'Italy', description: 'Design and fashion capital, leading aesthetics and material sourcing.', status: 'Operational Node', timezone: 'CET (UTC+1)', active: false }
                     ]
                 },
                 {
@@ -2965,7 +2965,8 @@
                                         {continent.cities.map((city) => (
                                             <div 
                                                 key={city.name}
-                                                className={`p-3 border-b border-[#1a1a1a] cursor-default ${city.active ? '' : 'opacity-40'}`}
+                                                className={`p-3 border-b border-[#1a1a1a] cursor-pointer hover:bg-[#111] transition-colors ${city.active ? '' : 'opacity-40'}`}
+                                                onClick={() => setSelectedCity(city)}
                                             >
                                                 <span className={`text-sm ${city.active ? 'text-gray-300' : 'text-gray-500'}`}>{city.name}</span>
                                                 <span className="text-gray-600 text-[10px] ml-2">{city.country}</span>
