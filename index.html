@@ -3368,24 +3368,15 @@
             const [activeTab, setActiveTab] = useState('home');
             const [selectedStudio, setSelectedStudio] = useState(null);
             const [showMenu, setShowMenu] = useState(false);
-            const [isPrivateMode, setIsPrivateMode] = useState(() => localStorage.getItem('allmer_isPrivate') === 'true');
-            const [showPinModal, setShowPinModal] = useState(false);
-            const [pinInput, setPinInput] = useState('');
+const [isPrivateMode, setIsPrivateMode] = useState(false);
 
-            // Filter menu items based on auth
-            const visibleMenuItems = isPrivateMode 
-                ? menuItems 
-                : menuItems.filter(item => !publicOnlyPages.includes(item.id));
-
-            const authenticatePrivate = (pin) => {
-                if (pin === '2020') {
-                    localStorage.setItem('allmer_isPrivate', 'true');
-                    localStorage.setItem('allmer_authTime', Date.now().toString());
+            React.useEffect(() => {
+                const stored = localStorage.getItem('allmer_isPrivate');
+                const authTime = localStorage.getItem('allmer_authTime');
+                if ((stored === 'true' || (authTime && Date.now() - parseInt(authTime) < 30 * 24 * 60 * 60 * 1000))) {
                     setIsPrivateMode(true);
-                    setShowPinModal(false);
-                    setPinInput('');
                 }
-            };
+            }, []);
 
             const handleTogglePrivate = () => {
                 if (isPrivateMode) {
@@ -3401,14 +3392,7 @@
                 authenticatePrivate(pinInput);
             };
 
-            React.useEffect(() => {
-                // Check auth on mount
-                const authTime = localStorage.getItem('allmer_authTime');
-                if (authTime && Date.now() - parseInt(authTime) < 30 * 24 * 60 * 60 * 1000) {
-                    setIsPrivateMode(true);
-                }
-
-                const handleKeyDown = (e) => {
+            const handleKeyDown = (e) => {
                     if (e.code === 'Space' && e.target === document.body) {
                         e.preventDefault();
                         setShowMenu(prev => !prev);
@@ -3416,28 +3400,24 @@
                     
                     // Number key shortcuts (1-7)
                     const keyNum = parseInt(e.key);
-                    if (!isNaN(keyNum) && keyNum >= 1 && keyNum <= menuItems.length) {
-                        const item = menuItems[keyNum - 1];
+                    if (!isNaN(keyNum) && keyNum >= 1 && keyNum <= visibleMenuItems.length) {
+                        const item = visibleMenuItems[keyNum - 1];
                         setActiveTab(item.id);
                         setShowMenu(false);
                     }
 
                     // Comma (backward) and Period (forward)
                     if (e.key === ',' || e.key === '<' || e.key === '.' || e.key === '>') {
-                        const currentIndex = menuItems.findIndex(item => item.id === activeTab);
+                        const currentIndex = visibleMenuItems.findIndex(item => item.id === activeTab);
                         let nextIndex;
 
                         if (e.key === ',' || e.key === '<') {
-                            // If on home or not in menu, go to last item
-                            // If in menu, go back one
-                            nextIndex = currentIndex === -1 ? menuItems.length - 1 : (currentIndex - 1 + menuItems.length) % menuItems.length;
+                            nextIndex = currentIndex === -1 ? visibleMenuItems.length - 1 : (currentIndex - 1 + visibleMenuItems.length) % visibleMenuItems.length;
                         } else {
-                            // If on home or not in menu, go to first item
-                            // If in menu, go forward one
-                            nextIndex = currentIndex === -1 ? 0 : (currentIndex + 1) % menuItems.length;
+                            nextIndex = currentIndex === -1 ? 0 : (currentIndex + 1) % visibleMenuItems.length;
                         }
 
-                        setActiveTab(menuItems[nextIndex].id);
+                        setActiveTab(visibleMenuItems[nextIndex].id);
                         setShowMenu(false);
                     }
 
