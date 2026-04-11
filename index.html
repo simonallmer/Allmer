@@ -468,7 +468,32 @@
                             </div>
                         </div>
 
-                        {/* Income Statement removed per public version requirements */}
+                        {/* Income Statement */}
+                        <div className="border border-[#222] bg-[#0a0a0a]">
+                            <div className="p-4 border-b border-[#222]">
+                                <h3 className="text-[#D4AF37] brand-font text-lg uppercase tracking-widest">Income Statement</h3>
+                            </div>
+                            <div className="overflow-x-auto">
+                                <table className="w-full">
+                                    <thead>
+                                        <tr className="border-b border-[#222]">
+                                            <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">Date</th>
+                                            <th className="text-left p-3 text-gray-500 text-[10px] uppercase tracking-wider">Description</th>
+                                            <th className="text-right p-3 text-gray-500 text-[10px] uppercase tracking-wider">Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {transactions.filter(t => t.transactionType === 'income').map(t => (
+                                            <tr key={t.id} className="border-b border-[#1a1a1a]">
+                                                <td className="p-3 text-gray-400 text-sm">{t.date}</td>
+                                                <td className="p-3 text-white text-sm">{t.description}</td>
+                                                <td className="p-3 text-right text-green-500 font-mono">+€{t.amount.toFixed(2)}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
 
                         {/* Balance Sheet removed per public version requirements */}
 
