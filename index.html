@@ -3295,15 +3295,8 @@
             );
         };
 
-const publicMenuItems = [
-            { id: 'arts', label: 'SUBSIDIARIES' },
-            { id: 'assets', label: 'ASSETS' },
-            { id: 'catalog', label: 'CATALOG' },
-            { id: 'lexicon', label: 'LEXICON' },
-            { id: 'worldmap', label: 'LOCATIONS' },
-        ];
-
-        const privateMenuItems = [
+// All menu items (visible only after PIN)
+        const menuItems = [
             { id: 'arts', label: 'SUBSIDIARIES' },
             { id: 'assets', label: 'ASSETS' },
             { id: 'projected', label: 'SUBSCRIPTIONS' },
@@ -3314,7 +3307,8 @@ const publicMenuItems = [
             { id: 'worldmap', label: 'LOCATIONS' },
         ];
 
-        const menuItems = publicMenuItems;
+        // Pages hidden in public mode (before PIN)
+        const publicOnlyPages = ['assets', 'projected', 'stakeholders', 'publications'];
 
         const LoginScreen = ({ onAuthorize }) => {
             const [password, setPassword] = useState('');
@@ -3378,8 +3372,10 @@ const publicMenuItems = [
             const [showPinModal, setShowPinModal] = useState(false);
             const [pinInput, setPinInput] = useState('');
 
-            // Menu items: use privateMenuItems when authenticated, otherwise publicMenuItems
-            const currentMenuItems = isPrivateMode ? privateMenuItems : publicMenuItems;
+            // Filter menu items based on auth
+            const visibleMenuItems = isPrivateMode 
+                ? menuItems 
+                : menuItems.filter(item => !publicOnlyPages.includes(item.id));
 
             const authenticatePrivate = (pin) => {
                 if (pin === '2020') {
@@ -3471,7 +3467,7 @@ const publicMenuItems = [
 
                         {/* Persistent Navigation - Center (hidden on mobile) */}
                         <div className="hidden xl:flex items-center gap-2 absolute left-1/2 transform -translate-x-1/2">
-                            {currentMenuItems.map(item => (
+                            {visibleMenuItems.map(item => (
                                 <button
                                     key={item.id}
                                     onClick={() => setActiveTab(item.id)}
