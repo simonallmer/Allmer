@@ -332,6 +332,102 @@
             </div>
         );
 
+        const NewsPillar = () => {
+            const newsItems = [
+                {
+                    date: '2026.04.08',
+                    text: '§LINK§ retells 250 years of U.S. history in an immersive way.',
+                    links: [{ label: 'American Chronicle', href: 'https://simonallmer.com/americanchronicle' }],
+                },
+                {
+                    date: '2026.02.27',
+                    text: 'The §LINK§ saga begins with Kissinger: A World Destroyed, illustrated by §LINK§.',
+                    links: [
+                        { label: 'American Portrait', href: 'https://simonallmer.com/americanportrait' },
+                        { label: 'Gustavo Melo', href: null }
+                    ],
+                },
+                {
+                    date: '2026.02.01',
+                    text: '§LINK§ now offers original Casino games for free online. A physical Integrated Resort is planned where guests can "stay and play".',
+                    links: [{ label: 'Casino Camino', href: 'https://casinocamino.com' }],
+                },
+                {
+                    date: '2025.10.18',
+                    text: 'The §LINK§ card game is being illustrated by §LINK§.',
+                    links: [
+                        { label: 'Believe', href: 'https://simonallmer.com/believe' },
+                        { label: 'Mayank Kumarr', href: null }
+                    ],
+                },
+                {
+                    date: '2025.10.01',
+                    text: 'The first §LINK§ variant Coffee is in production at §LINK§.',
+                    links: [
+                        { label: 'Metropole', href: 'https://simonallmer.com/metropole' },
+                        { label: 'Zuckerlwerkstatt', href: null }
+                    ],
+                },
+                {
+                    date: '2025.08.01',
+                    text: '§LINK§ is now available through §LINK§ on Apple Books, Google Play, Amazon and Rakuten Kobo.',
+                    links: [
+                        { label: 'Chronicle: Years of Change', href: 'https://simonallmer.com/chronicle' },
+                        { label: 'Third-Party Distribution', href: null }
+                    ],
+                }
+            ];
+
+            const renderNewsText = (item) => {
+                const parts = item.text.split('§LINK§');
+                const elements = [];
+                parts.forEach((textSegment, idx) => {
+                    elements.push(<span key={`t-${idx}`}>{textSegment}</span>);
+                    if (idx < item.links.length) {
+                        const link = item.links[idx];
+                        if (link.href) {
+                            elements.push(
+                                <a key={`l-${idx}`} href={link.href} target="_blank" rel="noopener noreferrer"
+                                   className="text-[#D4AF37] hover:text-white transition-colors">
+                                    {link.label}
+                                </a>
+                            );
+                        } else {
+                            elements.push(
+                                <span key={`l-${idx}`} className="text-gray-300">{link.label}</span>
+                            );
+                        }
+                    }
+                });
+                return elements;
+            };
+
+            return (
+                <div className="flex-1 bg-black min-h-full p-8 pb-20 text-white relative overflow-hidden">
+                    <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/black-mamba.png')] pointer-events-none"></div>
+
+                    <SectionHeader title="News" subtitle="Latest from Allmer" />
+
+                    <div className="max-w-3xl mx-auto space-y-10">
+                        {newsItems.map((item, i) => (
+                            <div key={i} className="border-b border-[#1a1a1a] pb-8 last:border-b-0">
+                                <p className="text-[10px] text-[#D4AF37] uppercase tracking-[0.2em] font-serif brand-font mb-2">{item.date}</p>
+                                <p className="text-gray-300 font-serif leading-relaxed text-sm">
+                                    {renderNewsText(item)}
+                                </p>
+                            </div>
+                        ))}
+
+                        <div className="pt-4">
+                            <p className="text-[10px] text-gray-600 uppercase tracking-[0.2em] brand-font">
+                                Yearbook — <span className="italic normal-case text-gray-600">Coming Soon</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
         const ArtsPillar = ({ onSelectStudio }) => (
             <div className="flex-1 bg-black min-h-full p-8 pb-20 text-white relative overflow-hidden">
                 <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/black-mamba.png')] pointer-events-none"></div>
@@ -3344,6 +3440,7 @@
 
 // All menu items (visible only after PIN)
         const menuItems = [
+            { id: 'news', label: 'NEWS' },
             { id: 'arts', label: 'SUBSIDIARIES' },
             { id: 'assets', label: 'ASSETS' },
             { id: 'projected', label: 'SUBSCRIPTIONS' },
@@ -3555,6 +3652,7 @@
                         >
                             <div className="min-h-full flex flex-col border-l border-[#333]">
 {activeTab === 'home' && <HomePillar navigate={setActiveTab} />}
+                                {activeTab === 'news' && <NewsPillar />}
                                 {activeTab === 'profile' && <ProfilePillar />}
                                 {activeTab === 'principles' && <PrinciplesPillar />}
                                 {activeTab === 'arts' && <ArtsPillar onSelectStudio={setSelectedStudio} />}
