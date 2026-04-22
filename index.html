@@ -738,7 +738,7 @@
             })();
             const [hoveredDay, setHoveredDay] = useState(null);
             const [hoveredMonthIndex, setHoveredMonthIndex] = useState(null);
-            const [viewMode, setViewMode] = useState('year');
+            const [viewMode, setViewMode] = useState('month');
             const [wheelViewMode, setWheelViewMode] = useState('days');
             const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
 
@@ -819,7 +819,7 @@
                     let revenue = 0;
                     let source = '';
                     // Carlos (000000006) - Yearly subscription on March 21st, recurring every year
-                    if (date.getDate() === 21 && date.getMonth() === 2) { revenue = 6.00; source = 'Arcade (Yearly) - 000000006'; }
+                    if (date.getDate() === 21 && date.getMonth() === 2) { revenue = 5.00; source = 'Arcade (Yearly) - 000000006'; }
                     // Bennu (000000003) - Monthly subscription on 22nd, active since June 2025
                     else if (date.getDate() === 22) { revenue = 1.00; source = 'Arcade (Monthly) - 000000003'; }
                     return { dayOfYear: i, date, revenue, source };
@@ -882,25 +882,25 @@
                                 <div className="border border-[#222] bg-[#050505] p-4 text-center">
                                     <h4 className="text-[#D4AF37] brand-font text-sm mb-2">ARCADE</h4>
                                     <p className="text-gray-500 text-[10px] uppercase mb-2">Allmer</p>
-                                    <p className="text-white font-bold">6€ / year</p>
+                                    <p className="text-white font-bold">5€ / year</p>
                                     <p className="text-gray-500 text-xs">1€ / month</p>
                                 </div>
                                 <div className="border border-[#222] bg-[#050505] p-4 text-center">
                                     <h4 className="text-[#D4AF37] brand-font text-sm mb-2">CLUB</h4>
                                     <p className="text-gray-500 text-[10px] uppercase mb-2">Allmer Music</p>
-                                    <p className="text-white font-bold">6€ / year</p>
+                                    <p className="text-white font-bold">5€ / year</p>
                                     <p className="text-gray-500 text-xs">1€ / month</p>
                                 </div>
                                 <div className="border border-[#222] bg-[#050505] p-4 text-center">
                                     <h4 className="text-[#D4AF37] brand-font text-sm mb-2">CINEMA</h4>
                                     <p className="text-gray-500 text-[10px] uppercase mb-2">Allmer Films</p>
-                                    <p className="text-white font-bold">6€ / year</p>
+                                    <p className="text-white font-bold">5€ / year</p>
                                     <p className="text-gray-500 text-xs">1€ / month</p>
                                 </div>
                                 <div className="border border-[#222] bg-[#050505] p-4 text-center">
                                     <h4 className="text-[#D4AF37] brand-font text-sm mb-2">LIBRARY</h4>
                                     <p className="text-gray-500 text-[10px] uppercase mb-2">Allmer Comics</p>
-                                    <p className="text-white font-bold">6€ / year</p>
+                                    <p className="text-white font-bold">5€ / year</p>
                                     <p className="text-gray-500 text-xs">1€ / month</p>
                                 </div>
                                 <div className="border border-[#222] bg-[#D4AF37]/10 p-4 text-center">
@@ -912,7 +912,7 @@
                             </div>
                             <div className="mt-6 text-center">
                                 <p className="text-[#D4AF37] text-[10px] uppercase tracking-[0.2em] italic">
-                                    * All subscriptions are now 6€ per year. Old subscribers will also pay 6€ in the future.
+                                    * All subscriptions are now 5€ per year. Old subscribers will also pay 5€ in the future.
                                 </p>
                             </div>
                         </div>
@@ -1780,7 +1780,7 @@
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 <div 
                                     className="border border-[#222] hover:border-[#D4AF37] transition-all bg-[#050505] p-6 group cursor-pointer"
-                                    onClick={() => setSelectedProduct({ number: 'SUB-ARC', name: 'Arcade Subscription', brand: 'Allmer Games', genre: 'Subscription', description: '15 Allmer Games, 5 Classic Games, 5 Third Party Games', price: '6€/year or 1€/month' })}
+                                    onClick={() => setSelectedProduct({ number: 'SUB-ARC', name: 'Arcade Subscription', brand: 'Allmer Games', genre: 'Subscription', description: '15 Allmer Games, 5 Classic Games, 5 Third Party Games', price: '5€/year or 1€/month' })}
                                 >
                                     <div className="flex items-start justify-between mb-4">
                                         <div>
@@ -1790,12 +1790,12 @@
                                     </div>
                                     <h3 className="text-white brand-font text-lg mb-4 group-hover:text-[#D4AF37] transition-colors">Arcade Subscription</h3>
                                     <p className="text-gray-500 text-xs">15 Allmer Games, 5 Classic Games, 5 Third Party Games</p>
-                                    <p className="text-[#D4AF37] text-xs mt-2">6€/year or 1€/month</p>
+                                    <p className="text-[#D4AF37] text-xs mt-2">5€/year or 1€/month</p>
                                 </div>
 
                                 <div 
                                     className="border border-[#222] hover:border-[#D4AF37] transition-all bg-[#050505] p-6 group cursor-pointer"
-                                    onClick={() => setSelectedProduct({ number: 'SUB-CIN', name: 'Cinema Subscription', brand: 'Allmer Films', genre: 'Subscription', description: 'Full access to Allmer Films library', price: '6€/year or 1€/month' })}
+                                    onClick={() => setSelectedProduct({ number: 'SUB-CIN', name: 'Cinema Subscription', brand: 'Allmer Films', genre: 'Subscription', description: 'Full access to Allmer Films library', price: '5€/year or 1€/month' })}
                                 >
                                     <div className="flex items-start justify-between mb-4">
                                         <div>
@@ -1805,12 +1805,12 @@
                                     </div>
                                     <h3 className="text-white brand-font text-lg mb-4 group-hover:text-[#D4AF37] transition-colors">Cinema Subscription</h3>
                                     <p className="text-gray-500 text-xs">Full access to Allmer Films library</p>
-                                    <p className="text-[#D4AF37] text-xs mt-2">6€/year or 1€/month</p>
+                                    <p className="text-[#D4AF37] text-xs mt-2">5€/year or 1€/month</p>
                                 </div>
 
                                 <div 
                                     className="border border-[#222] hover:border-[#D4AF37] transition-all bg-[#050505] p-6 group cursor-pointer"
-                                    onClick={() => setSelectedProduct({ number: 'SUB-CLB', name: 'Club Subscription', brand: 'Allmer Music', genre: 'Subscription', description: 'Full access to Allmer Music library', price: '6€/year or 1€/month' })}
+                                    onClick={() => setSelectedProduct({ number: 'SUB-CLB', name: 'Club Subscription', brand: 'Allmer Music', genre: 'Subscription', description: 'Full access to Allmer Music library', price: '5€/year or 1€/month' })}
                                 >
                                     <div className="flex items-start justify-between mb-4">
                                         <div>
@@ -1820,12 +1820,12 @@
                                     </div>
                                     <h3 className="text-white brand-font text-lg mb-4 group-hover:text-[#D4AF37] transition-colors">Club Subscription</h3>
                                     <p className="text-gray-500 text-xs">Full access to Allmer Music library</p>
-                                    <p className="text-[#D4AF37] text-xs mt-2">6€/year or 1€/month</p>
+                                    <p className="text-[#D4AF37] text-xs mt-2">5€/year or 1€/month</p>
                                 </div>
 
                                 <div 
                                     className="border border-[#222] hover:border-[#D4AF37] transition-all bg-[#050505] p-6 group cursor-pointer"
-                                    onClick={() => setSelectedProduct({ number: 'SUB-LIB', name: 'Library Subscription', brand: 'Allmer Comics', genre: 'Subscription', description: 'Full access to Allmer Comics library', price: '6€/year or 1€/month' })}
+                                    onClick={() => setSelectedProduct({ number: 'SUB-LIB', name: 'Library Subscription', brand: 'Allmer Comics', genre: 'Subscription', description: 'Full access to Allmer Comics library', price: '5€/year or 1€/month' })}
                                 >
                                     <div className="flex items-start justify-between mb-4">
                                         <div>
@@ -1835,7 +1835,7 @@
                                     </div>
                                     <h3 className="text-white brand-font text-lg mb-4 group-hover:text-[#D4AF37] transition-colors">Library Subscription</h3>
                                     <p className="text-gray-500 text-xs">Full access to Allmer Comics library</p>
-                                    <p className="text-[#D4AF37] text-xs mt-2">6€/year or 1€/month</p>
+                                    <p className="text-[#D4AF37] text-xs mt-2">5€/year or 1€/month</p>
                                 </div>
 
                                 <div 
