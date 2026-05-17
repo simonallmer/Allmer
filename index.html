@@ -3329,7 +3329,7 @@
         const WorldMapPillar = () => {
             const { useRef, useEffect } = React;
             const [activeCity, setActiveCity] = useState('Vienna');
-            const [mapCoords, setMapCoords] = useState({ lat: '48.1908', lng: '16.3693' });
+            const [mapCoords, setMapCoords] = useState({ lat: '48.1876', lng: '16.3704' });
             const mapRef = useRef(null);
             const mapInstanceRef = useRef(null);
 
@@ -3377,7 +3377,7 @@
             };
 
             const cityCoords = {
-                'Vienna':       { lat: 48.1908, lng: 16.3693, zoom: 14 },
+                'Vienna':       { lat: 48.1876, lng: 16.3704, zoom: 15 },
                 'London':       { lat: 51.5074, lng: -0.1278, zoom: 12 },
                 'Paris':        { lat: 48.8566, lng: 2.3522,  zoom: 12 },
                 'Madrid':       { lat: 40.4168, lng: -3.7038, zoom: 12 },
@@ -3394,7 +3394,7 @@
 
             const mapPins = {
                 offices: [
-                    { name: 'Allmer HQ', address: 'Kolschitzkygasse 14-18/5, 1040 Vienna', lat: 48.1908, lng: 16.3693 }
+                    { name: 'Allmer HQ', address: 'Kolschitzkygasse 14-18/5/2, 1040 Vienna', lat: 48.1876, lng: 16.3704 }
                 ],
                 events: [
                     {
@@ -3442,7 +3442,7 @@
                 <div style="background:#0a0a0a;border:1px solid ${color};padding:10px 14px;min-width:180px;max-width:240px;">
                     <div style="color:${color};font-family:'Courier New',monospace;font-size:9px;font-weight:bold;text-transform:uppercase;letter-spacing:2px;margin-bottom:6px;">■ ${label}</div>
                     <div style="color:#fff;font-family:'Cinzel',serif;font-size:11px;margin-bottom:4px;">${name}</div>
-                    <div style="color:#666;font-family:'Courier New',monospace;font-size:9px;line-height:1.5;">${address}</div>
+                    <div style="color:#e8e8e8;font-family:'Courier New',monospace;font-size:11px;line-height:1.6;margin-top:2px;">${address}</div>
                     ${extra}
                 </div>`;
 
@@ -3450,7 +3450,7 @@
                 if (!mapRef.current || mapInstanceRef.current) return;
 
                 const map = L.map(mapRef.current, {
-                    center: [48.1908, 16.3693],
+                    center: [48.1876, 16.3704],
                     zoom: 14,
                     zoomControl: false,
                 });
