@@ -3498,7 +3498,15 @@
                 });
 
                 mapInstanceRef.current = map;
+
+                // Invalidate size when content panel resizes (sidebar open/close)
+                const ro = new ResizeObserver(() => {
+                    mapInstanceRef.current && mapInstanceRef.current.invalidateSize();
+                });
+                if (mapRef.current) ro.observe(mapRef.current.parentElement);
+
                 return () => {
+                    ro.disconnect();
                     if (mapInstanceRef.current) {
                         mapInstanceRef.current.remove();
                         mapInstanceRef.current = null;
@@ -3610,6 +3618,323 @@
                             })}
                         </div>
 
+                    </div>
+                </div>
+            );
+        };
+
+        const ScriptsVault = () => {
+            const { useRef, useEffect, useCallback } = React;
+
+            const baseData = [
+                {
+                    brand: 'American Portrait', brandId: 'american-portrait', color: '#D4AF37',
+                    series: [
+                        {
+                            name: 'Kissinger', seriesId: 'kissinger',
+                            products: [
+                                {
+                                    id: 'kissinger-awd', name: 'Kissinger: A World Destroyed',
+                                    type: 'Comic', docType: 'Script',
+                                    versions: [{ versionId: 'r1', version: '2026.05', date: '2026.05.19', isCurrent: true, source: 'repo',
+                                        files: { pdf: 'scripts/american-portrait/kissinger/Kissinger_A_World_Destroyed_2026.05.pdf',
+                                                 fadein: 'scripts/american-portrait/kissinger/Kissinger_A_World_Destroyed_2026.05.fadein' } }]
+                                }
+                            ]
+                        }
+                    ],
+                    products: []
+                },
+                {
+                    brand: 'Scaretales', brandId: 'scaretales', color: '#EF5350',
+                    series: [],
+                    products: [
+                        {
+                            id: 'the-amulett', name: 'The Amulett',
+                            type: 'Film', docType: 'Treatment',
+                            versions: [{ versionId: 'r1', version: '2026.05', date: '2026.05.18', isCurrent: true, source: 'repo',
+                                files: { pdf: 'scripts/scaretales/the-amulett/The_Amulett_Treatment_2026.05.pdf',
+                                         docx: 'scripts/scaretales/the-amulett/The_Amulett_Treatment_2026.05.docx' } }]
+                        }
+                    ]
+                }
+            ];
+
+            const [data, setData] = useState(baseData);
+            const [selectedProductId, setSelectedProductId] = useState('kissinger-awd');
+            const [selectedBrandId, setSelectedBrandId] = useState('american-portrait');
+            const [selectedSeriesId, setSelectedSeriesId] = useState('kissinger');
+            const [showHistory, setShowHistory] = useState(false);
+            const [uploading, setUploading] = useState(false);
+            const [uploadStatus, setUploadStatus] = useState('');
+            const fileInputRef = useRef(null);
+            const uploadProductIdRef = useRef(null);
+
+            const getAllProducts = (d) => {
+                const all = [];
+                (d || data).forEach(brand => {
+                    brand.series.forEach(s => s.products.forEach(p => all.push({ ...p, brandId: brand.brandId, brandName: brand.brand, brandColor: brand.color, seriesId: s.seriesId, seriesName: s.name })));
+                    (brand.products || []).forEach(p => all.push({ ...p, brandId: brand.brandId, brandName: brand.brand, brandColor: brand.color, seriesId: null, seriesName: null }));
+                });
+                return all;
+            };
+
+            const currentBrand = data.find(b => b.brandId === selectedBrandId);
+            const visibleProducts = selectedSeriesId
+                ? (currentBrand?.series.find(s => s.seriesId === selectedSeriesId)?.products || [])
+                : (currentBrand?.products || []);
+            const selectedProduct = getAllProducts().find(p => p.id === selectedProductId);
+            const currentVersion = selectedProduct?.versions?.find(v => v.isCurrent) || selectedProduct?.versions?.[0];
+
+            /* ── IndexedDB helpers ── */
+            const openDB = () => new Promise((res, rej) => {
+                const r = indexedDB.open('AllmerScripts', 1);
+                r.onupgradeneeded = e => e.target.result.createObjectStore('uploads', { keyPath: 'key' });
+                r.onsuccess = e => res(e.target.result);
+                r.onerror = e => rej(e.target.error);
+            });
+            const idbPut = (key, val) => openDB().then(db => new Promise((res, rej) => {
+                const tx = db.transaction('uploads', 'readwrite');
+                tx.objectStore('uploads').put({ key, ...val });
+                tx.oncomplete = res; tx.onerror = e => rej(e.target.error);
+            }));
+            const idbGet = (key) => openDB().then(db => new Promise((res, rej) => {
+                const tx = db.transaction('uploads', 'readonly');
+                const r = tx.objectStore('uploads').get(key);
+                r.onsuccess = e => res(e.target.result); r.onerror = e => rej(e.target.error);
+            }));
+
+            /* ── Load IDB versions on mount ── */
+            useEffect(() => {
+                getAllProducts().forEach(p => {
+                    idbGet(`meta_${p.id}`).then(rec => {
+                        if (!rec?.versions?.length) return;
+                        setData(prev => prev.map(brand => ({
+                            ...brand,
+                            series: brand.series.map(s => ({ ...s, products: s.products.map(q => q.id !== p.id ? q : { ...q, versions: [...rec.versions, ...q.versions.filter(v => v.source === 'repo')] }) })),
+                            products: (brand.products||[]).map(q => q.id !== p.id ? q : { ...q, versions: [...rec.versions, ...q.versions.filter(v => v.source === 'repo')] })
+                        })));
+                    }).catch(() => {});
+                });
+            }, []);
+
+            const getToday = () => { const d = new Date(); return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`; };
+            const nextVersion = (existing) => {
+                const d = new Date();
+                const base = `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}`;
+                const count = existing.filter(v => v.version.startsWith(base)).length;
+                return count === 0 ? base : `${base}.${count}`;
+            };
+
+            const handleFileSelected = async (e) => {
+                const file = e.target.files[0];
+                if (!file || !uploadProductIdRef.current) return;
+                setUploading(true); setUploadStatus('Reading…');
+                try {
+                    const buffer = await file.arrayBuffer();
+                    const ext = file.name.split('.').pop().toLowerCase();
+                    const pid = uploadProductIdRef.current;
+                    const prod = getAllProducts().find(p => p.id === pid);
+                    const ver = nextVersion(prod?.versions || []);
+                    const newV = { versionId: `idb_${Date.now()}`, version: ver, date: getToday(), isCurrent: true, source: 'idb', files: { [ext]: `idb:${pid}:${ver}:${ext}` } };
+                    await idbPut(`file_${pid}_${ver}_${ext}`, { buffer, filename: file.name });
+                    setData(prev => {
+                        const next = prev.map(brand => ({
+                            ...brand,
+                            series: brand.series.map(s => ({ ...s, products: s.products.map(p => p.id !== pid ? p : { ...p, versions: [newV, ...p.versions.map(v => ({...v, isCurrent: false}))] }) })),
+                            products: (brand.products||[]).map(p => p.id !== pid ? p : { ...p, versions: [newV, ...p.versions.map(v => ({...v, isCurrent: false}))] })
+                        }));
+                        const idbVersions = getAllProducts(next).find(p => p.id === pid)?.versions.filter(v => v.source === 'idb') || [];
+                        idbPut(`meta_${pid}`, { versions: idbVersions });
+                        return next;
+                    });
+                    setUploadStatus('✓ Uploaded');
+                    setTimeout(() => setUploadStatus(''), 3000);
+                } catch(err) { setUploadStatus('Error: ' + err.message); }
+                finally { setUploading(false); e.target.value = ''; }
+            };
+
+            const handleDownload = async (files, fmt, prodName, ver) => {
+                const val = files[fmt]; if (!val) return;
+                if (val.startsWith('idb:')) {
+                    const [, pid, v, ext] = val.split(':');
+                    const rec = await idbGet(`file_${pid}_${v}_${ext}`);
+                    if (!rec) return;
+                    const mime = { pdf:'application/pdf', docx:'application/vnd.openxmlformats-officedocument.wordprocessingml.document', fadein:'application/octet-stream' };
+                    const blob = new Blob([rec.buffer], { type: mime[ext]||'application/octet-stream' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a'); a.href = url; a.download = rec.filename || `${prodName}_${v}.${ext}`; a.click();
+                    setTimeout(() => URL.revokeObjectURL(url), 3000);
+                } else {
+                    const a = document.createElement('a'); a.href = val; a.download = val.split('/').pop(); a.click();
+                }
+            };
+
+            const fmtColor = { pdf: '#EF5350', docx: '#4FC3F7', fadein: '#A78BFA' };
+            const fmtLabel = { pdf: 'PDF', docx: 'DOCX', fadein: 'FADEIN' };
+            const typeColor = { Comic: '#D4AF37', Film: '#4FC3F7', Game: '#A78BFA' };
+
+            return (
+                <div className="flex-1 bg-black min-h-full p-8 pb-20 text-white font-serif relative overflow-hidden">
+                    <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/dark-leather.png')] pointer-events-none"></div>
+                    <SectionHeader title="Scripts" subtitle="Productions Vault" />
+                    <input ref={fileInputRef} type="file" accept=".pdf,.docx,.fadein" className="hidden" onChange={handleFileSelected} />
+
+                    <div className="max-w-5xl mx-auto mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                        {/* ── LEFT: Brand / Series / Product nav ── */}
+                        <div className="md:col-span-1 flex flex-col gap-5">
+
+                            <div>
+                                <p className="text-[9px] font-mono uppercase tracking-[0.25em] text-gray-600 mb-2">Brand</p>
+                                <div className="flex flex-col gap-1">
+                                    {data.map(brand => (
+                                        <button key={brand.brandId}
+                                            onClick={() => {
+                                                setSelectedBrandId(brand.brandId);
+                                                const firstSeries = brand.series[0];
+                                                setSelectedSeriesId(firstSeries?.seriesId || null);
+                                                const firstProd = firstSeries?.products[0] || brand.products?.[0];
+                                                if (firstProd) setSelectedProductId(firstProd.id);
+                                            }}
+                                            className={`text-left px-3 py-2 border text-[11px] font-mono uppercase tracking-wider transition-all flex items-center gap-2 ${selectedBrandId === brand.brandId ? 'border-[#D4AF37] bg-[#D4AF37]/10 text-[#D4AF37]' : 'border-[#222] text-gray-500 hover:border-[#444] hover:text-gray-300'}`}>
+                                            <span className="inline-block w-2 h-2 rotate-45 shrink-0" style={{ background: brand.color, boxShadow: `0 0 5px ${brand.color}` }}></span>
+                                            {brand.brand}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {currentBrand?.series?.length > 0 && (
+                                <div>
+                                    <p className="text-[9px] font-mono uppercase tracking-[0.25em] text-gray-600 mb-2">Series</p>
+                                    <div className="flex flex-col gap-1">
+                                        {currentBrand.series.map(s => (
+                                            <button key={s.seriesId}
+                                                onClick={() => { setSelectedSeriesId(s.seriesId); if (s.products[0]) setSelectedProductId(s.products[0].id); }}
+                                                className={`text-left px-3 py-2 border text-[11px] font-mono uppercase tracking-wider transition-all ${selectedSeriesId === s.seriesId ? 'border-[#D4AF37]/50 bg-[#D4AF37]/5 text-gray-200' : 'border-[#1a1a1a] text-gray-600 hover:border-[#333] hover:text-gray-400'}`}>
+                                                — {s.name}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            <div>
+                                <p className="text-[9px] font-mono uppercase tracking-[0.25em] text-gray-600 mb-2">Production</p>
+                                <div className="flex flex-col gap-1">
+                                    {visibleProducts.map(p => (
+                                        <button key={p.id} onClick={() => setSelectedProductId(p.id)}
+                                            className={`text-left px-3 py-2.5 border transition-all ${selectedProductId === p.id ? 'border-[#D4AF37] bg-[#D4AF37]/10' : 'border-[#1a1a1a] hover:border-[#333]'}`}>
+                                            <div className={`text-[11px] font-mono leading-tight ${selectedProductId === p.id ? 'text-[#D4AF37]' : 'text-gray-400'}`}>{p.name}</div>
+                                            <div className="flex gap-2 mt-1.5 flex-wrap">
+                                                <span className="text-[8px] font-mono uppercase tracking-wider px-1.5 py-0.5 border" style={{ borderColor: (typeColor[p.type]||'#555')+'99', color: typeColor[p.type]||'#999' }}>{p.type}</span>
+                                                <span className="text-[8px] font-mono uppercase tracking-wider text-gray-600">{p.docType}</span>
+                                            </div>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* ── RIGHT: Document viewer ── */}
+                        <div className="md:col-span-2">
+                            {selectedProduct && currentVersion ? (
+                                <div className="border border-[#D4AF37]/25 bg-[#050505]" style={{ boxShadow: '0 0 40px rgba(212,175,55,0.04)' }}>
+
+                                    {/* Title block */}
+                                    <div className="px-6 py-5 border-b border-[#111]">
+                                        <div className="flex items-start justify-between gap-4">
+                                            <div>
+                                                <p className="text-[9px] font-mono text-gray-600 uppercase tracking-widest mb-1">
+                                                    {selectedProduct.brandName}{selectedProduct.seriesName ? ` · ${selectedProduct.seriesName}` : ''}
+                                                </p>
+                                                <h2 className="text-[#D4AF37] brand-font text-xl uppercase tracking-widest leading-tight">{selectedProduct.name}</h2>
+                                                <div className="flex gap-2 mt-2 flex-wrap">
+                                                    <span className="text-[8px] font-mono uppercase tracking-wider px-2 py-0.5 border" style={{ borderColor: (typeColor[selectedProduct.type]||'#555')+'99', color: typeColor[selectedProduct.type]||'#999' }}>{selectedProduct.type}</span>
+                                                    <span className="text-[8px] font-mono uppercase tracking-wider px-2 py-0.5 border border-[#333] text-gray-500">{selectedProduct.docType}</span>
+                                                </div>
+                                            </div>
+                                            <div className="text-right shrink-0">
+                                                <div className="text-[#D4AF37] font-mono text-sm">v{currentVersion.version}</div>
+                                                <div className="text-gray-600 font-mono text-[9px] mt-0.5">{currentVersion.date}</div>
+                                                <div className="text-[8px] font-mono uppercase tracking-widest text-green-500/60 mt-1.5">● Current</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Download current */}
+                                    <div className="px-6 py-5 border-b border-[#111]">
+                                        <p className="text-[9px] font-mono uppercase tracking-[0.2em] text-gray-600 mb-3">Download Current Version</p>
+                                        <div className="flex flex-wrap gap-2">
+                                            {['pdf','docx','fadein'].map(fmt => currentVersion.files[fmt] && (
+                                                <button key={fmt}
+                                                    onClick={() => handleDownload(currentVersion.files, fmt, selectedProduct.name, currentVersion.version)}
+                                                    className="flex items-center gap-2 px-5 py-2.5 border text-[11px] font-mono uppercase tracking-wider transition-all hover:opacity-75 active:scale-95"
+                                                    style={{ borderColor: fmtColor[fmt], color: fmtColor[fmt] }}>
+                                                    <span className="inline-block w-1.5 h-1.5" style={{ background: fmtColor[fmt] }}></span>
+                                                    {fmtLabel[fmt]}
+                                                    <span className="opacity-50 text-[10px]">↓</span>
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* Upload */}
+                                    <div className="px-6 py-4 border-b border-[#111] flex items-center justify-between gap-4">
+                                        <div>
+                                            <p className="text-[9px] font-mono uppercase tracking-[0.2em] text-gray-600">Upload New Version</p>
+                                            <p className="text-[8px] font-mono text-gray-700 mt-0.5">Accepts .pdf · .docx · .fadein — previous versions are preserved</p>
+                                            {uploadStatus && <p className="text-[9px] font-mono mt-1" style={{ color: uploadStatus.startsWith('✓') ? '#4ade80' : '#EF5350' }}>{uploadStatus}</p>}
+                                        </div>
+                                        <button
+                                            onClick={() => { uploadProductIdRef.current = selectedProduct.id; fileInputRef.current.click(); }}
+                                            disabled={uploading}
+                                            className="shrink-0 px-4 py-2 border border-[#D4AF37]/40 text-[#D4AF37] text-[9px] font-mono uppercase tracking-widest hover:bg-[#D4AF37]/10 transition-all disabled:opacity-40">
+                                            {uploading ? 'Reading…' : '+ Upload'}
+                                        </button>
+                                    </div>
+
+                                    {/* Version history */}
+                                    <div className="px-6 py-4">
+                                        <button onClick={() => setShowHistory(h => !h)}
+                                            className="flex items-center gap-2 text-[9px] font-mono uppercase tracking-[0.2em] text-gray-600 hover:text-gray-400 transition-colors">
+                                            <span style={{ display:'inline-block', transition:'transform 0.2s', transform: showHistory ? 'rotate(90deg)' : 'none' }}>▶</span>
+                                            Version History ({selectedProduct.versions.length})
+                                        </button>
+                                        {showHistory && (
+                                            <div className="mt-3 flex flex-col gap-2">
+                                                {selectedProduct.versions.map((v, i) => (
+                                                    <div key={v.versionId || i} className={`px-4 py-3 border ${v.isCurrent ? 'border-[#D4AF37]/25 bg-[#D4AF37]/5' : 'border-[#111]'}`}>
+                                                        <div className="flex items-center justify-between mb-2">
+                                                            <div className="flex items-center gap-3">
+                                                                <span className="font-mono text-xs text-white">v{v.version}</span>
+                                                                {v.isCurrent && <span className="text-[8px] font-mono uppercase text-green-500/60">● Current</span>}
+                                                            </div>
+                                                            <span className="text-[9px] font-mono text-gray-600">{v.date}</span>
+                                                        </div>
+                                                        <div className="flex gap-2 flex-wrap">
+                                                            {['pdf','docx','fadein'].map(fmt => v.files[fmt] && (
+                                                                <button key={fmt}
+                                                                    onClick={() => handleDownload(v.files, fmt, selectedProduct.name, v.version)}
+                                                                    className="text-[8px] font-mono uppercase px-2 py-1 border transition-all hover:opacity-70"
+                                                                    style={{ borderColor: fmtColor[fmt]+'60', color: fmtColor[fmt] }}>
+                                                                    {fmtLabel[fmt]} ↓
+                                                                </button>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="border border-[#1a1a1a] p-16 text-center text-gray-700 font-mono text-[10px] uppercase tracking-widest">
+                                    Select a production from the left
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             );
@@ -3912,10 +4237,11 @@
             { id: 'lexicon', label: 'LEXICON' },
             { id: 'publications', label: 'PUBLICATIONS' },
             { id: 'worldmap', label: 'LOCATIONS' },
+            { id: 'scripts', label: 'SCRIPTS' },
         ];
 
         // Pages hidden in public mode (before PIN)
-        const publicOnlyPages = ['assets', 'projected', 'stakeholders', 'publications'];
+        const publicOnlyPages = ['assets', 'projected', 'stakeholders', 'publications', 'scripts'];
 
         const LoginScreen = ({ onAuthorize }) => {
             const [password, setPassword] = useState('');
@@ -4127,6 +4453,7 @@
                                 {isPrivateMode && activeTab === 'publications' && <PublicationsPillar />}
                                 {isPrivateMode && activeTab === 'knowledge' && <KnowledgePillar />}
                                 {activeTab === 'worldmap' && <WorldMapPillar />}
+                                {isPrivateMode && activeTab === 'scripts' && <ScriptsVault />}
                             </div>
                         </div>
 
