@@ -4351,6 +4351,11 @@
                         setShowMenu(prev => !prev);
                     }
                     
+                    // H → landing page
+                    if (e.key === 'h' || e.key === 'H') {
+                        setActiveTab('home'); setShowMenu(false);
+                    }
+
                     // Number key shortcuts: 1-9 for items 1-9, 0 for the last item (Scripts)
                     const keyNum = parseInt(e.key);
                     if (e.key === '0') {
