@@ -3661,9 +3661,9 @@
             ];
 
             const [data, setData] = useState(baseData);
-            const [selectedProductId, setSelectedProductId] = useState('kissinger-awd');
-            const [selectedBrandId, setSelectedBrandId] = useState('american-portrait');
-            const [selectedSeriesId, setSelectedSeriesId] = useState('kissinger');
+            const [selectedProductId, setSelectedProductId] = useState(null);
+            const [selectedBrandId, setSelectedBrandId] = useState(null);
+            const [selectedSeriesId, setSelectedSeriesId] = useState(null);
             const [showHistory, setShowHistory] = useState(false);
             const [uploading, setUploading] = useState(false);
             const [uploadStatus, setUploadStatus] = useState('');
@@ -4351,9 +4351,12 @@
                         setShowMenu(prev => !prev);
                     }
                     
-                    // Number key shortcuts (1-7)
+                    // Number key shortcuts: 1-9 for items 1-9, 0 for the last item (Scripts)
                     const keyNum = parseInt(e.key);
-                    if (!isNaN(keyNum) && keyNum >= 1 && keyNum <= visibleMenuItems.length) {
+                    if (e.key === '0') {
+                        const item = visibleMenuItems[visibleMenuItems.length - 1];
+                        if (item) { setActiveTab(item.id); setShowMenu(false); }
+                    } else if (!isNaN(keyNum) && keyNum >= 1 && keyNum <= visibleMenuItems.length - 1) {
                         const item = visibleMenuItems[keyNum - 1];
                         setActiveTab(item.id);
                         setShowMenu(false);
