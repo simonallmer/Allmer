@@ -855,12 +855,12 @@
                         </div>
 
                         {[
-                            { name: 'Allmer Comics', desc: "Graphic Novels", url: "allmercomics.com" },
-                            { name: 'Allmer Films', desc: "Motion Pictures", url: "allmerfilms.com" },
-                            { name: 'Allmer Music', desc: "Fine Music", url: "allmermusic.com" },
-                            { name: 'Allmer Games', desc: "Interactive", url: "allmergames.com" },
-                            { name: 'Allmer Journals', desc: "Literature", url: "allmerjournals.com" },
-                            { name: 'Allmer Snacks', desc: "Gastronomy", url: "allmersnacks.com" }
+                            { name: 'Allmer Comics', desc: "Comic Books", text: "Stories that become legends.", url: "allmercomics.com" },
+                            { name: 'Allmer Films', desc: "Feature Films, Limited Series", text: "Pure cinema.", url: "allmerfilms.com" },
+                            { name: 'Allmer Music', desc: "Music Albums, Instruments", text: "Making records.", url: "allmermusic.com" },
+                            { name: 'Allmer Games', desc: "Board Games, Video Games", text: "The full spectrum of play.", url: "allmergames.com" },
+                            { name: 'Allmer Journals', desc: "Magazines, Books", text: "Read the world today.", url: "allmerjournals.com" },
+                            { name: 'Allmer Snacks', desc: "Food, Beverages", text: "Culinary art. Without reservations.", url: "allmersnacks.com" }
                         ].map((div) => (
                             <div
                                 key={div.name}
@@ -869,7 +869,7 @@
                                 <div>
                                     <span className="block text-[#D4AF37] font-serif tracking-widest text-base brand-font mb-1">{div.name.toUpperCase()}</span>
                                     <span className="text-xs text-gray-500 font-serif italic block mb-3">{div.desc}</span>
-                                    <p className="text-gray-400 text-sm">Text coming soon.</p>
+                                    <p className="text-gray-400 text-sm">{div.text}</p>
                                 </div>
                                 <div className="mt-4 pt-3 border-t border-[#333]">
                                     <a href={`https://${div.url}`} target="_blank" className="text-[#D4AF37] text-[10px] font-mono hover:text-white transition-colors flex items-center gap-1">
