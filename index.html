@@ -256,6 +256,11 @@
         // --- SHARED DATA ---
         const newsItems = [
             {
+                date: '2026.05.26',
+                text: 'Allmer Group establishes Foundry, an in-house manufacturing and research subsidiary. Future products will be produced entirely in-house.',
+                links: [],
+            },
+            {
                 date: '2026.05.24',
                 text: '§LINK§ reimagine the centuries old French Playing Cards by removing the Aristocracy and introducing the Cypher to offer more intuitive new games.',
                 links: [{ label: 'American Playing Cards', href: 'https://simonallmer.com/americanplayingcards' }],
@@ -359,7 +364,8 @@
             { number: 'C001', name: 'Kissinger: A World Destroyed', series: 'Kissinger', brand: 'American Portrait', genre: 'Comic', platforms: '', year: 2026 },
             { number: 'C002', name: 'Carter: The Blood Beneath the Soil', series: 'Carter', brand: 'American Portrait', genre: 'Comic', platforms: '', year: 2026 },
             { number: 'C003', name: 'Futory: Dragon Kingdom', series: 'Futory Saga', brand: 'Futory', genre: 'Comic', platforms: '', year: 2026 },
-            { number: 'C004', name: 'Kissinger: Chain Reaction', series: 'Kissinger', brand: 'American Portrait', genre: 'Comic', platforms: '', year: 2026 }
+            { number: 'C004', name: 'Kissinger: Chain Reaction', series: 'Kissinger', brand: 'American Portrait', genre: 'Comic', platforms: '', year: 2026 },
+            { number: 'C005', name: 'The Amulett', series: '', brand: 'Scaretales', genre: 'Comic', platforms: '', year: 2026 }
         ];
 
         const filmsData = [
@@ -842,9 +848,10 @@
                                 Simon Allmer Entertainment
                             </h3>
                             <p className="text-[#D4AF37] text-[10px] uppercase tracking-widest mb-1">Est. 2020</p>
-                            <a href="https://simonallmer.com" target="_blank" className="text-[#D4AF37] text-[10px] font-mono hover:text-white transition-colors flex items-center justify-center gap-1">
+                            <a href="https://simonallmer.com" target="_blank" className="text-[#D4AF37] text-[10px] font-mono hover:text-white transition-colors flex items-center justify-center gap-1 mb-3">
                                 simonallmer.com <ExternalLink className="w-3 h-3" />
                             </a>
+                            <p className="text-gray-400 text-sm max-w-xl mx-auto">Committed to creative excellence, Simon Allmer produces story-driven entertainment and consumer products for a global audience.</p>
                         </div>
 
                         {[
@@ -872,6 +879,32 @@
                             </div>
                         ))}
                     </div>
+
+                    {/* Foundry */}
+                    <div className="max-w-4xl mx-auto mt-12">
+                        <div className="col-span-1 md:col-span-2 text-center mb-6">
+                            <h3 className="text-[#D4AF37] font-serif text-xl border-b border-[#333] inline-block pb-2 mb-2 brand-font">
+                                Foundry
+                            </h3>
+                            <p className="text-[#D4AF37] text-[10px] uppercase tracking-widest mb-3">Est. 2026</p>
+                            <p className="text-gray-400 text-sm max-w-xl mx-auto">Foundry — The operational backbone of Allmer Group: an in-house manufacturing and research subsidiary that builds products to exacting standards, serving both Allmer brands and selected partners.</p>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {[
+                                { name: 'Foundry Works', desc: 'Precision Fabrication', text: 'Where specifications become physical reality: a precision fabrication facility that produces Allmer products and partner goods to the same uncompromising standard regardless of complexity.' },
+                                { name: 'Foundry Labs', desc: 'Research & Development', text: 'The experimental engine of Foundry: a small team of domain experts pushing the boundaries of materials, gastronomy, and technology to develop knowledge that cannot be replicated elsewhere.' }
+                            ].map((div) => (
+                                <div key={div.name} className="flex flex-col justify-between p-6 border border-[#222] hover:border-[#D4AF37] transition-colors bg-[#050505]">
+                                    <div>
+                                        <span className="block text-[#D4AF37] font-serif tracking-widest text-base brand-font mb-1">{div.name.toUpperCase()}</span>
+                                        <span className="text-xs text-gray-500 font-serif italic block mb-3">{div.desc}</span>
+                                        <p className="text-gray-400 text-sm">{div.text}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
                 </div>
             </div>
         );
