@@ -256,6 +256,11 @@
         // --- SHARED DATA ---
         const newsItems = [
             {
+                date: '2026.05.24',
+                text: '§LINK§ reimagine the centuries old French Playing Cards by removing the Aristocracy and introducing the Cypher to offer more intuitive new games.',
+                links: [{ label: 'American Playing Cards', href: 'https://simonallmer.com/americanplayingcards' }],
+            },
+            {
                 date: '2026.04.08',
                 text: '§LINK§ retells 250 years of U.S. history in an immersive way.',
                 links: [{ label: 'American Chronicle', href: 'https://simonallmer.com/americanchronicle' }],
@@ -905,6 +910,60 @@
             const balance = earnings - expenses;
             const projectedNextMonth = transactions.filter(t => t.type === 'recurring' && t.transactionType === 'income' && t.recurringPeriod === 'monthly').reduce((sum, t) => sum + t.amount, 0);
 
+            // ── Revenue Streams (merged from Subscriptions page) ──
+            const daysInYear = 365;
+            const TODAY_INDEX = (() => {
+                const now = new Date();
+                const start = new Date(now.getFullYear(), 0, 1);
+                const diff = (now - start) + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
+                return Math.floor(diff / (1000 * 60 * 60 * 24));
+            })();
+            const [hoveredDay, setHoveredDay] = useState(null);
+            const [hoveredMonthIndex, setHoveredMonthIndex] = useState(null);
+            const [viewMode, setViewMode] = useState('month');
+            const [wheelViewMode, setWheelViewMode] = useState('days');
+            const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
+
+            const polarToCartesian = (cx, cy, r, deg) => { const rad = ((deg - 90) * Math.PI) / 180; return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) }; };
+            const describeArc = (x, y, ir, or_, sa, ea) => { const so = polarToCartesian(x,y,or_,ea), eo = polarToCartesian(x,y,or_,sa), si = polarToCartesian(x,y,ir,ea), ei = polarToCartesian(x,y,ir,sa), laf = ea-sa<=180?"0":"1"; return ["M",so.x,so.y,"A",or_,or_,0,laf,0,eo.x,eo.y,"L",ei.x,ei.y,"A",ir,ir,0,laf,1,si.x,si.y,"Z"].join(" "); };
+            const getColorForRevenue = r => r===0?'#991b1b':r<5?'#c2410c':r<10?'#1d4ed8':r<20?'#0d9488':'#15803d';
+            const getColorForMonthly = r => r===0?'#991b1b':r<150?'#c2410c':r<300?'#1d4ed8':r<600?'#0d9488':'#15803d';
+            const getStatusText = r => r===0?'No Revenue':r<5?'Below Threshold':r<10?'Basic Needs':r<20?'Comfortable':'Antifragile';
+            const getStatusTextMonthly = r => r===0?'No Revenue':r<150?'Below Threshold':r<300?'Basic Needs':r<600?'Comfortable':'Antifragile';
+            const getCardStyles = r => r===0?'bg-red-900/10 border-red-900/30 text-red-400 hover:bg-red-900/20':r<5?'bg-orange-900/10 border-orange-900/30 text-orange-400 hover:bg-orange-900/20':r<10?'bg-blue-900/10 border-blue-900/30 text-blue-400 hover:bg-blue-900/20':r<20?'bg-teal-900/10 border-teal-900/30 text-teal-400 hover:bg-teal-900/20':'bg-green-900/10 border-green-900/30 text-green-400 hover:bg-green-900/20';
+
+            const monthStarts = [{name:'Jan',day:0,index:0},{name:'Feb',day:31,index:1},{name:'Mar',day:59,index:2},{name:'Apr',day:90,index:3},{name:'May',day:120,index:4},{name:'Jun',day:151,index:5},{name:'Jul',day:181,index:6},{name:'Aug',day:212,index:7},{name:'Sep',day:243,index:8},{name:'Oct',day:273,index:9},{name:'Nov',day:304,index:10},{name:'Dec',day:334,index:11}];
+            const monthNamesFull = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+            const daysOfWeek = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+
+            const [subData, setSubData] = useState(() => Array.from({ length: daysInYear }).map((_, i) => {
+                const date = new Date(2026, 0, 1); date.setDate(i + 1);
+                let revenue = 0, source = '';
+                if (date.getDate() === 21 && date.getMonth() === 2) { revenue = 5.00; source = 'Arcade (Yearly) - 000000006'; }
+                else if (date.getDate() === 22) { revenue = 1.00; source = 'Arcade (Monthly) - 000000003'; }
+                return { dayOfYear: i, date, revenue, source };
+            }));
+
+            const simulateGrowth = () => setSubData(prev => prev.map((day, i) => {
+                if (i <= TODAY_INDEX + 3) return day;
+                const progress = (i - TODAY_INDEX) / (daysInYear - TODAY_INDEX);
+                const isSubscribed = Math.random() < (0.2 + progress * 0.8);
+                if (!isSubscribed) return { ...day, revenue: 0, source: '' };
+                const rand = Math.random();
+                const newRev = rand < 0.3 - progress*0.2 ? Math.floor(Math.random()*4)+1 : rand < 0.6 - progress*0.1 ? Math.floor(Math.random()*5)+5 : rand < 0.8 ? Math.floor(Math.random()*10)+10 : Math.floor(Math.random()*30)+20;
+                return { ...day, revenue: newRev, source: 'Simulated Sub' };
+            }));
+
+            const curDay = hoveredDay !== null ? subData[hoveredDay] : subData[TODAY_INDEX];
+            const curMonthIdx = hoveredMonthIndex !== null ? hoveredMonthIndex : (subData[TODAY_INDEX]?.date.getMonth() || 0);
+            const curMonth = wheelViewMode === 'months' ? monthStarts[curMonthIdx] : null;
+            const curMonthRev = curMonth ? subData.filter(d => d.date.getMonth() === curMonthIdx).reduce((s,d) => s+d.revenue, 0) : 0;
+            const handleMonthJump = (idx) => { setSelectedMonth(idx); setViewMode('month'); };
+            const monthDaysData = subData.filter(d => d.date.getMonth() === selectedMonth);
+            const emptyDaysStart = (new Date(2026, selectedMonth, 1).getDay() + 6) % 7;
+            const subPadding = Array.from({ length: emptyDaysStart }).map((_, i) => i);
+            // ── end Revenue Streams logic ──
+
             const studioColors = {
                 games: 'bg-red-900/30 text-red-400 border-red-500',
                 comics: 'bg-teal-900/30 text-teal-400 border-teal-500',
@@ -1017,6 +1076,238 @@
                             </div>
                         </div>
 
+                        {/* Revenue Streams */}
+                        <div className="border border-[#222] bg-[#0a0a0a]">
+                            <div className="p-4 border-b border-[#222]">
+                                <h3 className="text-[#D4AF37] brand-font text-lg uppercase tracking-widest">Revenue Streams</h3>
+                            </div>
+                            <div className="p-6 space-y-8">
+                                {/* Subscriptions Pricing Grid */}
+                                <div>
+                                    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                                        <div className="border border-[#222] bg-[#050505] p-4 text-center">
+                                            <h4 className="text-[#D4AF37] brand-font text-sm mb-2">ARCADE</h4>
+                                            <p className="text-gray-500 text-[10px] uppercase mb-2">Allmer</p>
+                                            <p className="text-white font-bold">5€ / year</p>
+                                            <p className="text-gray-500 text-xs">1€ / month</p>
+                                        </div>
+                                        <div className="border border-[#222] bg-[#050505] p-4 text-center">
+                                            <h4 className="text-[#D4AF37] brand-font text-sm mb-2">CLUB</h4>
+                                            <p className="text-gray-500 text-[10px] uppercase mb-2">Allmer Music</p>
+                                            <p className="text-white font-bold">5€ / year</p>
+                                            <p className="text-gray-500 text-xs">1€ / month</p>
+                                        </div>
+                                        <div className="border border-[#222] bg-[#050505] p-4 text-center">
+                                            <h4 className="text-[#D4AF37] brand-font text-sm mb-2">CINEMA</h4>
+                                            <p className="text-gray-500 text-[10px] uppercase mb-2">Allmer Films</p>
+                                            <p className="text-white font-bold">5€ / year</p>
+                                            <p className="text-gray-500 text-xs">1€ / month</p>
+                                        </div>
+                                        <div className="border border-[#222] bg-[#050505] p-4 text-center">
+                                            <h4 className="text-[#D4AF37] brand-font text-sm mb-2">LIBRARY</h4>
+                                            <p className="text-gray-500 text-[10px] uppercase mb-2">Allmer Comics</p>
+                                            <p className="text-white font-bold">5€ / year</p>
+                                            <p className="text-gray-500 text-xs">1€ / month</p>
+                                        </div>
+                                        <div className="border border-[#222] bg-[#D4AF37]/10 p-4 text-center">
+                                            <h4 className="text-[#D4AF37] brand-font text-sm mb-2">CENTER</h4>
+                                            <p className="text-gray-500 text-[10px] uppercase mb-2">All Studios</p>
+                                            <p className="text-white font-bold">15€ / year</p>
+                                            <p className="text-gray-500 text-xs">2.50€ / month</p>
+                                        </div>
+                                    </div>
+                                    <div className="mt-4 text-center">
+                                        <p className="text-[#D4AF37] text-[10px] uppercase tracking-[0.2em] italic">* All subscriptions are now 5€ per year. Old subscribers will also pay 5€ in the future.</p>
+                                    </div>
+                                </div>
+
+                                {/* View Toggle */}
+                                <div className="flex justify-center">
+                                    <div className="flex items-center gap-2 bg-[#0a0a0a] p-1.5 rounded-full border border-[#333]">
+                                        <button onClick={() => setViewMode('year')} className={`px-4 py-2 rounded-full text-xs font-bold tracking-wider transition-all ${viewMode === 'year' ? 'bg-[#D4AF37] text-black' : 'text-gray-400 hover:text-white'}`}>YEAR WHEEL</button>
+                                        <button onClick={() => handleMonthJump(2)} className={`px-4 py-2 rounded-full text-xs font-bold tracking-wider transition-all ${viewMode === 'month' ? 'bg-[#D4AF37] text-black' : 'text-gray-400 hover:text-white'}`}>MONTH GRID</button>
+                                    </div>
+                                </div>
+
+                                {viewMode === 'year' ? (
+                                    <div className="flex flex-col lg:flex-row gap-8">
+                                        <div>
+                                            <div className="flex justify-end mb-4 pr-4">
+                                                <div className="flex items-center bg-[#111] h-10 rounded-full border border-[#333] p-1">
+                                                    <button onClick={() => setWheelViewMode('days')} className={`px-4 py-1.5 rounded-full text-[10px] font-bold tracking-wider transition-all ${wheelViewMode === 'days' ? 'bg-white text-black' : 'text-gray-400 hover:text-white'}`}>Days</button>
+                                                    <button onClick={() => setWheelViewMode('months')} className={`px-4 py-1.5 rounded-full text-[10px] font-bold tracking-wider transition-all ${wheelViewMode === 'months' ? 'bg-white text-black' : 'text-gray-400 hover:text-white'}`}>Months</button>
+                                                </div>
+                                            </div>
+                                            <div className="flex-1 flex items-center justify-center">
+                                                <div className="relative w-full max-w-[500px] aspect-square">
+                                                    <svg viewBox="0 0 800 800" className="w-full h-full drop-shadow-2xl">
+                                                        <defs>
+                                                            <filter id="glow2">
+                                                                <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+                                                                <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                                                            </filter>
+                                                        </defs>
+                                                        <g transform="translate(400, 400)">
+                                                            {monthStarts.map((month, index) => {
+                                                                const nextMonthDay = monthStarts[index + 1]?.day || 365;
+                                                                const middleDay = month.day + (nextMonthDay - month.day) / 2;
+                                                                const angle = (middleDay / daysInYear) * 360;
+                                                                const pos = polarToCartesian(0, 0, 360, angle);
+                                                                const rotation = angle > 90 && angle < 270 ? angle + 180 : angle;
+                                                                return (
+                                                                    <g key={month.name} onClick={() => handleMonthJump(month.index)} className="cursor-pointer group">
+                                                                        <rect x={pos.x - 30} y={pos.y - 15} width="60" height="30" fill="transparent" transform={`rotate(${rotation}, ${pos.x}, ${pos.y})`}/>
+                                                                        <text x={pos.x} y={pos.y} fill="#666" fontSize="14" fontWeight="bold" textAnchor="middle" alignmentBaseline="middle" transform={`rotate(${rotation}, ${pos.x}, ${pos.y})`} className="uppercase tracking-widest transition-colors group-hover:fill-[#D4AF37]">{month.name}</text>
+                                                                    </g>
+                                                                );
+                                                            })}
+                                                            {wheelViewMode === 'days' && subData.map((day, i) => {
+                                                                const anglePerDay = 360 / daysInYear;
+                                                                const startAngle = i * anglePerDay;
+                                                                const endAngle = (i + 1) * anglePerDay;
+                                                                const isHovered = hoveredDay === i;
+                                                                const isToday = i === TODAY_INDEX;
+                                                                const outerRad = isHovered ? 320 : (isToday ? 310 : 300);
+                                                                const innerRad = isHovered ? 180 : 190;
+                                                                const color = getColorForRevenue(day.revenue);
+                                                                return (
+                                                                    <path key={i} d={describeArc(0, 0, innerRad, outerRad, startAngle, endAngle)} fill={color} stroke={isHovered || isToday ? "#D4AF37" : color} strokeWidth={isHovered ? 2 : (isToday ? 1.5 : 0.5)} className="transition-all duration-200 cursor-pointer" onMouseEnter={() => setHoveredDay(i)} onMouseLeave={() => setHoveredDay(null)} style={{ filter: (isHovered || isToday || day.revenue >= 20) ? 'url(#glow2)' : 'none', opacity: hoveredDay !== null && !isHovered && !isToday ? 0.4 : 1 }}/>
+                                                                );
+                                                            })}
+                                                            {wheelViewMode === 'months' && monthStarts.map((month, index) => {
+                                                                const startDay = month.day;
+                                                                const endDay = monthStarts[index + 1]?.day || 365;
+                                                                const anglePerDay = 360 / daysInYear;
+                                                                const startAngle = startDay * anglePerDay;
+                                                                const endAngle = endDay * anglePerDay;
+                                                                const monthRev = subData.filter(d => d.date.getMonth() === index).reduce((sum, d) => sum + d.revenue, 0);
+                                                                const isCurrentMonth = TODAY_INDEX >= startDay && TODAY_INDEX < endDay;
+                                                                const color = getColorForMonthly(monthRev);
+                                                                return (
+                                                                    <path key={month.name} d={describeArc(0, 0, 180, isCurrentMonth ? 310 : 300, startAngle, endAngle)} fill={color} stroke={isCurrentMonth ? "#D4AF37" : color} strokeWidth={isCurrentMonth ? 1.5 : 0.5} className="transition-all duration-200 cursor-pointer" onMouseEnter={() => setHoveredMonthIndex(index)} onMouseLeave={() => setHoveredMonthIndex(null)} style={{ filter: isCurrentMonth || monthRev >= 600 ? 'url(#glow2)' : 'none', opacity: hoveredMonthIndex !== null && hoveredMonthIndex !== index ? 0.4 : 1 }}/>
+                                                                );
+                                                            })}
+                                                            <circle cx="0" cy="0" r="175" fill="#0a0a0a" stroke="#333" strokeWidth="4"/>
+                                                            {curDay && (
+                                                                <g className="transition-all duration-300">
+                                                                    {wheelViewMode === 'days' ? (
+                                                                        <>
+                                                                            <text x="0" y="-40" textAnchor="middle" fill="#666" fontSize="14" fontWeight="600" className="uppercase tracking-widest">{curDay.dayOfYear === TODAY_INDEX ? "TODAY" : curDay.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</text>
+                                                                            <text x="0" y="20" textAnchor="middle" fill={getColorForRevenue(curDay.revenue)} fontSize="48" fontWeight="bold">{curDay.revenue.toFixed(2)}</text>
+                                                                            <text x="0" y="45" textAnchor="middle" fill="#666" fontSize="12" fontWeight="500" className="uppercase tracking-widest">Revenue (€)</text>
+                                                                            <text x="0" y="70" textAnchor="middle" fill={getColorForRevenue(curDay.revenue)} fontSize="12" fontWeight="bold" className="uppercase tracking-widest">{getStatusText(curDay.revenue)}</text>
+                                                                            {curDay.source && (<text x="0" y="100" textAnchor="middle" fill="#666" fontSize="10">{curDay.source}</text>)}
+                                                                        </>
+                                                                    ) : (
+                                                                        <>
+                                                                            <text x="0" y="-40" textAnchor="middle" fill="#666" fontSize="14" fontWeight="600" className="uppercase tracking-widest">{curMonth ? `${curMonth.name} 2026` : 'Current Month'}</text>
+                                                                            <text x="0" y="20" textAnchor="middle" fill={getColorForMonthly(curMonthRev)} fontSize="48" fontWeight="bold">{Math.round(curMonthRev)}</text>
+                                                                            <text x="0" y="45" textAnchor="middle" fill="#666" fontSize="12" fontWeight="500" className="uppercase tracking-widest">Projected Revenue (€)</text>
+                                                                            <text x="0" y="70" textAnchor="middle" fill={getColorForMonthly(curMonthRev)} fontSize="12" fontWeight="bold" className="uppercase tracking-widest">{getStatusTextMonthly(curMonthRev)}</text>
+                                                                        </>
+                                                                    )}
+                                                                </g>
+                                                            )}
+                                                        </g>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {/* Sidebar */}
+                                        <div className="lg:w-80 space-y-6">
+                                            <div className="border border-[#222] bg-[#050505] p-6">
+                                                <h3 className="text-[#D4AF37] text-sm uppercase tracking-widest mb-4 font-bold">Current Subscribers</h3>
+                                                <ul className="space-y-3">
+                                                    {[{ day: 'Mar 21', index: 80, desc: '000000006 · Arcade (Yearly)' }, { day: 'Mar 22', index: 81, desc: '000000003 · Arcade (Monthly)' }].map((item, idx) => {
+                                                        const dayData = subData[item.index];
+                                                        if (!dayData) return null;
+                                                        return (
+                                                            <li key={idx} className="flex items-center justify-between text-sm cursor-pointer group" onMouseEnter={() => setHoveredDay(item.index)} onMouseLeave={() => setHoveredDay(null)}>
+                                                                <div className="flex items-center gap-3">
+                                                                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: getColorForRevenue(dayData.revenue) }}></div>
+                                                                    <div>
+                                                                        <span className="text-gray-300 group-hover:text-white transition-colors block">{item.day}</span>
+                                                                        <span className="text-gray-500 text-[10px]">{item.desc}</span>
+                                                                    </div>
+                                                                </div>
+                                                                <span className="font-bold text-white">€{dayData.revenue.toFixed(2)}</span>
+                                                            </li>
+                                                        );
+                                                    })}
+                                                    <li className="pt-2 border-t border-[#333]">
+                                                        <p className="text-gray-500 text-[10px]">Monthly recurs every 22nd</p>
+                                                        <p className="text-gray-500 text-[10px]">Yearly recurs every Mar 21st</p>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div className="border border-[#222] bg-[#050505] p-6">
+                                                <h3 className="text-[#D4AF37] text-sm uppercase tracking-widest mb-4 font-bold">Revenue Scale ({wheelViewMode === 'days' ? 'Daily' : 'Monthly'})</h3>
+                                                <div className="space-y-3">
+                                                    {wheelViewMode === 'days' ? (
+                                                        <>
+                                                            <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-red-900"></div><span className="text-gray-400 text-xs">€0</span></div>
+                                                            <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-orange-900"></div><span className="text-gray-400 text-xs">€1-4.99</span></div>
+                                                            <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-blue-900"></div><span className="text-gray-400 text-xs">€5-9.99</span></div>
+                                                            <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-teal-900"></div><span className="text-gray-400 text-xs">€10-19.99</span></div>
+                                                            <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-green-900"></div><span className="text-gray-400 text-xs">€20+</span></div>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-red-900"></div><span className="text-gray-400 text-xs">€0</span></div>
+                                                            <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-orange-900"></div><span className="text-gray-400 text-xs">€1-149</span></div>
+                                                            <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-blue-900"></div><span className="text-gray-400 text-xs">€150-299</span></div>
+                                                            <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-teal-900"></div><span className="text-gray-400 text-xs">€300-599</span></div>
+                                                            <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-green-900"></div><span className="text-gray-400 text-xs">€600+</span></div>
+                                                        </>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <div className="border border-[#222] bg-[#050505] p-6">
+                                                <h3 className="text-[#D4AF37] text-sm uppercase tracking-widest mb-2 font-bold">Arcade Subscribers</h3>
+                                                <p className="text-4xl font-bold text-white">2</p>
+                                                <div className="space-y-1 mt-2">
+                                                    <p className="text-gray-500 text-xs">Customer 000000006 (Yearly)</p>
+                                                    <p className="text-gray-500 text-xs">Customer 000000003 (Monthly)</p>
+                                                </div>
+                                            </div>
+                                            <button onClick={simulateGrowth} className="w-full py-3 px-4 bg-[#D4AF37] text-black font-bold text-sm uppercase tracking-widest hover:bg-[#D4AF37]/80 transition-all">Simulate Subscriptions</button>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <div className="flex items-center justify-between mb-6">
+                                            <button onClick={() => setSelectedMonth(prev => prev > 0 ? prev - 1 : 11)} className="p-2 border border-[#333] text-gray-400 hover:text-white hover:border-[#D4AF37] transition-colors">
+                                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"/></svg>
+                                            </button>
+                                            <h3 className="text-2xl font-bold text-[#D4AF37]">{monthNamesFull[selectedMonth]} 2026</h3>
+                                            <button onClick={() => setSelectedMonth(prev => prev < 11 ? prev + 1 : 0)} className="p-2 border border-[#333] text-gray-400 hover:text-white hover:border-[#D4AF37] transition-colors">
+                                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/></svg>
+                                            </button>
+                                        </div>
+                                        <div className="border border-[#222] bg-[#050505] p-6">
+                                            <div className="grid grid-cols-7 gap-2 mb-2">
+                                                {daysOfWeek.map(day => (<div key={day} className="text-center text-gray-500 font-bold text-xs uppercase">{day}</div>))}
+                                            </div>
+                                            <div className="grid grid-cols-7 gap-2">
+                                                {subPadding.map(pad => (<div key={`pad-${pad}`} className="aspect-square"></div>))}
+                                                {monthDaysData.map((day) => {
+                                                    const isToday = day.dayOfYear === TODAY_INDEX;
+                                                    const cardStyles = getCardStyles(day.revenue);
+                                                    return (
+                                                        <div key={day.dayOfYear} className={`aspect-square border rounded p-2 flex flex-col justify-between cursor-pointer transition-all ${cardStyles} ${isToday ? 'ring-2 ring-[#D4AF37]' : ''}`} onMouseEnter={() => setHoveredDay(day.dayOfYear)} onMouseLeave={() => setHoveredDay(null)}>
+                                                            <span className="text-xs opacity-70">{day.date.getDate()}</span>
+                                                            <span className="text-sm font-bold">€{day.revenue.toFixed(2)}</span>
+                                                            {day.source && hoveredDay === day.dayOfYear && (<span className="text-[8px] text-gray-400 truncate">{day.source}</span>)}
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
                     </div>
 
                     {/* Modal */}
@@ -1124,481 +1415,6 @@
             );
         };
 
-        const ProjectedRevenuePillar = () => {
-            const daysInYear = 365;
-            const TODAY_INDEX = (() => {
-                const now = new Date();
-                const start = new Date(now.getFullYear(), 0, 1);
-                const diff = (now - start) + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
-                return Math.floor(diff / (1000 * 60 * 60 * 24));
-            })();
-            const [hoveredDay, setHoveredDay] = useState(null);
-            const [hoveredMonthIndex, setHoveredMonthIndex] = useState(null);
-            const [viewMode, setViewMode] = useState('month');
-            const [wheelViewMode, setWheelViewMode] = useState('days');
-            const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
-
-            const getDaysInYear = (year) => {
-                return ((year % 4 === 0 && year % 100 > 0) || year % 400 === 0) ? 366 : 365;
-            };
-
-            const polarToCartesian = (centerX, centerY, radius, angleInDegrees) => {
-                const angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180.0;
-                return {
-                    x: centerX + radius * Math.cos(angleInRadians),
-                    y: centerY + radius * Math.sin(angleInRadians)
-                };
-            };
-
-            const describeArc = (x, y, innerRadius, outerRadius, startAngle, endAngle) => {
-                const startOuter = polarToCartesian(x, y, outerRadius, endAngle);
-                const endOuter = polarToCartesian(x, y, outerRadius, startAngle);
-                const startInner = polarToCartesian(x, y, innerRadius, endAngle);
-                const endInner = polarToCartesian(x, y, innerRadius, startAngle);
-                const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
-                const d = [
-                    "M", startOuter.x, startOuter.y,
-                    "A", outerRadius, outerRadius, 0, largeArcFlag, 0, endOuter.x, endOuter.y,
-                    "L", endInner.x, endInner.y,
-                    "A", innerRadius, innerRadius, 0, largeArcFlag, 1, startInner.x, startInner.y,
-                    "Z"
-                ].join(" ");
-                return d;
-            };
-
-            const getColorForRevenue = (revenue) => {
-                if (revenue === 0) return '#991b1b';
-                if (revenue < 5) return '#c2410c';
-                if (revenue < 10) return '#1d4ed8';
-                if (revenue < 20) return '#0d9488';
-                return '#15803d';
-            };
-
-            const getColorForMonthlyRevenue = (revenue) => {
-                if (revenue === 0) return '#991b1b';
-                if (revenue < 150) return '#c2410c';
-                if (revenue < 300) return '#1d4ed8';
-                if (revenue < 600) return '#0d9488';
-                return '#15803d';
-            };
-
-            const getStatusText = (revenue) => {
-                if (revenue === 0) return 'No Revenue';
-                if (revenue < 5) return 'Below Threshold';
-                if (revenue < 10) return 'Basic Needs';
-                if (revenue < 20) return 'Comfortable';
-                return 'Antifragile';
-            };
-
-            const getStatusTextForMonthly = (revenue) => {
-                if (revenue === 0) return 'No Revenue';
-                if (revenue < 150) return 'Below Threshold';
-                if (revenue < 300) return 'Basic Needs';
-                if (revenue < 600) return 'Comfortable';
-                return 'Antifragile';
-            };
-
-            const monthStarts = [
-                { name: 'Jan', day: 0, index: 0 }, { name: 'Feb', day: 31, index: 1 }, { name: 'Mar', day: 59, index: 2 },
-                { name: 'Apr', day: 90, index: 3 }, { name: 'May', day: 120, index: 4 }, { name: 'Jun', day: 151, index: 5 },
-                { name: 'Jul', day: 181, index: 6 }, { name: 'Aug', day: 212, index: 7 }, { name: 'Sep', day: 243, index: 8 },
-                { name: 'Oct', day: 273, index: 9 }, { name: 'Nov', day: 304, index: 10 }, { name: 'Dec', day: 334, index: 11 }
-            ];
-
-            const monthNamesFull = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-            const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-
-            const [data, setData] = useState(() => {
-                return Array.from({ length: daysInYear }).map((_, i) => {
-                    const date = new Date(2026, 0, 1);
-                    date.setDate(i + 1);
-                    let revenue = 0;
-                    let source = '';
-                    // Carlos (000000006) - Yearly subscription on March 21st, recurring every year
-                    if (date.getDate() === 21 && date.getMonth() === 2) { revenue = 5.00; source = 'Arcade (Yearly) - 000000006'; }
-                    // Bennu (000000003) - Monthly subscription on 22nd, active since June 2025
-                    else if (date.getDate() === 22) { revenue = 1.00; source = 'Arcade (Monthly) - 000000003'; }
-                    return { dayOfYear: i, date, revenue, source };
-                });
-            });
-
-            const simulateGrowth = () => {
-                setData(prev => prev.map((day, i) => {
-                    if (i <= TODAY_INDEX + 3) return day;
-                    const progress = (i - TODAY_INDEX) / (daysInYear - TODAY_INDEX);
-                    const isSubscribed = Math.random() < (0.2 + (progress * 0.8));
-                    let newRev = 0;
-                    let newSource = '';
-                    if (isSubscribed) {
-                        const rand = Math.random();
-                        if (rand < 0.3 - (progress * 0.2)) newRev = Math.floor(Math.random() * 4) + 1;
-                        else if (rand < 0.6 - (progress * 0.1)) newRev = Math.floor(Math.random() * 5) + 5;
-                        else if (rand < 0.8) newRev = Math.floor(Math.random() * 10) + 10;
-                        else newRev = Math.floor(Math.random() * 30) + 20;
-                        newSource = 'Simulated Sub';
-                    }
-                    return { ...day, revenue: newRev, source: newSource };
-                }));
-            };
-
-            const currentDisplayDay = hoveredDay !== null ? data[hoveredDay] : data[TODAY_INDEX];
-            const currentDisplayMonthIndex = hoveredMonthIndex !== null ? hoveredMonthIndex : (TODAY_INDEX >= 0 && TODAY_INDEX < 365 ? data[TODAY_INDEX].date.getMonth() : 0);
-            const currentDisplayMonth = wheelViewMode === 'months' ? monthStarts[currentDisplayMonthIndex] : null;
-            const currentDisplayMonthRevenue = wheelViewMode === 'months' && currentDisplayMonth ? data.filter(d => d.date.getMonth() === currentDisplayMonthIndex).reduce((sum, d) => sum + d.revenue, 0) : 0;
-
-            const handleMonthJump = (monthIndex) => {
-                setSelectedMonth(monthIndex);
-                setViewMode('month');
-            };
-
-            const getCardStylesForRevenue = (revenue) => {
-                if (revenue === 0) return 'bg-red-900/10 border-red-900/30 text-red-400 hover:bg-red-900/20';
-                if (revenue < 5) return 'bg-orange-900/10 border-orange-900/30 text-orange-400 hover:bg-orange-900/20';
-                if (revenue < 10) return 'bg-blue-900/10 border-blue-900/30 text-blue-400 hover:bg-blue-900/20';
-                if (revenue < 20) return 'bg-teal-900/10 border-teal-900/30 text-teal-400 hover:bg-teal-900/20';
-                return 'bg-green-900/10 border-green-900/30 text-green-400 hover:bg-green-900/20';
-            };
-
-            const monthDaysData = data.filter(d => d.date.getMonth() === selectedMonth);
-            const firstDayOfMonthObj = new Date(2026, selectedMonth, 1);
-            const firstDayOfWeek = firstDayOfMonthObj.getDay();
-            const emptyDaysStart = (firstDayOfWeek + 6) % 7;
-            const paddingArray = Array.from({ length: emptyDaysStart }).map((_, i) => i);
-
-            return (
-                <div className="flex-1 bg-black min-h-full p-8 pb-20 text-white font-serif relative overflow-hidden">
-                    <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/dark-leather.png')] pointer-events-none"></div>
-
-                    <SectionHeader title="Subscriptions" subtitle="Revenue Streams" />
-
-                    <div className="max-w-6xl mx-auto">
-                        {/* Subscriptions List */}
-                        <div className="mb-12">
-                            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                                <div className="border border-[#222] bg-[#050505] p-4 text-center">
-                                    <h4 className="text-[#D4AF37] brand-font text-sm mb-2">ARCADE</h4>
-                                    <p className="text-gray-500 text-[10px] uppercase mb-2">Allmer</p>
-                                    <p className="text-white font-bold">5€ / year</p>
-                                    <p className="text-gray-500 text-xs">1€ / month</p>
-                                </div>
-                                <div className="border border-[#222] bg-[#050505] p-4 text-center">
-                                    <h4 className="text-[#D4AF37] brand-font text-sm mb-2">CLUB</h4>
-                                    <p className="text-gray-500 text-[10px] uppercase mb-2">Allmer Music</p>
-                                    <p className="text-white font-bold">5€ / year</p>
-                                    <p className="text-gray-500 text-xs">1€ / month</p>
-                                </div>
-                                <div className="border border-[#222] bg-[#050505] p-4 text-center">
-                                    <h4 className="text-[#D4AF37] brand-font text-sm mb-2">CINEMA</h4>
-                                    <p className="text-gray-500 text-[10px] uppercase mb-2">Allmer Films</p>
-                                    <p className="text-white font-bold">5€ / year</p>
-                                    <p className="text-gray-500 text-xs">1€ / month</p>
-                                </div>
-                                <div className="border border-[#222] bg-[#050505] p-4 text-center">
-                                    <h4 className="text-[#D4AF37] brand-font text-sm mb-2">LIBRARY</h4>
-                                    <p className="text-gray-500 text-[10px] uppercase mb-2">Allmer Comics</p>
-                                    <p className="text-white font-bold">5€ / year</p>
-                                    <p className="text-gray-500 text-xs">1€ / month</p>
-                                </div>
-                                <div className="border border-[#222] bg-[#D4AF37]/10 p-4 text-center">
-                                    <h4 className="text-[#D4AF37] brand-font text-sm mb-2">CENTER</h4>
-                                    <p className="text-gray-500 text-[10px] uppercase mb-2">All Studios</p>
-                                    <p className="text-white font-bold">15€ / year</p>
-                                    <p className="text-gray-500 text-xs">2.50€ / month</p>
-                                </div>
-                            </div>
-                            <div className="mt-6 text-center">
-                                <p className="text-[#D4AF37] text-[10px] uppercase tracking-[0.2em] italic">
-                                    * All subscriptions are now 5€ per year. Old subscribers will also pay 5€ in the future.
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* View Toggle */}
-                        <div className="flex justify-center mb-8">
-                            <div className="flex items-center gap-2 bg-[#0a0a0a] p-1.5 rounded-full border border-[#333]">
-                                <button 
-                                    onClick={() => setViewMode('year')} 
-                                    className={`px-4 py-2 rounded-full text-xs font-bold tracking-wider transition-all ${viewMode === 'year' ? 'bg-[#D4AF37] text-black' : 'text-gray-400 hover:text-white'}`}
-                                >
-                                    YEAR WHEEL
-                                </button>
-                                <button 
-                                    onClick={() => handleMonthJump(2)}
-                                    className={`px-4 py-2 rounded-full text-xs font-bold tracking-wider transition-all ${viewMode === 'month' ? 'bg-[#D4AF37] text-black' : 'text-gray-400 hover:text-white'}`}
-                                >
-                                    MONTH GRID
-                                </button>
-                            </div>
-                        </div>
-
-                        {viewMode === 'year' ? (
-                            <div className="flex flex-col lg:flex-row gap-8">
-                                {/* Year Wheel */}
-                                <div className="flex justify-end mb-4 pr-4">
-                                    <div className="flex items-center bg-[#111] h-10 rounded-full border border-[#333] p-1">
-                                        <button 
-                                            onClick={() => setWheelViewMode('days')} 
-                                            className={`px-4 py-1.5 rounded-full text-[10px] font-bold tracking-wider transition-all ${wheelViewMode === 'days' ? 'bg-white text-black' : 'text-gray-400 hover:text-white'}`}
-                                        >
-                                            Days
-                                        </button>
-                                        <button 
-                                            onClick={() => setWheelViewMode('months')} 
-                                            className={`px-4 py-1.5 rounded-full text-[10px] font-bold tracking-wider transition-all ${wheelViewMode === 'months' ? 'bg-white text-black' : 'text-gray-400 hover:text-white'}`}
-                                        >
-                                            Months
-                                        </button>
-                                    </div>
-                                </div>
-                                <div className="flex-1 flex items-center justify-center">
-                                    <div className="relative w-full max-w-[500px] aspect-square">
-                                        <svg viewBox="0 0 800 800" className="w-full h-full drop-shadow-2xl">
-                                            <defs>
-                                                <filter id="glow">
-                                                    <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
-                                                    <feMerge>
-                                                        <feMergeNode in="coloredBlur"/>
-                                                        <feMergeNode in="SourceGraphic"/>
-                                                    </feMerge>
-                                                </filter>
-                                            </defs>
-                                            <g transform="translate(400, 400)">
-                                                {/* Month Labels */}
-                                                {monthStarts.map((month, index) => {
-                                                    const nextMonthDay = monthStarts[index + 1]?.day || 365;
-                                                    const middleDay = month.day + (nextMonthDay - month.day) / 2;
-                                                    const angle = (middleDay / daysInYear) * 360;
-                                                    const pos = polarToCartesian(0, 0, 360, angle);
-                                                    const rotation = angle > 90 && angle < 270 ? angle + 180 : angle;
-                                                    return (
-                                                        <g key={month.name} onClick={() => handleMonthJump(month.index)} className="cursor-pointer group">
-                                                            <rect x={pos.x - 30} y={pos.y - 15} width="60" height="30" fill="transparent" transform={`rotate(${rotation}, ${pos.x}, ${pos.y})`}/>
-                                                            <text x={pos.x} y={pos.y} fill="#666" fontSize="14" fontWeight="bold" textAnchor="middle" alignmentBaseline="middle" transform={`rotate(${rotation}, ${pos.x}, ${pos.y})`} className="uppercase tracking-widest transition-colors group-hover:fill-[#D4AF37]">
-                                                                {month.name}
-                                                            </text>
-                                                        </g>
-                                                    );
-                                                })}
-
-                                                 {/* 365 Wedges */}
-                                                 {wheelViewMode === 'days' && data.map((day, i) => {
-                                                     const anglePerDay = 360 / daysInYear;
-                                                     const startAngle = i * anglePerDay;
-                                                     const endAngle = (i + 1) * anglePerDay;
-                                                     const isHovered = hoveredDay === i;
-                                                     const isToday = i === TODAY_INDEX;
-                                                     const outerRad = isHovered ? 320 : (isToday ? 310 : 300);
-                                                     const innerRad = isHovered ? 180 : 190;
-                                                     const color = getColorForRevenue(day.revenue);
-                                                     return (
-                                                         <path
-                                                             key={i}
-                                                             d={describeArc(0, 0, innerRad, outerRad, startAngle, endAngle)}
-                                                             fill={color}
-                                                             stroke={isHovered || isToday ? "#D4AF37" : color}
-                                                             strokeWidth={isHovered ? 2 : (isToday ? 1.5 : 0.5)}
-                                                             className="transition-all duration-200 cursor-pointer"
-                                                             onMouseEnter={() => setHoveredDay(i)}
-                                                             onMouseLeave={() => setHoveredDay(null)}
-                                                             style={{ filter: (isHovered || isToday || day.revenue >= 20) ? 'url(#glow)' : 'none', opacity: hoveredDay !== null && !isHovered && !isToday ? 0.4 : 1 }}
-                                                         />
-                                                     );
-                                                 })}
-
-                                                 {/* 12 Month Wedges */}
-                                                 {wheelViewMode === 'months' && monthStarts.map((month, index) => {
-                                                     const startDay = month.day;
-                                                     const endDay = monthStarts[index + 1]?.day || 365;
-                                                     const anglePerDay = 360 / daysInYear;
-                                                     const startAngle = startDay * anglePerDay;
-                                                     const endAngle = endDay * anglePerDay;
-                                                     const monthRev = data.filter(d => d.date.getMonth() === index).reduce((sum, d) => sum + d.revenue, 0);
-                                                     
-                                                     const isCurrentMonth = TODAY_INDEX >= startDay && TODAY_INDEX < endDay;
-                                                     
-                                                      const color = getColorForMonthlyRevenue(monthRev);
-                                                     
-                                                     return (
-                                                         <path
-                                                             key={month.name}
-                                                             d={describeArc(0, 0, 180, isCurrentMonth ? 310 : 300, startAngle, endAngle)}
-                                                             fill={color}
-                                                             stroke={isCurrentMonth ? "#D4AF37" : color}
-                                                             strokeWidth={isCurrentMonth ? 1.5 : 0.5}
-                                                             className="transition-all duration-200 cursor-pointer"
-                                                             onMouseEnter={() => setHoveredMonthIndex(index)}
-                                                             onMouseLeave={() => setHoveredMonthIndex(null)}
-                                                             style={{ filter: isCurrentMonth || monthRev >= 600 ? 'url(#glow)' : 'none', opacity: hoveredMonthIndex !== null && hoveredMonthIndex !== index ? 0.4 : 1 }}
-                                                         />
-                                                     );
-                                                 })}
-
-                                                {/* Center Dashboard */}
-                                                <circle cx="0" cy="0" r="175" fill="#0a0a0a" stroke="#333" strokeWidth="4"/>
-                                                {currentDisplayDay && (
-                                                    <g className="transition-all duration-300">
-                                                        {wheelViewMode === 'days' ? (
-                                                            <>
-                                                                <text x="0" y="-40" textAnchor="middle" fill="#666" fontSize="14" fontWeight="600" className="uppercase tracking-widest">
-                                                                    {currentDisplayDay.dayOfYear === TODAY_INDEX ? "TODAY" : currentDisplayDay.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                                                                </text>
-                                                                <text x="0" y="20" textAnchor="middle" fill={getColorForRevenue(currentDisplayDay.revenue)} fontSize="48" fontWeight="bold">
-                                                                    {currentDisplayDay.revenue.toFixed(2)}
-                                                                </text>
-                                                                <text x="0" y="45" textAnchor="middle" fill="#666" fontSize="12" fontWeight="500" className="uppercase tracking-widest">
-                                                                    Revenue (€)
-                                                                </text>
-                                                                <text x="0" y="70" textAnchor="middle" fill={getColorForRevenue(currentDisplayDay.revenue)} fontSize="12" fontWeight="bold" className="uppercase tracking-widest">
-                                                                    {getStatusText(currentDisplayDay.revenue)}
-                                                                </text>
-                                                                {currentDisplayDay.source && (
-                                                                    <text x="0" y="100" textAnchor="middle" fill="#666" fontSize="10" className="truncate max-w-[150px]">
-                                                                        {currentDisplayDay.source}
-                                                                    </text>
-                                                                )}
-                                                            </>
-                                                        ) : (
-                                                            <>
-                                                                <text x="0" y="-40" textAnchor="middle" fill="#666" fontSize="14" fontWeight="600" className="uppercase tracking-widest">
-                                                                    {currentDisplayMonth ? `${currentDisplayMonth.name} 2026` : 'Current Month'}
-                                                                </text>
-                                                                <text x="0" y="20" textAnchor="middle" fill={getColorForMonthlyRevenue(currentDisplayMonthRevenue)} fontSize="48" fontWeight="bold">
-                                                                    {Math.round(currentDisplayMonthRevenue)}
-                                                                </text>
-                                                                <text x="0" y="45" textAnchor="middle" fill="#666" fontSize="12" fontWeight="500" className="uppercase tracking-widest">
-                                                                    Projected Revenue (€)
-                                                                </text>
-                                                                <text x="0" y="70" textAnchor="middle" fill={getColorForMonthlyRevenue(currentDisplayMonthRevenue)} fontSize="12" fontWeight="bold" className="uppercase tracking-widest">
-                                                                    {getStatusTextForMonthly(currentDisplayMonthRevenue)}
-                                                                </text>
-                                                            </>
-                                                        )}
-                                                    </g>
-                                                )}
-                                            </g>
-                                        </svg>
-                                    </div>
-                                </div>
-
-                                {/* Sidebar */}
-                                <div className="lg:w-80 space-y-6">
-                                    {/* Timeline */}
-                                    <div className="border border-[#222] bg-[#050505] p-6">
-                                        <h3 className="text-[#D4AF37] text-sm uppercase tracking-widest mb-4 font-bold">Current Subscribers</h3>
-                                        <ul className="space-y-3">
-                                            {[
-                                                { day: 'Mar 21', index: 80, desc: '000000006 · Arcade (Yearly)' },
-                                                { day: 'Mar 22', index: 81, desc: '000000003 · Arcade (Monthly)' }
-                                            ].map((item, idx) => {
-                                                const dayData = data[item.index];
-                                                if (!dayData) return null;
-                                                return (
-                                                    <li key={idx} className="flex items-center justify-between text-sm cursor-pointer group" onMouseEnter={() => setHoveredDay(item.index)} onMouseLeave={() => setHoveredDay(null)}>
-                                                        <div className="flex items-center gap-3">
-                                                            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: getColorForRevenue(dayData.revenue) }}></div>
-                                                            <div>
-                                                                <span className="text-gray-300 group-hover:text-white transition-colors block">{item.day}</span>
-                                                                <span className="text-gray-500 text-[10px]">{item.desc}</span>
-                                                            </div>
-                                                        </div>
-                                                        <span className="font-bold text-white">€{dayData.revenue.toFixed(2)}</span>
-                                                    </li>
-                                                );
-                                            })}
-                                            <li className="pt-2 border-t border-[#333]">
-                                                <p className="text-gray-500 text-[10px]">Monthly recurs every 22nd</p>
-                                                <p className="text-gray-500 text-[10px]">Yearly recurs every Mar 21st</p>
-                                            </li>
-                                        </ul>
-                                    </div>
-
-                                    {/* Legend */}
-                                    <div className="border border-[#222] bg-[#050505] p-6">
-                                        <h3 className="text-[#D4AF37] text-sm uppercase tracking-widest mb-4 font-bold">Revenue Scale ({wheelViewMode === 'days' ? 'Daily' : 'Monthly'})</h3>
-                                        <div className="space-y-3">
-                                            {wheelViewMode === 'days' ? (
-                                                <>
-                                                    <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-red-900"></div><span className="text-gray-400 text-xs">€0</span></div>
-                                                    <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-orange-900"></div><span className="text-gray-400 text-xs">€1-4.99</span></div>
-                                                    <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-blue-900"></div><span className="text-gray-400 text-xs">€5-9.99</span></div>
-                                                    <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-teal-900"></div><span className="text-gray-400 text-xs">€10-19.99</span></div>
-                                                    <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-green-900"></div><span className="text-gray-400 text-xs">€20+</span></div>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-red-900"></div><span className="text-gray-400 text-xs">€0</span></div>
-                                                    <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-orange-900"></div><span className="text-gray-400 text-xs">€1-149</span></div>
-                                                    <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-blue-900"></div><span className="text-gray-400 text-xs">€150-299</span></div>
-                                                    <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-teal-900"></div><span className="text-gray-400 text-xs">€300-599</span></div>
-                                                    <div className="flex items-center gap-3"><div className="w-4 h-4 rounded-full bg-green-900"></div><span className="text-gray-400 text-xs">€600+</span></div>
-                                                </>
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    {/* Arcade Subscribers */}
-                                    <div className="border border-[#222] bg-[#050505] p-6">
-                                        <h3 className="text-[#D4AF37] text-sm uppercase tracking-widest mb-2 font-bold">Arcade Subscribers</h3>
-                                        <p className="text-4xl font-bold text-white">2</p>
-                                        <div className="space-y-1 mt-2">
-                                            <p className="text-gray-500 text-xs">Customer 000000006 (Yearly)</p>
-                                            <p className="text-gray-500 text-xs">Customer 000000003 (Monthly)</p>
-                                        </div>
-                                    </div>
-
-                                    {/* Simulate */}
-                                    <button onClick={simulateGrowth} className="w-full py-3 px-4 bg-[#D4AF37] text-black font-bold text-sm uppercase tracking-widest hover:bg-[#D4AF37]/80 transition-all">
-                                        Simulate Subscriptions
-                                    </button>
-                                </div>
-                            </div>
-                        ) : (
-                            <div>
-                                {/* Month Navigator */}
-                                <div className="flex items-center justify-between mb-6">
-                                    <button onClick={() => setSelectedMonth(prev => prev > 0 ? prev - 1 : 11)} className="p-2 border border-[#333] text-gray-400 hover:text-white hover:border-[#D4AF37] transition-colors">
-                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"/></svg>
-                                    </button>
-                                    <h3 className="text-2xl font-bold text-[#D4AF37]">{monthNamesFull[selectedMonth]} 2026</h3>
-                                    <button onClick={() => setSelectedMonth(prev => prev < 11 ? prev + 1 : 0)} className="p-2 border border-[#333] text-gray-400 hover:text-white hover:border-[#D4AF37] transition-colors">
-                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/></svg>
-                                    </button>
-                                </div>
-
-                                {/* Calendar Grid */}
-                                <div className="border border-[#222] bg-[#050505] p-6">
-                                    <div className="grid grid-cols-7 gap-2 mb-2">
-                                        {daysOfWeek.map(day => (<div key={day} className="text-center text-gray-500 font-bold text-xs uppercase">{day}</div>))}
-                                    </div>
-                                    <div className="grid grid-cols-7 gap-2">
-                                        {paddingArray.map(pad => (<div key={`pad-${pad}`} className="aspect-square"></div>))}
-                                        {monthDaysData.map((day) => {
-                                            const isToday = day.dayOfYear === TODAY_INDEX;
-                                            const cardStyles = getCardStylesForRevenue(day.revenue);
-                                            return (
-                                                <div 
-                                                    key={day.dayOfYear} 
-                                                    className={`aspect-square border rounded p-2 flex flex-col justify-between cursor-pointer transition-all ${cardStyles} ${isToday ? 'ring-2 ring-[#D4AF37]' : ''}`}
-                                                    onMouseEnter={() => setHoveredDay(day.dayOfYear)}
-                                                    onMouseLeave={() => setHoveredDay(null)}
-                                                >
-                                                    <span className="text-xs opacity-70">{day.date.getDate()}</span>
-                                                    <span className="text-sm font-bold">€{day.revenue.toFixed(2)}</span>
-                                                    {day.source && hoveredDay === day.dayOfYear && (
-                                                        <span className="text-[8px] text-gray-400 truncate">{day.source}</span>
-                                                    )}
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            );
-        };
-
         const StakeholdersPillar = () => {
             const [activeStakeholder, setActiveStakeholder] = useState('manufacturers');
             const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -1668,7 +1484,7 @@
                 <div className="flex-1 bg-black min-h-full p-8 pb-20 text-white font-serif relative overflow-hidden flex flex-col items-center">
                     <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/dark-leather.png')] pointer-events-none"></div>
                     
-                    <SectionHeader title="Stakeholders" subtitle="Operational Network" />
+                    <SectionHeader title="Network" subtitle="Operational Network" />
 
                     <div className="w-full max-w-6xl">
                         {/* Sub-navigation */}
@@ -2237,7 +2053,15 @@
 
         const LexiconPillar = () => {
             const entries = [
-                { name: 'Allmer', description: 'The Holding Company that includes Simon Allmer Entertainment and future ventures. Company type: Holding Company. Legal status: EU Inc. beginning in 2027. Manages the less artistic aspects of the business (Real Estate, Financials) so each subsidiary can focus on what they do best. Allmer also offers training to Partners (how to develop products) and manages relationships with key stakeholders. Clear Business to Business positioning.', tag: 'Company' },
+                { name: 'Company', description: 'Legal and organizational entities that form the Allmer structure. Includes the Holding Company (Allmer Group) and the Parent Operating Company (Simon Allmer Entertainment).', tag: 'Meta' },
+                { name: 'Principles', description: 'The foundational creative and business beliefs that guide all decisions across Allmer Group and its Studios. Principles are non-negotiable standards applied to every product, service, and partnership.', tag: 'Meta' },
+                { name: 'Studio', description: 'One of the six specialized production arms of Simon Allmer Entertainment, each focused on a distinct medium: Comics, Films, Games, Journals, Music, Snacks. Studios work independently or in tandem to build multimedia brands.', tag: 'Meta' },
+                { name: 'Brand', description: 'A creative universe, product line, or identity that spans one or more Studios. Brands are the primary consumer-facing layer of the Allmer catalog — e.g. Seven Wonders, Futory, American Portrait.', tag: 'Meta' },
+                { name: 'Series', description: 'A named collection of products within a Brand that share a common setting, mechanic, or narrative arc. A Series groups related releases into a coherent line — e.g. Futory Cards, Old Seven Wonders.', tag: 'Meta' },
+                { name: 'Service', description: 'Subscription offerings that provide tiered access to Allmer content libraries across Studios. Services are named after a theme or space rather than the Studio itself — e.g. Arcade, Cinema, Club.', tag: 'Meta' },
+                { name: 'Skill', description: 'A personal ability cultivated by Simon Allmer as part of his performance and creative practice. Skills are demonstrated live and contribute directly to In-Camera Effort in Allmer productions.', tag: 'Meta' },
+                { name: 'System', description: 'A System is a designed foundation that enables multiple experiences rather than delivering one fixed outcome. A system may be shipped as a product (American Playing Cards) or contain products that are themselves Subsystems (e.g. Pentamorph as part of Allmer Music Instruments). As a consumer-facing company it is important that each system has ready-made product experiences (Frontier game with American Playing Cards, Auto Beats with Pentamorph). With Systems, people can consume and create.', tag: 'Meta' },
+                { name: 'Allmer Group', description: 'The Holding Company that includes Simon Allmer Entertainment and future ventures. Company type: Holding Company. Legal status: EU Inc. beginning in 2027. Manages the less artistic aspects of the business (Real Estate, Financials) so each subsidiary can focus on what they do best. Allmer Group also offers training to Partners (how to develop products) and manages relationships with key stakeholders. Clear Business to Business positioning.', tag: 'Company' },
                 { name: 'Allmer Comics', description: 'Products: Comic Books, Digital Comics. Brands/Series: Futory, Detective Noname.', tag: 'Studio' },
                 { name: 'Allmer Films', description: 'Products: Feature Films, Limited Series. Brands/Series: Futory, Detective Noname, Danger.', tag: 'Studio' },
                 { name: 'Allmer Games', description: 'Products: Tabletop Games, Video Games. Brands/Series: Seven Wonders, Futory, Detective Noname, Believe, Elements, Casino Camino, Lunyra.', tag: 'Studio' },
@@ -2248,6 +2072,8 @@
                 { name: 'Arcade', description: '15 Allmer Games, 5 Classic Games, 5 Third Party Games.', strategy: 'Phase 1 — Spread the rules: €6/year gets Seven Wonders and Futory Cards into as many hands as possible. People learn the games, teach their friends, bring them to events. Phase 2 — The community becomes the moat: Once "want to play a round of Seven Wonders?" is a phrase people actually say, the game has cultural gravity. You don\'t need to convince anyone of the value anymore — the community does it for you. Phase 3 — Price reflects the network, not just the software: Doubling to €10/year at that point isn\'t a price hike — it\'s joining a club that people already want to be in.', goal: 'Most Subscriptions for Gaming Service.', tag: 'Service' },
                 { name: 'Believe', description: 'Card game where deception is the objective. Players build stories that can be true or false but only get points by fooling people. Includes 3 distinct game modes.', tag: 'Brand' },
                 { name: 'Car Stunts', description: '', tag: 'Skill' },
+                { name: 'American Playing Cards', description: 'A premium playing card system rooted in classic American iconography and design tradition. Stands as its own distinct identity, separate from Casino Camino. Ready-made product experience: Frontier — a card game built on the American Playing Cards system.', tag: 'System' },
+                { name: 'Allmer Music Instruments', description: 'A modular instrument system for composition, performance, and interactive creation. Contains Subsystems such as Pentamorph, each of which functions as a standalone product while contributing to the broader instrument ecosystem. Ready-made product experience: Auto Beats — built on the Pentamorph subsystem.', tag: 'System' },
                 { name: 'Casino Camino', description: 'Reimagining the gamble experience through unique titles.', tag: 'Brand' },
                 { name: 'Center', description: 'Full access to Allmer Studios complete library', tag: 'Service' },
                 { name: 'Chronicle', description: '', tag: 'Brand' },
@@ -2258,8 +2084,8 @@
                 { name: 'Danger', description: 'Practical Action series with death-defying stunts. Studio used: Allmer Films, Allmer Music.', tag: 'Brand' },
                 { name: 'Detective Noname', description: 'Story of a 19th century detective and his mysterious cases throughout London.', tag: 'Brand' },
                 { name: 'Elements', description: 'A simple samurai card game where players can lay out many cards at once by following either shape or color.', goal: 'Highest Grossing Card Game.', tag: 'Brand' },
-                { name: 'Extension', description: 'A brand experience that doesn\'t qualify as a full product produced by a Studio but nevertheless has to be taken care of as it enhances the customer\'s satisfaction. For example, on the Metropole (Allmer Snacks) page, there is a digital Metropole crossword puzzle. A simple crossword with cool styling doesn\'t qualify as its own game (which would demand originality), but there should be someone responsible for taking care of that extension and not simply treating it like a temporary web design element.', tag: 'Company' },
-                { name: 'In-Camera Effort (ICE)', description: 'In-Camera Effort (ICE) refers to the cumulative volume of physical preparation, technical training, and manual craftsmanship invested by the cast and crew prior to or during the capturing of a frame. Unlike "Production Value," which measures the perceived expensive-ness of the final image, ICE measures the human-hours of specialized skill required to manifest a moment without digital augmentation.\n\nKey Dimensions\n\nSomatic Training: Actors learning a skill (e.g., ballet, scuba diving, linguistics).\n\nTactical Choreography: Long-form, complex physical sequences practiced for months.\n\nAnalog Craft: Hand-sewn costumes or physical sets that dictate how actors move.', tag: 'Principles' },
+                { name: 'Extension', description: 'A brand experience that doesn\'t qualify as a full product produced by a Studio but nevertheless has to be taken care of as it enhances the customer\'s satisfaction. For example, on the Metropole (Allmer Snacks) page, there is a digital Metropole crossword puzzle. A simple crossword with cool styling doesn\'t qualify as its own game (which would demand originality), but there should be someone responsible for taking care of that extension and not simply treating it like a temporary web design element.', tag: 'Meta' },
+                { name: 'In-Camera Effort', description: 'In-Camera Effort refers to the cumulative volume of physical preparation, technical training, and manual craftsmanship invested by the cast and crew prior to or during the capturing of a frame. Unlike "Production Value," which measures the perceived expensive-ness of the final image, In-Camera Effort measures the human-hours of specialized skill required to manifest a moment without digital augmentation.\n\nKey Dimensions\n\nSomatic Training: Actors learning a skill (e.g., ballet, scuba diving, linguistics).\n\nTactical Choreography: Long-form, complex physical sequences practiced for months.\n\nAnalog Craft: Hand-sewn costumes or physical sets that dictate how actors move.', tag: 'Principles' },
                 { name: 'Invent or Die', description: 'Products must be boldly original, bring true value to people, and be constantly improved.', tag: 'Principles' },
                 { name: 'Magic is Real', description: 'The defining craft of each Studio is created by humans, not machines. In a world of digital abundance, the claim that something was made with years of skill and deep obsession becomes radical. Allmer makes that claim and proves it — in objects, interfaces, and events. Magic is Real because it happened somewhere.', tag: 'Principles' },
                 { name: 'Serve the Story', description: 'Creative decisions must strengthen the narrative and make it as engaging as possible.', tag: 'Principles' },
@@ -2278,13 +2104,13 @@
                 { name: 'Simon Allmer Entertainment', description: 'Committed to creative excellence, Simon Allmer produces story-driven entertainment and consumer products for a global audience. Company type: Parent Operating Company. Legal status: EU Inc. beginning in 2027.', tag: 'Company' },
                 { name: 'Solar-Soda', description: 'A solar-powered beverage brand.', tag: 'Brand' },
                 { name: 'Society Review', description: 'A magazine that aims to transform information into knowledge through discussions on today\'s critical issues.', tag: 'Brand' },
-                { name: 'Studio System', description: 'The unique approach of Simon Allmer Entertainment to create multimedia brands through the direct control and "orchestration" of the six Studios (no outsourcing). Each Studio can function independently to create unique IP (e.g. Seven Wonders is just Allmer Games) or play in tandem with others (American Portrait uses every studio to create unique products for each). Studio work doesn\'t always have to result in a product by the studio—e.g. Allmer Music can make sound design for a Game without releasing the soundtrack separately.', tag: 'Company' },
+                { name: 'Studio System', description: 'The unique approach of Simon Allmer Entertainment to create multimedia brands through the direct control and "orchestration" of the six Studios (no outsourcing). Each Studio can function independently to create unique IP (e.g. Seven Wonders is just Allmer Games) or play in tandem with others (American Portrait uses every studio to create unique products for each). Studio work doesn\'t always have to result in a product by the studio—e.g. Allmer Music can make sound design for a Game without releasing the soundtrack separately.', tag: 'Principles' },
                 { name: 'New Seven Wonders', description: 'Seven architectural wonders of the modern world, reimagined as luxury physical games and decorative objects.', tag: 'Series', brand: 'Seven Wonders' },
                 { name: 'Virtual Sports', description: 'Virtual Sports are a new genre of competitive entertainment that merge the physical intensity of traditional sports with the immersive environments of digital worlds. Unlike esports, where players remain mostly stationary behind screens, virtual sports require athletes to physically move and react within mixed-reality arenas while wearing VR headsets and body-tracking gear.\n\nDeveloped and popularized by Simon Allmer Entertainment, virtual sports aim to restore the spectacle, suspense, and audience engagement found in traditional sports, while offering endlessly dynamic environments. The playing fields can shift in real-time—introducing elements such as nightfall, snowfall, shifting platforms, or urban warfare zones—created through a hybrid of digital simulations and practical effects.\n\nEach match is unpredictable, with players forced to adapt on the fly, testing reflexes, endurance, and strategic thinking. Disciplines can range from fast-paced obstacle reactions to simulated combat missions, with formal training programs and athletic conditioning for serious competitors.\n\nSimon Allmer Entertainment not only develops the virtual environments and game systems, but also produces and broadcasts the events globally, blending sports broadcasting, cinematic storytelling, and live audience interaction to redefine competitive entertainment for the modern era.', tag: 'Brand' },
                 { name: 'Water Lung', description: 'Ability to hold one\'s breath for over 5 minutes in static apnea without inhaling pure O2 and over 7 minutes with pure O2 inhalation.', tag: 'Skill' },
                 { name: 'Wire Walking', description: '', tag: 'Skill' }
             ].sort((a, b) => {
-                const tagPriority = { 'Company': 1, 'Principles': 2, 'Studio': 3, 'Brand': 4, 'Series': 5, 'Service': 6, 'Skill': 7 };
+                const tagPriority = { 'Meta': 0, 'Company': 1, 'Principles': 2, 'Studio': 3, 'Brand': 4, 'Series': 5, 'System': 6, 'Service': 7, 'Skill': 8 };
                 if (tagPriority[a.tag] !== tagPriority[b.tag]) {
                     return tagPriority[a.tag] - tagPriority[b.tag];
                 }
@@ -2295,11 +2121,13 @@
             const [filterTag, setFilterTag] = useState(null);
             const [selectedEntry, setSelectedEntry] = useState(null);
 
-            const tagOrder = ['Company', 'Principles', 'Studio', 'Brand', 'Series', 'Service', 'Skill'];
+            const tagOrder = ['Meta', 'Company', 'Principles', 'Studio', 'Brand', 'Series', 'System', 'Service', 'Skill'];
             const tags = tagOrder.filter(tag => entries.some(e => e.tag === tag));
 
             const tagColors = {
+                'Meta': 'bg-gray-900/40 text-gray-300 border-gray-500',
                 'Brand': 'bg-blue-900/30 text-blue-400 border-blue-500',
+                'System': 'bg-emerald-900/30 text-emerald-400 border-emerald-500',
                 'Company': 'bg-purple-900/30 text-purple-400 border-purple-500',
                 'Principles': 'bg-yellow-900/30 text-yellow-400 border-yellow-500',
                 'Series': 'bg-cyan-900/30 text-cyan-400 border-cyan-500',
@@ -4231,17 +4059,16 @@
             { id: 'news', label: 'NEWS' },
             { id: 'arts', label: 'SUBSIDIARIES' },
             { id: 'assets', label: 'ASSETS' },
-            { id: 'projected', label: 'SUBSCRIPTIONS' },
             { id: 'catalog', label: 'CATALOG' },
-            { id: 'stakeholders', label: 'STAKEHOLDERS' },
             { id: 'lexicon', label: 'LEXICON' },
+            { id: 'stakeholders', label: 'NETWORK' },
             { id: 'publications', label: 'PUBLICATIONS' },
             { id: 'worldmap', label: 'LOCATIONS' },
             { id: 'scripts', label: 'SCRIPTS' },
         ];
 
         // Pages hidden in public mode (before PIN)
-        const publicOnlyPages = ['assets', 'projected', 'stakeholders', 'publications', 'scripts'];
+        const publicOnlyPages = ['assets', 'stakeholders', 'publications', 'scripts'];
 
         const LoginScreen = ({ onAuthorize }) => {
             const [password, setPassword] = useState('');
@@ -4454,7 +4281,6 @@
                                 {activeTab === 'principles' && <PrinciplesPillar />}
                                 {activeTab === 'arts' && <ArtsPillar onSelectStudio={setSelectedStudio} />}
                                 {activeTab === 'assets' && <AssetsPillar navigate={setActiveTab} />}
-                                {isPrivateMode && activeTab === 'projected' && <ProjectedRevenuePillar />}
                                 {activeTab === 'catalog' && <CatalogPillar />}
                                 {isPrivateMode && activeTab === 'stakeholders' && <StakeholdersPillar />}
                                 {activeTab === 'lexicon' && <LexiconPillar />}
