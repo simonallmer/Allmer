@@ -2503,7 +2503,7 @@
                                             <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Internal Strategy — Allmer Group · Confidential</p>
                                             <p className="text-gray-600 text-[10px] mb-4">Published: 2026.05.26</p>
                                             <p className="text-gray-400 text-sm leading-relaxed mb-6">The operational backbone of Allmer: structure, dual strategy, guild model, and competitive architecture of Foundry across Works and Labs.</p>
-                                            <a href="publications/Foundry_Blueprint_2026.pdf" target="_blank" className="inline-block text-[#D4AF37] text-xs uppercase tracking-widest border border-[#D4AF37] px-4 py-2 group-hover:bg-[#D4AF37] group-hover:text-black transition-all">View PDF</a>
+                                            <span className="text-[#D4AF37] text-xs uppercase tracking-widest border border-[#D4AF37] px-4 py-2 group-hover:bg-[#D4AF37] group-hover:text-black transition-all">Open Reader</span>
                                         </div>
                                     </div>
                                 </div>
@@ -2677,7 +2677,7 @@
                                             <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Internal Strategy — Allmer Group · Confidential</p>
                                             <p className="text-gray-600 text-[10px] mb-4">Published: 2026.05.26</p>
                                             <p className="text-gray-400 text-sm leading-relaxed mb-6">The operational backbone of Allmer: structure, dual strategy, guild model, and competitive architecture of Foundry across Works and Labs.</p>
-                                            <a href="publications/Foundry_Blueprint_2026.pdf" target="_blank" className="inline-block text-[#D4AF37] text-xs uppercase tracking-widest border border-[#D4AF37] px-4 py-2 group-hover:bg-[#D4AF37] group-hover:text-black transition-all">View PDF</a>
+                                            <span className="text-[#D4AF37] text-xs uppercase tracking-widest border border-[#D4AF37] px-4 py-2 group-hover:bg-[#D4AF37] group-hover:text-black transition-all">Open Reader</span>
                                         </div>
                                     </div>
                                 </div>
@@ -3181,8 +3181,135 @@
                     )}
 
                     {/* Allmer Games Network PDF Reader Modal */}
+                    {showFoundryReader && (
+                        <div className="fixed inset-0 bg-black/95 z-50 flex flex-col" onClick={() => setShowFoundryReader(false)}>
+                            <div className="flex items-center justify-between p-6 border-b border-[#222]">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-8 h-10 border border-[#D4AF37]/50 bg-gradient-to-b from-[#1a1a1a] to-[#0a0a0a] flex items-center justify-center">
+                                        <span className="text-[#D4AF37] brand-font text-[6px] leading-tight">FBP</span>
+                                    </div>
+                                    <div>
+                                        <h4 className="text-[#D4AF37] brand-font text-sm">Foundry Blueprint</h4>
+                                        <p className="text-gray-500 text-[10px]">Allmer Group · Confidential · 2026</p>
+                                    </div>
+                                </div>
+                                <button onClick={() => setShowFoundryReader(false)} className="text-gray-500 hover:text-white text-2xl w-10 h-10 flex items-center justify-center border border-transparent hover:border-[#333] transition-all">×</button>
+                            </div>
+                            <div className="flex-1 overflow-y-auto p-8 md:p-16" onClick={e => e.stopPropagation()}>
+                                <div className="max-w-3xl mx-auto font-serif space-y-10 text-gray-300">
+                                    <div className="border-b border-[#D4AF37]/30 pb-8">
+                                        <h1 className="text-white text-4xl font-bold mb-2">FOUNDRY</h1>
+                                        <p className="text-[#D4AF37] text-lg mb-1">Internal Strategy Blueprint</p>
+                                        <p className="text-gray-600 text-sm">Allmer Group · Confidential · 2026</p>
+                                        <p className="mt-6 italic leading-relaxed">Foundry is the operational backbone of Allmer Group. It manufactures products to exacting standards, builds and maintains a global network of certified artisans and domain experts, and runs experimental research that no competitor can replicate. It serves Allmer brands and selected external partners. It does not advertise. It is known in the right rooms.</p>
+                                    </div>
+                                    <div>
+                                        <h2 className="text-white text-2xl font-bold mb-4">1. Structure</h2>
+                                        <div className="border-t border-[#D4AF37]/20 pt-4">
+                                            <p className="mb-6 leading-relaxed">Foundry operates as a wholly owned subsidiary of Allmer Group, sitting alongside Simon Allmer Entertainment in the holding structure. It is not a creative entity. It is the industrial and intellectual infrastructure that makes creative output physically possible and globally consistent.</p>
+                                            <h3 className="text-[#D4AF37] font-bold mb-2">Foundry Works</h3>
+                                            <p className="mb-4 leading-relaxed">Precision fabrication facility. Executes manufacturing to defined standards for all Allmer product lines and selected partner brands. It receives a standard and fulfills it.</p>
+                                            <p className="italic text-gray-500 leading-relaxed mb-6">Partner capacity model: Allmer production occupies scheduled machine time. Idle capacity — Monday night, off-peak windows — is sold to external partners at accessible minimum order quantities. A Parisian confectionary that cannot afford bespoke glassware through conventional supply chains can commission a Foundry Works run that reflects its brand DNA. Same machines. Same quality. Different client.</p>
+                                            <h3 className="text-[#D4AF37] font-bold mb-2">Foundry Labs</h3>
+                                            <p className="mb-4 leading-relaxed">The experimental division. A small team of domain experts — molecular gastronomists, materials scientists, stage technicians, specialist craftspeople — whose accumulated knowledge is the asset. Labs does not produce to brief. It investigates, prototypes, and encodes discoveries into Foundry's production standards, feeding Works with capabilities that did not exist before.</p>
+                                            <p className="leading-relaxed">Labs knowledge is tacit by design. The output is not a report. It is a process embedded in people and machines that cannot be reverse-engineered from the finished product.</p>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h2 className="text-white text-2xl font-bold mb-4">2. The Dual Strategy</h2>
+                                        <div className="border-t border-[#D4AF37]/20 pt-4">
+                                            <p className="mb-6 leading-relaxed">Foundry operates two systems simultaneously. Neither is subordinate to the other. Together they produce something no single-mode competitor can replicate.</p>
+                                            <h3 className="text-white font-bold mb-2">Automated Precision</h3>
+                                            <ul className="space-y-2 mb-6 text-gray-400">
+                                                {['Fabrication workflows executing to defined tolerance and quality standards', 'Consistent output regardless of product type or client — board game components and snack packaging run on the same logic', 'Cost structure achievable only through eliminated intermediaries and Allmer-owned real estate', 'Idle capacity converted to partner revenue without cannibalizing Allmer production schedules'].map((item, i) => (
+                                                    <li key={i} className="flex gap-3"><span className="text-[#D4AF37]">—</span><span>{item}</span></li>
+                                                ))}
+                                            </ul>
+                                            <h3 className="text-white font-bold mb-2">Irreplaceable Human Networks</h3>
+                                            <ul className="space-y-2 mb-6 text-gray-400">
+                                                {['Certified artisan and expert network across eleven city hubs', 'Long-term relationships with domain specialists whose knowledge cannot be hired away, only cultivated', 'Cross-discipline learning at hub level: the woodworker who learns stone becomes a product category that did not previously exist', 'Foundry acts as connector, standardiser, and quality guarantor — the artisan retains individual character within defined parameters'].map((item, i) => (
+                                                    <li key={i} className="flex gap-3"><span className="text-[#D4AF37]">—</span><span>{item}</span></li>
+                                                ))}
+                                            </ul>
+                                            <h3 className="text-white font-bold mb-2">The Connector Model</h3>
+                                            <p className="leading-relaxed text-gray-400">The Salon Edition of Seven Wonders illustrates the full model. A Parisian artisan receives precisely milled components from a nearby Foundry Works supplier — standard dimensions, defined tolerances, delivered through an automated pipeline. The artisan handcrafts the finished piece. The result is sold to Parisian cafés and private collectors. The same piece sold in Tokyo carries the same form. The artisan's individual character is retained within that form. Foundry sets the standard. The network provides the soul.</p>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h2 className="text-white text-2xl font-bold mb-4">3. The Maintenance Model</h2>
+                                        <div className="border-t border-[#D4AF37]/20 pt-4 space-y-4 leading-relaxed">
+                                            <p>Foundry offers institutional clients — hotel chains, high-end retailers, cultural institutions — a low-cost maintenance subscription covering inspection, repair, and replacement of Foundry-produced pieces. Priced at a level only Foundry can sustain profitably, due to owned real estate, eliminated logistics overhead, and the existing certified network already present in each city.</p>
+                                            <p>Most manufacturers do not offer this service. The gap is structural: they lack the physical proximity and the human network to make it economical. Foundry's architecture makes it natural.</p>
+                                            <p>The subscription converts a one-time sale into a long-term institutional relationship. Switching cost is high: the client would need to rebuild the operational relationship with a provider who does not have Foundry's network or cost structure. The subscription is priced to make switching irrational.</p>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h2 className="text-white text-2xl font-bold mb-4">4. The Guild Model</h2>
+                                        <div className="border-t border-[#D4AF37]/20 pt-4">
+                                            <p className="mb-6 leading-relaxed">Foundry is, in structural terms, a modern guild. The historical guild concentrated craft knowledge within a city, enforced quality standards, controlled access, trained members across adjacent disciplines, and marked output with a signal that circulated only in the right circles. Foundry replicates this model with contemporary infrastructure.</p>
+                                            <h3 className="text-[#D4AF37] font-bold mb-3">City Hubs</h3>
+                                            <p className="mb-4 leading-relaxed">Foundry operates physical hubs in each city of Allmer Group operations. These are not satellite offices. They are the places where the certified network gathers, trains, experiments, and collaborates.</p>
+                                            <div className="border border-[#222] overflow-hidden mb-6">
+                                                <table className="w-full text-sm">
+                                                    <thead><tr className="border-b border-[#333]"><th className="text-left p-3 text-[#D4AF37] text-xs uppercase tracking-wider">City</th><th className="text-left p-3 text-[#D4AF37] text-xs uppercase tracking-wider">Country</th><th className="text-left p-3 text-[#D4AF37] text-xs uppercase tracking-wider">Craft Density</th></tr></thead>
+                                                    <tbody>
+                                                        {[['Vienna','Austria','Metalwork, furniture, confectionery, clockmaking'],['London','UK','Tailoring, ceramics, typography, fine joinery'],['Paris','France','Woodcraft, gastronomy, glasswork, textile'],['Rome','Italy','Leather, marble, mosaic, culinary'],['New York City','USA','Industrial design, print, culinary innovation'],['Los Angeles','USA','Materials, fabrication, screen craft'],['Chicago','USA','Architecture craft, steel, culinary'],['Singapore','Singapore','Precision engineering, gastronomy, textile'],['Hong Kong','Hong Kong','Jade, ceramics, tailoring, lacquer'],['Seoul','South Korea','Ceramic, metal, paper craft, culinary'],['Tokyo','Japan','Wood joinery, ceramics, lacquer, blade craft']].map(([city, country, craft], i) => (
+                                                            <tr key={i} className="border-b border-[#1a1a1a]"><td className="p-3 text-[#D4AF37]">{city}</td><td className="p-3 text-gray-400">{country}</td><td className="p-3 text-gray-400">{craft}</td></tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <h3 className="text-[#D4AF37] font-bold mb-2">Network Effects</h3>
+                                            <p className="mb-4 leading-relaxed">The more certified members in a hub, the more cross-discipline exchange occurs. A woodworker who gains access to a stone specialist creates multi-material products that neither could produce alone. Knowledge does not stay in individual heads. Foundry Labs encodes tacit expertise into standards, techniques, and training protocols that propagate across the network.</p>
+                                            <h3 className="text-[#D4AF37] font-bold mb-2">Certification and Access</h3>
+                                            <p className="leading-relaxed">Membership in the Foundry network is earned, not purchased. Certified members receive sustained work, access to the broader network and its collaborative projects, knowledge preservation infrastructure, and participation in long-term Allmer productions. The benefits compound with tenure. The cost of leaving rises proportionally.</p>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h2 className="text-white text-2xl font-bold mb-4">5. The Brand Signal</h2>
+                                        <div className="border-t border-[#D4AF37]/20 pt-4 space-y-4 leading-relaxed">
+                                            <p>Foundry does not advertise. There are no campaigns, no television spots, no press releases directed at consumer audiences. The signal travels through the work and through the people who encounter it.</p>
+                                            <p>In the right room — a hotel acquisition meeting, a private collector's study, a Michelin-starred kitchen — "is this made by Foundry" is the entire campaign. This is the Hermès model applied to manufacturing infrastructure: quiet, specific, and inaccessible by definition to those who have not earned proximity to it.</p>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h2 className="text-white text-2xl font-bold mb-4">6. Competitive Architecture: Seven Powers</h2>
+                                        <div className="border-t border-[#D4AF37]/20 pt-4">
+                                            <p className="mb-6 leading-relaxed">Analysis against Hamilton Helmer's Seven Powers framework.</p>
+                                            <div className="border border-[#222] overflow-hidden">
+                                                <table className="w-full text-sm">
+                                                    <thead><tr className="border-b border-[#333]"><th className="text-left p-3 text-[#D4AF37] text-xs uppercase tracking-wider">Power</th><th className="text-left p-3 text-[#D4AF37] text-xs uppercase tracking-wider">Status</th><th className="text-left p-3 text-[#D4AF37] text-xs uppercase tracking-wider">Application</th></tr></thead>
+                                                    <tbody>
+                                                        {[['Counter-Positioning','Operative','No competitor runs precision fabrication alongside a certified artisan guild. Replication requires becoming something fundamentally different.'],['Switching Costs','Operative','Certified artisans accumulate benefits that compound with tenure. Institutional clients face high operational switching costs.'],['Process Power','Operative','Foundry Labs encodes tacit knowledge into production standards. The process cannot be reverse-engineered from the finished product.'],['Cornered Resource','Emerging','Active cultivation of long-term exclusive relationships with top craftspeople in each city, before the model achieves public recognition.'],['Network Effects','Emerging','Hub concentration drives cross-discipline knowledge compounding. Value to each certified member increases as the network grows.'],['Scale Economies','Emerging','Maintenance subscription fixed costs spread across growing subscriber base. Owned real estate creates a cost floor competitors cannot match.'],['Branding','Early Signal','No campaigns. Signal travels through the work and through proximity. "Is this made by Foundry" in the right room is the model.']].map(([power, status, desc], i) => (
+                                                            <tr key={i} className="border-b border-[#1a1a1a]">
+                                                                <td className="p-3 text-white font-bold">{power}</td>
+                                                                <td className="p-3"><span className={`text-xs px-2 py-0.5 border ${status==='Operative'?'border-green-700 text-green-400':status==='Emerging'?'border-blue-700 text-blue-400':'border-gray-600 text-gray-400'}`}>{status}</span></td>
+                                                                <td className="p-3 text-gray-400">{desc}</td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h2 className="text-white text-2xl font-bold mb-4">7. What Foundry Is Not</h2>
+                                        <div className="border-t border-[#D4AF37]/20 pt-4">
+                                            <ul className="space-y-3 text-gray-400">
+                                                {['Foundry is not a logistics company. Distribution is handled at the partner or Allmer brand level.','Foundry is not a creative studio. It executes to standards set by Simon Allmer Entertainment and by partner briefs. It does not originate product concepts or brand direction.','Foundry is not a consultancy. Its knowledge is embedded in production, not sold as advice.','Foundry does not advertise to consumers. Its audience is institutional and professional. Word of mouth within those circles is the only channel.'].map((item, i) => (
+                                                    <li key={i} className="flex gap-3"><span className="text-[#D4AF37]">—</span><span>{item}</span></li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div className="border-t border-[#333] pt-6 text-center text-gray-600 text-xs">Allmer Group · Foundry Blueprint · Confidential · 2026</div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     {showNetworkReader && (
-                        <div 
+                        <div
                             className="fixed inset-0 bg-black/95 z-50 flex flex-col"
                             onClick={() => setShowNetworkReader(false)}
                         >
