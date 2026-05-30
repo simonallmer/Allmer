@@ -912,13 +912,14 @@
         const AssetsPillar = ({ navigate }) => {
             const [city, setCity] = useState('Vienna');
             const [transactions, setTransactions] = useState([
-                { id: 1, date: '2026.03.15', description: 'Various Game Sales - Paradice am See, Vienna - Various Customers', studio: 'games', event: 'Paradice am See', type: 'oneoff', amount: 30.00, transactionType: 'income' },
+                { id: 1, date: '2026.03.15', description: 'Various Game Sales - Paradice am See, Vienna, Austria - Various Customers', studio: 'games', event: 'Paradice am See', type: 'oneoff', amount: 30.00, transactionType: 'income' },
                 { id: 2, date: '2026.03.21', description: 'Arcade Subscription - Austria - Customer 000000006', studio: 'games', event: '', type: 'recurring', amount: 6.00, transactionType: 'income', recurringPeriod: 'yearly', recurringDay: 21 },
                 { id: 3, date: '2026.03.22', description: 'Arcade Subscription - Vienna, Austria - Customer 000000003', studio: 'games', event: '', type: 'recurring', amount: 1.00, transactionType: 'income', recurringPeriod: 'monthly', recurringDay: 22 },
-                { id: 4, date: '2026.03.23', description: 'Pyramid Sale - Munchy Bar, Vienna - Customer 000000007', studio: 'games', event: '', type: 'oneoff', amount: 10.00, transactionType: 'income' },
-                { id: 5, date: '2026.03.27', description: 'Game Sales - Jo&Joe, Vienna (Paradice Board Game Night)', studio: 'games', event: 'Paradice Board Game Night', type: 'oneoff', amount: 10.00, transactionType: 'income' },
-                { id: 6, date: '2026.04.06', description: 'Futory Cards Sale - Munchy Bar, Vienna', studio: 'games', event: '', type: 'oneoff', amount: 15.00, transactionType: 'income' },
-                { id: 7, date: '2026.04.09', description: '', studio: 'games', event: '', type: 'oneoff', amount: 40.00, transactionType: 'income' }
+                { id: 4, date: '2026.03.23', description: 'Pyramid Sale - Munchy Bar, Vienna, Austria - Customer 000000007', studio: 'games', event: '', type: 'oneoff', amount: 10.00, transactionType: 'income' },
+                { id: 5, date: '2026.03.27', description: 'Game Sales - Jo&Joe, Vienna, Austria (Paradice Board Game Night)', studio: 'games', event: 'Paradice Board Game Night', type: 'oneoff', amount: 10.00, transactionType: 'income' },
+                { id: 6, date: '2026.04.06', description: 'Futory Cards Sale - Munchy Bar, Vienna, Austria', studio: 'games', event: '', type: 'oneoff', amount: 15.00, transactionType: 'income' },
+                { id: 7, date: '2026.04.09', description: '', studio: 'games', event: '', type: 'oneoff', amount: 40.00, transactionType: 'income' },
+                { id: 8, date: '2026.05.29', description: 'Various Game Sales - Jo&Joe, Vienna, Austria (Paradice Board Game Night)', studio: 'games', event: 'Paradice Board Game Night', type: 'oneoff', amount: 10.00, transactionType: 'income' }
             ]);
             const [sortOrder, setSortOrder] = useState('desc');
             const [showModal, setShowModal] = useState(false);
