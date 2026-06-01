@@ -1000,6 +1000,29 @@
             const subPadding = Array.from({ length: emptyDaysStart }).map((_, i) => i);
             // ── end Revenue Streams logic ──
 
+            // ── Equipment ──
+            const [selectedEquipment, setSelectedEquipment] = useState(null);
+            const equipmentList = [
+                { id: 1, name: 'iPhone SE (2022)', category: 'Smartphone', purchaseYear: 2022, purchasePrice: 450, depreciationYears: 4 },
+                { id: 2, name: 'Mac mini (2018) 512GB', category: 'Computer', purchaseYear: 2018, purchasePrice: 1500, depreciationYears: 8 },
+                { id: 3, name: 'Mac mini (2026) 1TB', category: 'Computer', purchaseYear: 2026, purchasePrice: 1200, depreciationYears: 8 },
+            ];
+            const EQ_YEAR = 2026; const EQ_MONTH = 6;
+            const getEqCurrentValue = (item) => {
+                const elapsed = (EQ_YEAR - item.purchaseYear) + (EQ_MONTH - 1) / 12;
+                return Math.max(0, item.purchasePrice - (item.purchasePrice / item.depreciationYears) * elapsed);
+            };
+            const getEqPoints = (item) => {
+                const endYear = item.purchaseYear + item.depreciationYears;
+                const pts = [];
+                for (let y = item.purchaseYear; y <= endYear; y++) {
+                    const v = Math.max(0, item.purchasePrice - (item.purchasePrice / item.depreciationYears) * (y - item.purchaseYear));
+                    pts.push({ year: y, value: v });
+                }
+                return pts;
+            };
+            // ── end Equipment ──
+
             const studioColors = {
                 games: 'bg-red-900/30 text-red-400 border-red-500',
                 comics: 'bg-teal-900/30 text-teal-400 border-teal-500',
@@ -1341,6 +1364,78 @@
                                         </div>
                                     </div>
                                 )}
+                            </div>
+                        </div>
+
+                        {/* Equipment */}
+                        <div className="border border-[#222] bg-[#0a0a0a]">
+                            <div className="p-4 border-b border-[#222]">
+                                <h3 className="text-[#D4AF37] brand-font text-lg uppercase tracking-widest">Equipment</h3>
+                            </div>
+                            <div className="p-6">
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                    {equipmentList.map(item => {
+                                        const curVal = getEqCurrentValue(item);
+                                        const pct = curVal / item.purchasePrice;
+                                        const isSelected = selectedEquipment?.id === item.id;
+                                        return (
+                                            <div key={item.id} onClick={() => setSelectedEquipment(isSelected ? null : item)} className={`border p-4 cursor-pointer transition-all ${isSelected ? 'border-[#D4AF37] bg-[#111]' : 'border-[#222] bg-[#050505] hover:border-[#D4AF37]/50'}`}>
+                                                <p className="text-[#D4AF37] brand-font text-sm mb-1">{item.name}</p>
+                                                <p className="text-gray-500 text-[10px] uppercase tracking-wider mb-3">{item.category} · {item.depreciationYears}yr depreciation</p>
+                                                <div className="w-full h-1.5 bg-[#222] mb-2">
+                                                    <div className="h-full bg-[#D4AF37] transition-all" style={{ width: `${pct * 100}%` }}></div>
+                                                </div>
+                                                <div className="flex justify-between text-xs">
+                                                    <span className="text-gray-500">Purchased {item.purchaseYear} · €{item.purchasePrice}</span>
+                                                    <span className={curVal === 0 ? 'text-red-400' : 'text-white'}>€{curVal.toFixed(0)} remaining</span>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                                {selectedEquipment && (() => {
+                                    const pts = getEqPoints(selectedEquipment);
+                                    const W = 500, H = 180, PAD = 40;
+                                    const xScale = (y) => PAD + ((y - pts[0].year) / (pts[pts.length-1].year - pts[0].year)) * (W - PAD * 2);
+                                    const yScale = (v) => PAD + (1 - v / selectedEquipment.purchasePrice) * (H - PAD * 1.5);
+                                    const polyline = pts.map(p => `${xScale(p.year)},${yScale(p.value)}`).join(' ');
+                                    const curVal = getEqCurrentValue(selectedEquipment);
+                                    const nowX = xScale(EQ_YEAR + (EQ_MONTH - 1) / 12);
+                                    const nowY = yScale(curVal);
+                                    return (
+                                        <div className="border border-[#222] bg-[#050505] p-6 animate-in fade-in duration-200">
+                                            <div className="flex justify-between items-start mb-4">
+                                                <div>
+                                                    <h4 className="text-[#D4AF37] brand-font text-base">{selectedEquipment.name}</h4>
+                                                    <p className="text-gray-500 text-xs">Linear depreciation · {selectedEquipment.purchaseYear}–{selectedEquipment.purchaseYear + selectedEquipment.depreciationYears}</p>
+                                                </div>
+                                                <button onClick={() => setSelectedEquipment(null)} className="text-gray-600 hover:text-white text-lg">×</button>
+                                            </div>
+                                            <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ maxHeight: '220px' }}>
+                                                {/* Grid lines */}
+                                                {[0, 0.25, 0.5, 0.75, 1].map(f => (
+                                                    <g key={f}>
+                                                        <line x1={PAD} x2={W - PAD} y1={yScale(f * selectedEquipment.purchasePrice)} y2={yScale(f * selectedEquipment.purchasePrice)} stroke="#1a1a1a" strokeWidth="1"/>
+                                                        <text x={PAD - 4} y={yScale(f * selectedEquipment.purchasePrice) + 4} fill="#555" fontSize="9" textAnchor="end">€{Math.round(f * selectedEquipment.purchasePrice)}</text>
+                                                    </g>
+                                                ))}
+                                                {/* Year labels */}
+                                                {pts.filter((_, i) => i % Math.ceil(pts.length / 5) === 0 || i === pts.length - 1).map(p => (
+                                                    <text key={p.year} x={xScale(p.year)} y={H - 4} fill="#555" fontSize="9" textAnchor="middle">{p.year}</text>
+                                                ))}
+                                                {/* Depreciation line */}
+                                                <polyline points={polyline} fill="none" stroke="#D4AF37" strokeWidth="2"/>
+                                                {/* Shaded area */}
+                                                <polygon points={`${polyline} ${xScale(pts[pts.length-1].year)},${yScale(0)} ${xScale(pts[0].year)},${yScale(0)}`} fill="#D4AF37" fillOpacity="0.06"/>
+                                                {/* Today marker */}
+                                                <line x1={nowX} x2={nowX} y1={PAD} y2={H - PAD * 0.5} stroke="#ffffff" strokeWidth="1" strokeDasharray="3,3"/>
+                                                <circle cx={nowX} cy={nowY} r="4" fill="#D4AF37" stroke="#000" strokeWidth="1.5"/>
+                                                <text x={nowX + 6} y={nowY - 6} fill="#D4AF37" fontSize="9">€{curVal.toFixed(0)}</text>
+                                                <text x={nowX + 6} y={nowY + 12} fill="#666" fontSize="8">Today</text>
+                                            </svg>
+                                        </div>
+                                    );
+                                })()}
                             </div>
                         </div>
 
