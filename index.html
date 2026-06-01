@@ -1002,6 +1002,7 @@
 
             // ── Equipment ──
             const [selectedEquipment, setSelectedEquipment] = useState(null);
+            const [eqHoverPos, setEqHoverPos] = useState(null);
             const equipmentList = [
                 { id: 1, name: 'iPhone SE (2022)', category: 'Smartphone', purchaseYear: 2022, purchasePrice: 450, depreciationYears: 4 },
                 { id: 2, name: 'Mac mini (2018) 512GB', category: 'Computer', purchaseYear: 2018, purchasePrice: 1500, depreciationYears: 8 },
@@ -1011,16 +1012,21 @@
             const EQ_YEAR = 2026; const EQ_MONTH = 6;
             const getEqCurrentValue = (item) => {
                 const elapsed = (EQ_YEAR - item.purchaseYear) + (EQ_MONTH - 1) / 12;
-                return Math.max(0, item.purchasePrice - (item.purchasePrice / item.depreciationYears) * elapsed);
+                if (elapsed <= 1) return item.purchasePrice;
+                return Math.max(0, item.purchasePrice - (item.purchasePrice / item.depreciationYears) * (elapsed - 1));
             };
             const getEqPoints = (item) => {
-                const endYear = item.purchaseYear + item.depreciationYears;
-                const pts = [];
-                for (let y = item.purchaseYear; y <= endYear; y++) {
-                    const v = Math.max(0, item.purchasePrice - (item.purchasePrice / item.depreciationYears) * (y - item.purchaseYear));
-                    pts.push({ year: y, value: v });
+                const endYear = item.purchaseYear + item.depreciationYears + 1;
+                const pts = [{ year: item.purchaseYear, value: item.purchasePrice }, { year: item.purchaseYear + 1, value: item.purchasePrice }];
+                for (let y = item.purchaseYear + 2; y <= endYear; y++) {
+                    pts.push({ year: y, value: Math.max(0, item.purchasePrice - (item.purchasePrice / item.depreciationYears) * (y - item.purchaseYear - 1)) });
                 }
                 return pts;
+            };
+            const getEqValueAtYear = (item, pts, year) => {
+                if (year <= item.purchaseYear + 1) return item.purchasePrice;
+                const elapsed = year - item.purchaseYear - 1;
+                return Math.max(0, item.purchasePrice - (item.purchasePrice / item.depreciationYears) * elapsed);
             };
             // ── end Equipment ──
 
@@ -1408,11 +1414,25 @@
                                             <div className="flex justify-between items-start mb-4">
                                                 <div>
                                                     <h4 className="text-[#D4AF37] brand-font text-base">{selectedEquipment.name}</h4>
-                                                    <p className="text-gray-500 text-xs">Linear depreciation · {selectedEquipment.purchaseYear}–{selectedEquipment.purchaseYear + selectedEquipment.depreciationYears}</p>
+                                                    <p className="text-gray-500 text-xs">Linear depreciation · {selectedEquipment.purchaseYear}–{selectedEquipment.purchaseYear + selectedEquipment.depreciationYears + 1} · full value in year 1</p>
                                                 </div>
-                                                <button onClick={() => setSelectedEquipment(null)} className="text-gray-600 hover:text-white text-lg">×</button>
+                                                <button onClick={() => { setSelectedEquipment(null); setEqHoverPos(null); }} className="text-gray-600 hover:text-white text-lg">×</button>
                                             </div>
-                                            <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ maxHeight: '220px' }}>
+                                            <svg viewBox={`0 0 ${W} ${H}`} className="w-full cursor-crosshair" style={{ maxHeight: '220px' }}
+                                                onMouseMove={(e) => {
+                                                    const svgEl = e.currentTarget;
+                                                    const pt = svgEl.createSVGPoint();
+                                                    pt.x = e.clientX; pt.y = e.clientY;
+                                                    const svgPt = pt.matrixTransform(svgEl.getScreenCTM().inverse());
+                                                    const clampedX = Math.max(PAD, Math.min(W - PAD, svgPt.x));
+                                                    const fracX = (clampedX - PAD) / (W - PAD * 2);
+                                                    const hYear = pts[0].year + fracX * (pts[pts.length-1].year - pts[0].year);
+                                                    const hVal = getEqValueAtYear(selectedEquipment, pts, hYear);
+                                                    const hY = yScale(hVal);
+                                                    setEqHoverPos({ x: clampedX, y: hY, year: hYear, value: hVal });
+                                                }}
+                                                onMouseLeave={() => setEqHoverPos(null)}
+                                            >
                                                 {/* Grid lines */}
                                                 {[0, 0.25, 0.5, 0.75, 1].map(f => (
                                                     <g key={f}>
@@ -1433,6 +1453,16 @@
                                                 <circle cx={nowX} cy={nowY} r="4" fill="#D4AF37" stroke="#000" strokeWidth="1.5"/>
                                                 <text x={nowX + 6} y={nowY - 6} fill="#D4AF37" fontSize="9">€{curVal.toFixed(0)}</text>
                                                 <text x={nowX + 6} y={nowY + 12} fill="#666" fontSize="8">Today</text>
+                                                {/* Hover crosshair */}
+                                                {eqHoverPos && (
+                                                    <g>
+                                                        <line x1={eqHoverPos.x} x2={eqHoverPos.x} y1={PAD} y2={H - PAD * 0.5} stroke="#ffffff" strokeWidth="1" strokeOpacity="0.3"/>
+                                                        <circle cx={eqHoverPos.x} cy={eqHoverPos.y} r="4" fill="#ffffff" stroke="#D4AF37" strokeWidth="1.5"/>
+                                                        <rect x={eqHoverPos.x > W - 100 ? eqHoverPos.x - 88 : eqHoverPos.x + 8} y={eqHoverPos.y - 22} width="80" height="36" fill="#0a0a0a" stroke="#D4AF37" strokeWidth="0.5" rx="1"/>
+                                                        <text x={eqHoverPos.x > W - 100 ? eqHoverPos.x - 48 : eqHoverPos.x + 48} y={eqHoverPos.y - 8} fill="#D4AF37" fontSize="9" textAnchor="middle">€{Math.round(eqHoverPos.value)}</text>
+                                                        <text x={eqHoverPos.x > W - 100 ? eqHoverPos.x - 48 : eqHoverPos.x + 48} y={eqHoverPos.y + 8} fill="#666" fontSize="8" textAnchor="middle">{eqHoverPos.year.toFixed(1)}</text>
+                                                    </g>
+                                                )}
                                             </svg>
                                         </div>
                                     );
