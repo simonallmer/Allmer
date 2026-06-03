@@ -1019,6 +1019,7 @@
                 { name: 'allmergames.com', url: 'https://allmergames.com' },
                 { name: 'allmerjournals.com', url: 'https://allmerjournals.com' },
                 { name: 'allmersnacks.com', url: 'https://allmersnacks.com' },
+                { name: 'believegame.com', url: 'https://believegame.com' },
                 { name: 'aportrait.org', url: 'https://aportrait.org', interim: true },
                 { name: 'societyreview.org', url: 'https://societyreview.org', interim: true },
             ].map(d => {
@@ -1484,8 +1485,9 @@
 
                         {/* Real Estate */}
                         <div className="border border-[#222] bg-[#0a0a0a]">
-                            <div className="p-4 border-b border-[#222]">
+                            <div className="flex items-center justify-between p-4 border-b border-[#222]">
                                 <h3 className="text-[#D4AF37] brand-font text-lg uppercase tracking-widest">Real Estate</h3>
+                                <button onClick={() => navigate('worldmap')} className="text-[10px] uppercase tracking-widest text-gray-600 hover:text-[#D4AF37] transition-colors border border-[#333] hover:border-[#D4AF37] px-3 py-1">Locations ↗</button>
                             </div>
                             <div className="divide-y divide-[#111]">
                                 {[
