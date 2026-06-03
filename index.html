@@ -1019,7 +1019,13 @@
                 { name: 'allmergames.com', url: 'https://allmergames.com' },
                 { name: 'allmerjournals.com', url: 'https://allmerjournals.com' },
                 { name: 'allmersnacks.com', url: 'https://allmersnacks.com' },
-            ].map(d => ({ ...d, base: d.name.replace('.com',''), letters: d.name.replace('.com','').length }));
+                { name: 'aportrait.org', url: 'https://aportrait.org', interim: true },
+                { name: 'societyreview.org', url: 'https://societyreview.org', interim: true },
+            ].map(d => {
+                const tld = d.name.includes('.com') ? '.com' : d.name.slice(d.name.lastIndexOf('.'));
+                const base = d.name.slice(0, d.name.lastIndexOf('.'));
+                return { ...d, base, letters: base.length, tld };
+            });
             const sortedDomains = [...domains].sort((a, b) =>
                 domainSort === 'alpha' ? a.base.localeCompare(b.base) : a.letters - b.letters
             );
@@ -1502,17 +1508,18 @@
                             <div className="divide-y divide-[#111]">
                                 {sortedDomains.map(d => (
                                     <a key={d.name} href={d.url} target="_blank" rel="noopener noreferrer"
-                                        className="flex items-center justify-between px-4 py-3 hover:bg-[#111] transition-colors group">
+                                        className={`flex items-center justify-between px-4 py-3 hover:bg-[#111] transition-colors group ${d.interim ? 'opacity-50' : ''}`}>
                                         <div className="flex items-center gap-3">
-                                            <span className="text-white font-mono text-sm group-hover:text-[#D4AF37] transition-colors">{d.name}</span>
+                                            <span className={`font-mono text-sm transition-colors ${d.interim ? 'text-gray-500 group-hover:text-gray-400' : 'text-white group-hover:text-[#D4AF37]'}`}>{d.name}</span>
                                             <span className="text-gray-700 text-[10px] font-mono">{d.letters}</span>
                                         </div>
-                                        <svg className="text-gray-700 group-hover:text-[#D4AF37] transition-colors" width="10" height="10" viewBox="0 0 10 10" fill="none">
+                                        <svg className={`transition-colors ${d.interim ? 'text-gray-700 group-hover:text-gray-500' : 'text-gray-700 group-hover:text-[#D4AF37]'}`} width="10" height="10" viewBox="0 0 10 10" fill="none">
                                             <path d="M1 9L9 1M9 1H3M9 1V7" stroke="currentColor" strokeWidth="1.2"/>
                                         </svg>
                                     </a>
                                 ))}
                             </div>
+                            <p className="px-4 py-3 text-[10px] text-gray-700 border-t border-[#111]">The .com domain will be acquired in the future.</p>
                         </div>
 
                     </div>
