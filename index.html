@@ -1012,6 +1012,13 @@
                 { name: 'allmergroup.com', url: 'https://allmergroup.com' },
                 { name: 'lunyra.com', url: 'https://lunyra.com' },
                 { name: 'casinocamino.com', url: 'https://casinocamino.com' },
+                { name: 'sevenwondersgames.com', url: 'https://sevenwondersgames.com' },
+                { name: 'allmercomics.com', url: 'https://allmercomics.com' },
+                { name: 'allmerfilms.com', url: 'https://allmerfilms.com' },
+                { name: 'allmermusic.com', url: 'https://allmermusic.com' },
+                { name: 'allmergames.com', url: 'https://allmergames.com' },
+                { name: 'allmerjournals.com', url: 'https://allmerjournals.com' },
+                { name: 'allmersnacks.com', url: 'https://allmersnacks.com' },
             ].map(d => ({ ...d, base: d.name.replace('.com',''), letters: d.name.replace('.com','').length }));
             const sortedDomains = [...domains].sort((a, b) =>
                 domainSort === 'alpha' ? a.base.localeCompare(b.base) : a.letters - b.letters
@@ -1483,8 +1490,6 @@
                             </div>
                         </div>
 
-                    </div>
-
                         {/* Internet Domains */}
                         <div className="border border-[#222] bg-[#0a0a0a]">
                             <div className="flex items-center justify-between p-4 border-b border-[#222]">
@@ -1509,6 +1514,8 @@
                                 ))}
                             </div>
                         </div>
+
+                    </div>
 
                     {/* Modal */}
                     {showModal && (
