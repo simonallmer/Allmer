@@ -2604,8 +2604,15 @@
                 <div className="flex-1 bg-black min-h-full p-8 pb-20 text-white font-serif relative overflow-hidden">
                     <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/dark-leather.png')] pointer-events-none"></div>
 
-                    <SectionHeader title="Publications" subtitle="Publications" />
-                    <div className="text-center text-gray-400 p-6">Publications area: no documents currently listed. Future public publications will be added.</div>
+                    <SectionHeader title="Publications" subtitle="Strategy & Production" />
+
+                    <div className="max-w-4xl mx-auto mb-4">
+                        <div className="flex items-center gap-4 mb-6">
+                            <div className="h-[1px] flex-1 bg-[#D4AF37]/20"></div>
+                            <h3 className="text-[#D4AF37] brand-font text-base uppercase tracking-[0.25em]">Strategies</h3>
+                            <div className="h-[1px] flex-1 bg-[#D4AF37]/20"></div>
+                        </div>
+                    </div>
 
                     <div className="max-w-4xl mx-auto space-y-4">
                         <div className="flex justify-between items-center mb-2">
@@ -3474,6 +3481,16 @@
                             </div>
                         </div>
                     )}
+
+                    {/* Scripts section */}
+                    <div className="max-w-4xl mx-auto mt-12 mb-4">
+                        <div className="flex items-center gap-4 mb-6">
+                            <div className="h-[1px] flex-1 bg-[#D4AF37]/20"></div>
+                            <h3 className="text-[#D4AF37] brand-font text-base uppercase tracking-[0.25em]">Scripts</h3>
+                            <div className="h-[1px] flex-1 bg-[#D4AF37]/20"></div>
+                        </div>
+                    </div>
+                    <ScriptsVault embedded={true} />
                 </div>
             );
         };
@@ -3775,7 +3792,7 @@
             );
         };
 
-        const ScriptsVault = () => {
+        const ScriptsVault = ({ embedded = false }) => {
             const { useRef, useEffect, useCallback } = React;
 
             const baseData = [
@@ -3926,13 +3943,10 @@
             const fmtLabel = { pdf: 'PDF', docx: 'DOCX', fadein: 'FADEIN' };
             const typeColor = { Comic: '#D4AF37', Film: '#4FC3F7', Game: '#A78BFA' };
 
-            return (
-                <div className="flex-1 bg-black min-h-full p-8 pb-20 text-white font-serif relative overflow-hidden">
-                    <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/dark-leather.png')] pointer-events-none"></div>
-                    <SectionHeader title="Scripts" subtitle="Productions Vault" />
+            const scriptsInner = (
+                <>
                     <input ref={fileInputRef} type="file" accept=".pdf,.docx,.fadein" className="hidden" onChange={handleFileSelected} />
-
-                    <div className="max-w-5xl mx-auto mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="max-w-5xl mx-auto mt-4 grid grid-cols-1 md:grid-cols-3 gap-6">
 
                         {/* ── LEFT: Brand / Series / Product nav ── */}
                         <div className="md:col-span-1 flex flex-col gap-5">
@@ -4088,6 +4102,13 @@
                             )}
                         </div>
                     </div>
+                </>
+            );
+            return embedded ? scriptsInner : (
+                <div className="flex-1 bg-black min-h-full p-8 pb-20 text-white font-serif relative overflow-hidden">
+                    <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/dark-leather.png')] pointer-events-none"></div>
+                    <SectionHeader title="Scripts" subtitle="Productions Vault" />
+                    {scriptsInner}
                 </div>
             );
         };
@@ -4729,13 +4750,12 @@
             { id: 'lexicon', label: 'LEXICON' },
             { id: 'stakeholders', label: 'NETWORK' },
             { id: 'worldmap', label: 'LOCATIONS' },
-            { id: 'publications', label: 'PUBLICATIONS' },
             { id: 'applications', label: 'APPLICATIONS' },
-            { id: 'scripts', label: 'SCRIPTS' },
+            { id: 'publications', label: 'PUBLICATIONS' },
         ];
 
         // Pages hidden in public mode (before PIN)
-        const publicOnlyPages = ['assets', 'stakeholders', 'publications', 'scripts', 'applications'];
+        const publicOnlyPages = ['assets', 'stakeholders', 'publications', 'applications'];
 
         const LoginScreen = ({ onAuthorize }) => {
             const [password, setPassword] = useState('');
@@ -4954,7 +4974,6 @@
                                 {isPrivateMode && activeTab === 'publications' && <PublicationsPillar />}
                                 {isPrivateMode && activeTab === 'knowledge' && <KnowledgePillar />}
                                 {activeTab === 'worldmap' && <WorldMapPillar />}
-                                {isPrivateMode && activeTab === 'scripts' && <ScriptsVault />}
                                 {isPrivateMode && activeTab === 'applications' && <ApplicationsPillar />}
                             </div>
                         </div>
