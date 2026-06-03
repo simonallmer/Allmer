@@ -1152,21 +1152,7 @@
 
                         {/* Real Estate Holdings removed per public version requirements */}
 
-                        {/* Office Location */}
-                        <div className="border border-[#222] bg-[#0a0a0a] p-6">
-                            <h3 className="text-[#D4AF37] brand-font text-lg uppercase tracking-widest mb-4">Office Location</h3>
-                            <div className="flex flex-col md:flex-row gap-6 items-start">
-                                <p className="text-white font-serif text-lg">Kolschitzkygasse 14-18 1040 Vienna, Austria</p>
-                                <a 
-                                    href="https://maps.app.goo.gl/FRvLW6r8Fa4GVb1i6" 
-                                    target="_blank" 
-                                    rel="noopener noreferrer"
-                                    className="inline-block text-[#D4AF37] text-sm border border-[#D4AF37] px-4 py-2 hover:bg-[#D4AF37] hover:text-black transition-colors"
-                                >
-                                    Open in Google Maps
-                                </a>
-                            </div>
-                        </div>
+                        {/* Office Location removed — see Real Estate section below */}
 
                         {/* Revenue Streams */}
                         <div className="border border-[#222] bg-[#0a0a0a]">
@@ -1496,6 +1482,39 @@
                             </div>
                         </div>
 
+                        {/* Real Estate */}
+                        <div className="border border-[#222] bg-[#0a0a0a]">
+                            <div className="p-4 border-b border-[#222]">
+                                <h3 className="text-[#D4AF37] brand-font text-lg uppercase tracking-widest">Real Estate</h3>
+                            </div>
+                            <div className="divide-y divide-[#111]">
+                                {[
+                                    { district: 'Wieden', street: 'Kolschitzkygasse 14–18', city: 'Vienna', country: 'Austria', pricePerM2: 10671, maps: 'https://maps.google.com/?q=Kolschitzkygasse+14-18,+1040+Vienna,+Austria' },
+                                    { district: 'Döbling', street: 'Krottenbachstraße 140', city: 'Vienna', country: 'Austria', pricePerM2: 8955, maps: 'https://maps.google.com/?q=Krottenbachstraße+140,+1190+Vienna,+Austria' },
+                                    { district: 'Wagram', street: 'Hamerlingstraße 5', city: 'Deutsch-Wagram', country: 'Austria', pricePerM2: 5127, maps: 'https://maps.google.com/?q=Hamerlingstraße+5,+Deutsch-Wagram,+Austria' },
+                                ].map(p => (
+                                    <a key={p.district} href={p.maps} target="_blank" rel="noopener noreferrer"
+                                        className="flex items-center justify-between px-4 py-4 hover:bg-[#111] transition-colors group">
+                                        <div className="flex flex-col gap-0.5">
+                                            <span className="text-[10px] text-gray-600 uppercase tracking-[0.2em] font-mono">{p.district}</span>
+                                            <span className="text-white font-mono text-sm group-hover:text-[#D4AF37] transition-colors">{p.street}</span>
+                                            <span className="text-gray-500 text-[11px] font-mono">{p.city}<span className="text-gray-700 mx-1">·</span>{p.country}</span>
+                                        </div>
+                                        <div className="flex items-center gap-4">
+                                            <div className="text-right">
+                                                <p className="text-[9px] text-gray-700 uppercase tracking-widest">per m²</p>
+                                                <p className="text-[#D4AF37] font-mono text-sm">€{p.pricePerM2.toLocaleString('de-AT')}</p>
+                                            </div>
+                                            <svg className="text-gray-700 group-hover:text-[#D4AF37] transition-colors flex-shrink-0" width="10" height="10" viewBox="0 0 10 10" fill="none">
+                                                <path d="M1 9L9 1M9 1H3M9 1V7" stroke="currentColor" strokeWidth="1.2"/>
+                                            </svg>
+                                        </div>
+                                    </a>
+                                ))}
+                            </div>
+                            <p className="px-4 py-2 text-[10px] text-gray-700 border-t border-[#111]">Source: immopreise.at · District averages 2026</p>
+                        </div>
+
                         {/* Internet Domains */}
                         <div className="border border-[#222] bg-[#0a0a0a]">
                             <div className="flex items-center justify-between p-4 border-b border-[#222]">
@@ -1508,7 +1527,7 @@
                             <div className="divide-y divide-[#111]">
                                 {sortedDomains.map(d => (
                                     <a key={d.name} href={d.url} target="_blank" rel="noopener noreferrer"
-                                        className={`flex items-center justify-between px-4 py-3 hover:bg-[#111] transition-colors group ${d.interim ? 'opacity-50' : ''}`}>
+                                        className={`flex items-center justify-between px-4 py-3 hover:bg-[#111] transition-colors group ${d.interim ? 'opacity-70' : ''}`}>
                                         <div className="flex items-center gap-3">
                                             <span className={`font-mono text-sm transition-colors ${d.interim ? 'text-gray-500 group-hover:text-gray-400' : 'text-white group-hover:text-[#D4AF37]'}`}>{d.name}</span>
                                             <span className="text-gray-700 text-[10px] font-mono">{d.letters}</span>
