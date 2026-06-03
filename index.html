@@ -310,7 +310,7 @@
         ];
 
         const gamesData = [
-            { number: 'G031', name: '(Colbu)', series: '', brand: 'Colbu', genre: 'World Builder', platforms: 'Web, App', year: 2028 },
+            { number: 'G031', name: 'Colbu', series: '', brand: 'Colbu', genre: 'World Builder', platforms: 'Web, App', year: 2028 },
             { number: 'G030', name: 'Dangerous', series: '', brand: 'Danger', genre: 'Action-Adventure', platforms: 'Web, App', year: 2028 },
             { number: 'G029', name: 'Lunyra Explorer', series: '', brand: 'Lunyra', genre: 'Open World', platforms: 'Web, App', year: 2028 },
             { number: 'G028', name: '(Detective Noname 2)', series: 'Riddle Novels', brand: 'Detective Noname', genre: 'Riddle', platforms: 'Book, eBook, Web, App', year: 2028 },
@@ -1003,6 +1003,19 @@
             // ── Equipment ──
             const [selectedEquipment, setSelectedEquipment] = useState(null);
             const [eqHoverPos, setEqHoverPos] = useState(null);
+            const [domainSort, setDomainSort] = useState('alpha');
+            const domains = [
+                { name: 'futory.com', url: 'https://futory.com' },
+                { name: 'colbu.com', url: 'https://colbu.com' },
+                { name: 'scaretales.com', url: 'https://scaretales.com' },
+                { name: 'simonallmer.com', url: 'https://simonallmer.com' },
+                { name: 'allmergroup.com', url: 'https://allmergroup.com' },
+                { name: 'lunyra.com', url: 'https://lunyra.com' },
+                { name: 'casinocamino.com', url: 'https://casinocamino.com' },
+            ].map(d => ({ ...d, base: d.name.replace('.com',''), letters: d.name.replace('.com','').length }));
+            const sortedDomains = [...domains].sort((a, b) =>
+                domainSort === 'alpha' ? a.base.localeCompare(b.base) : a.letters - b.letters
+            );
             const equipmentList = [
                 { id: 1, name: 'iPhone SE (2022)', category: 'Smartphone', purchaseYear: 2022, purchasePrice: 450, depreciationYears: 4 },
                 { id: 2, name: 'Mac mini (2018) 512GB', category: 'Computer', purchaseYear: 2018, purchasePrice: 1500, depreciationYears: 8 },
@@ -1471,6 +1484,31 @@
                         </div>
 
                     </div>
+
+                        {/* Internet Domains */}
+                        <div className="border border-[#222] bg-[#0a0a0a]">
+                            <div className="flex items-center justify-between p-4 border-b border-[#222]">
+                                <h3 className="text-[#D4AF37] brand-font text-lg uppercase tracking-widest">Internet Domains</h3>
+                                <div className="flex gap-1">
+                                    <button onClick={() => setDomainSort('alpha')} className={`px-3 py-1 text-[10px] uppercase tracking-widest border transition-all ${domainSort === 'alpha' ? 'border-[#D4AF37] text-[#D4AF37]' : 'border-[#333] text-gray-600 hover:border-[#555]'}`}>A–Z</button>
+                                    <button onClick={() => setDomainSort('length')} className={`px-3 py-1 text-[10px] uppercase tracking-widest border transition-all ${domainSort === 'length' ? 'border-[#D4AF37] text-[#D4AF37]' : 'border-[#333] text-gray-600 hover:border-[#555]'}`}>Length</button>
+                                </div>
+                            </div>
+                            <div className="divide-y divide-[#111]">
+                                {sortedDomains.map(d => (
+                                    <a key={d.name} href={d.url} target="_blank" rel="noopener noreferrer"
+                                        className="flex items-center justify-between px-4 py-3 hover:bg-[#111] transition-colors group">
+                                        <div className="flex items-center gap-3">
+                                            <span className="text-white font-mono text-sm group-hover:text-[#D4AF37] transition-colors">{d.name}</span>
+                                            <span className="text-gray-700 text-[10px] font-mono">{d.letters}</span>
+                                        </div>
+                                        <svg className="text-gray-700 group-hover:text-[#D4AF37] transition-colors" width="10" height="10" viewBox="0 0 10 10" fill="none">
+                                            <path d="M1 9L9 1M9 1H3M9 1V7" stroke="currentColor" strokeWidth="1.2"/>
+                                        </svg>
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
 
                     {/* Modal */}
                     {showModal && (
