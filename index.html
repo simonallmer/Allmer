@@ -4378,6 +4378,348 @@
             );
         };
 
+// ─── SOUND SYSTEM APP ────────────────────────────────────────────────────────
+        const SoundSystemApp = ({ onBack }) => {
+            const SS_CATALOG = [
+              { id:"motown", label:"Motown", keywords:{ general:["Detroit soul","orchestral pop","emotional uplift","radio-ready hooks","handclap rhythm"], technical:["tight rhythm section","call-and-response arrangement","punchy brass section","tambourine texture","close-mic vocal production"], emotional:["aspirational warmth","communal joy","restrained longing","triumphant tenderness"] }, artists:[ { id:"berry_gordy", label:"Berry Gordy", keywords:{ general:["streamlined pop production","commercial sheen","radio-ready hooks","controlled dynamics"], technical:["clean mix architecture","brass section punch","compressed dynamic range","studio-polished arrangement"], emotional:["optimistic precision","confident warmth","aspirational drive"] } }, { id:"hdh", label:"Holland-Dozier-Holland", keywords:{ general:["hook-forward structure","melodic momentum","ascending emotional arc","layered pop craft"], technical:["layered percussion arrangement","melodic bass lines","ascending key changes","call-and-response vocal layering"], emotional:["irresistible longing","joyful tension","bittersweet momentum"] } }, { id:"smokey_robinson", label:"Smokey Robinson", keywords:{ general:["delicate groove","soft orchestral warmth","lyrical tenderness","intimate soul"], technical:["soft string arrangement","subtle rhythmic groove","gentle percussion texture","falsetto-era vocal production"], emotional:["tender vulnerability","aching softness","quiet devotion"] } } ] },
+              { id:"singer_songwriters", label:"Singer-Songwriters", keywords:{ general:["confessional intimacy","acoustic warmth","personal storytelling","organic texture"], technical:["piano or acoustic guitar anchor","natural room sound","minimal overdub production","singer-songwriter simplicity"], emotional:["raw honesty","personal vulnerability","quiet emotional weight"] }, artists:[ { id:"barry_gibb", label:"Barry Gibb", keywords:{ general:["lush orchestration","disco-era grandeur","soaring emotional arc","warm reverb"], technical:["string-heavy arrangement","falsetto vocal production","dramatic build structure","layered harmony production"], emotional:["emotional grandeur","yearning intensity","sweeping romanticism"] } }, { id:"stevie_wonder", label:"Stevie Wonder", keywords:{ general:["synthesizer-forward soul","complex harmonic richness","genre-fluid warmth","layered vocal tapestry"], technical:["clavinet funk rhythm","harmonica accent texture","complex chord voicings","multi-track vocal layering"], emotional:["joyful complexity","spiritual uplift","restless creative energy"] } }, { id:"carole_king", label:"Carole King", keywords:{ general:["intimate piano-led warmth","confessional closeness","natural acoustic texture","organic simplicity"], technical:["piano anchor production","natural room sound","minimal arrangement","close-mic intimacy"], emotional:["confessional vulnerability","domestic warmth","honest emotional weight"] } }, { id:"billy_joel", label:"Billy Joel", keywords:{ general:["piano rock architecture","anthemic dynamics","storytelling drive","working-class honesty"], technical:["piano-driven arrangement","anthemic dynamic range","orchestral pop flourishes","live-feel production"], emotional:["working-class emotional directness","defiant pride","nostalgic longing"] } }, { id:"diane_warren", label:"Diane Warren", keywords:{ general:["power ballad construction","cinematic emotional build","stadium-scale chorus","sweeping orchestration"], technical:["layered backing vocal arrangement","cinematic string build","emotional peak engineering","compressed anthemic mix"], emotional:["overwhelming emotional peak","desperate longing","cathartic release","stadium-scale feeling"] } } ] },
+              { id:"theatrical", label:"Theatrical / Cinematic", keywords:{ general:["cinematic sweep","theatrical grandeur","melodic craft","dramatic atmosphere"], technical:["orchestral arrangement","chamber intimacy","jazz-inflected harmonic language","cinematic scoring approach"], emotional:["dramatic weight","wistful nostalgia","cinematic longing"] }, artists:[ { id:"irving_berlin", label:"Irving Berlin", keywords:{ general:["Tin Pan Alley craft","bright brass","classic American vernacular","vaudeville rhythm"], technical:["clean melodic clarity","brass-forward arrangement","vaudeville rhythmic feel","simple harmonic structure"], emotional:["patriotic grandeur","populist joy","nostalgic American warmth"] } }, { id:"bergman_school", label:"Bergman School", keywords:{ general:["jazz-inflected orchestration","French New Wave atmosphere","winding melodic phrase","lush harmonic language"], technical:["chamber orchestra texture","jazz harmony voicing","film-score melodic construction","intimate microphone placement"], emotional:["melancholic sweep","intellectual longing","bittersweet sophistication"] } } ] },
+              { id:"chameleon", label:"Chameleon Artists", chameleon:true, keywords:{ general:["genre-fluid production","era-spanning sonic identity","bold aesthetic reinvention"], technical:["innovative studio layering","genre-adaptive production approach","cutting-edge sound design"], emotional:["restless reinvention","provocative energy","bold artistic statement"] }, artists:[ { id:"michael_jackson", label:"Michael Jackson", chameleon:true, keywords:{ general:["precision studio production","cinematic pop scope","funk-pop tension","innovative sound design"], technical:["punchy drum machine texture","vocal percussion layer","precision studio layering","multi-genre production blend"], emotional:["electric tension","visceral energy","cinematic emotional scope"] } }, { id:"prince", label:"Prince", chameleon:true, keywords:{ general:["one-man-band density","Minneapolis funk","eclectic genre collision","psychedelic groove"], technical:["psychedelic guitar over drum machine","explicit rhythm bed","falsetto-to-baritone vocal range","dense multi-instrument layering"], emotional:["raw sexuality","ecstatic energy","psychedelic abandon"] } }, { id:"madonna", label:"Madonna", chameleon:true, keywords:{ general:["sleek synth-pop production","dancefloor mechanics","provocative sonic simplicity","era-defining pop craft"], technical:["synth-forward arrangement","dancefloor rhythm engineering","stripped production clarity","hook-driven pop architecture"], emotional:["provocative confidence","irresistible momentum","cool emotional distance"] } } ] },
+              { id:"producers", label:"Producers / Architects", keywords:{ general:["producer-forward sound design","rhythmic innovation","sonic architecture","genre-defining production"], technical:["studio-as-instrument approach","rhythmic complexity","layered production texture"], emotional:["cool precision","hypnotic groove","controlled intensity"] }, artists:[ { id:"r_kelly", label:"R. Kelly", keywords:{ general:["Chicago R&B warmth","gospel undertow","slow jam atmosphere","multi-part suite construction"], technical:["call-and-response choir texture","melodic ad-lib layering","gospel-inflected arrangement","warm low-frequency production"], emotional:["sensual devotion","spiritual longing","slow-burn intensity"] } }, { id:"timbaland", label:"Timbaland", keywords:{ general:["percussive minimalism","Eastern-influenced melody","asymmetric rhythmic feel","gritty urban atmosphere"], technical:["asymmetric rhythm patterns","hi-hat complexity","negative space as texture","Eastern-inflected melodic layer"], emotional:["cool confidence","hypnotic tension","aggressive restraint"] } }, { id:"justin_timberlake", label:"Justin Timberlake", keywords:{ general:["neo-soul pop precision","funk-influenced groove","crisp modern production","falsetto-forward sound"], technical:["crisp snare texture","layered vocal production","funk-influenced groove pattern","precision pop arrangement"], emotional:["smooth confidence","playful sensuality","effortless cool"] } }, { id:"william_orbit", label:"William Orbit", keywords:{ general:["electronic ambience","deconstructed pop","intimate digital warmth","ethereal atmosphere"], technical:["tape loop texture","ethereal vocal processing","stripped synthetic warmth","intimate digital production"], emotional:["quiet melancholy","digital dreamscape","tender fragility"] } } ] }
+            ];
+            const SS_GENRES = ["Ballad","R&B","Rock","Soul","Funk","Musical","Pop"];
+            const SS_DECADES = ["1920s","1930s","1940s","1950s","1960s","1970s","1980s","1990s","2000s","2010s","2020s"];
+            const GENRE_ORIGIN = { "Ballad":1920, "R&B":1940, "Rock":1950, "Soul":1950, "Funk":1960, "Musical":1920, "Pop":1950 };
+            const GENRE_WORDS = {
+              Ballad:{ general:["slow-build emotional arc","dramatic restraint","intimate vocal focus","sweeping melodic resolution"], technical:["sparse arrangement","swelling orchestral climax","legato melodic phrasing","dynamic range emphasis"], emotional:["aching vulnerability","quiet devastation","restrained heartbreak","tender longing"] },
+              "R&B":{ general:["smooth groove","soulful vocal runs","urban contemporary feel","warm low-end texture"], technical:["syncopated rhythm pattern","layered vocal harmony","warm bass presence","groove-locked production"], emotional:["sensual intimacy","smooth longing","effortless desire"] },
+              Rock:{ general:["guitar-driven energy","raw sonic power","driving rhythm","amplified atmosphere"], technical:["distorted guitar texture","punchy drum kit","overdriven amplifier warmth","band-locked groove"], emotional:["defiant energy","cathartic release","raw urgency"] },
+              Soul:{ general:["gospel-rooted warmth","emotional authenticity","deep feeling","soulful vocal delivery"], technical:["Hammond organ texture","call-and-response arrangement","live-feel recording","gospel-inflected vocal production"], emotional:["deep spiritual longing","communal warmth","raw emotional truth"] },
+              Funk:{ general:["syncopated groove","rhythmic complexity","danceable tension","tight ensemble feel"], technical:["slap bass texture","tight horn stabs","off-beat rhythmic emphasis","interlocking groove architecture"], emotional:["irresistible physical momentum","joyful urgency","hypnotic groove pull"] },
+              Musical:{ general:["theatrical drama","narrative sweep","show-stopping emotional climax","expressive character voice"], technical:["pit orchestra arrangement","dramatic key modulation","show tune harmonic language","theatrical dynamic arc"], emotional:["theatrical catharsis","narrative emotional weight","expressive vulnerability"] },
+              Pop:{ general:["hook-driven accessibility","radio-ready polish","bright contemporary sound","instant melodic recall"], technical:["compressed pop mix","hook-forward arrangement","layered production sheen","four-on-the-floor rhythm anchor"], emotional:["euphoric accessibility","effortless uplift","breezy confidence"] }
+            };
+
+            const [ssGenres, setSsGenres] = useState({});
+            const [ssDecades, setSsDecades] = useState([]);
+            const [ssArtists, setSsArtists] = useState([]);
+            const [ssBlend, setSsBlend] = useState('blended');
+            const [ssModes, setSsModes] = useState({ general:true, technical:true, emotional:true });
+            const [ssOutput, setSsOutput] = useState(null);
+            const [ssError, setSsError] = useState('');
+            const [ssCopied, setSsCopied] = useState({});
+
+            const genreTotal = () => Object.values(ssGenres).reduce((a,b)=>a+b,0);
+
+            const toggleGenre = (g) => {
+                const cur = ssGenres[g] || 0;
+                const total = genreTotal();
+                let next = { ...ssGenres };
+                if (cur === 0) { if (total < 3) next[g] = 1; }
+                else if (cur === 1) { if (total < 3) next[g] = 2; else next[g] = 0; }
+                else { next[g] = 0; }
+                setSsGenres(next);
+            };
+
+            const toggleDecade = (d) => {
+                setSsDecades(prev => {
+                    if (prev.includes(d)) return prev.filter(x=>x!==d);
+                    if (prev.length < 2) return [...prev, d];
+                    return [...prev.slice(1), d];
+                });
+            };
+
+            const getEntryById = (id) => {
+                if (id.startsWith('c:')) return SS_CATALOG.find(c=>c.id===id.slice(2))||null;
+                for (const cont of SS_CATALOG) { const a=cont.artists.find(a=>a.id===id); if(a) return a; }
+                return null;
+            };
+
+            const toggleArtist = (id) => {
+                setSsArtists(prev => {
+                    const idx = prev.indexOf(id);
+                    if (idx >= 0) return prev.filter(x=>x!==id);
+                    if (prev.length < 2) return [...prev, id];
+                    return [prev[0], id];
+                });
+            };
+
+            const toggleMode = (m) => setSsModes(prev=>({...prev,[m]:!prev[m]}));
+
+            const genreKwForType = (type) => {
+                const out = [];
+                Object.entries(ssGenres).forEach(([g,w])=>{ if(!w) return; const words=(GENRE_WORDS[g]||{})[type]||[]; const count=w===2?3:2; for(let i=0;i<count;i++){ if(words[i]) out.push(words[i]); } });
+                return out;
+            };
+
+            const buildArtistKw = (ids, type) => {
+                if (ids.length === 0) return [];
+                if (ids.length === 1) { const e=getEntryById(ids[0]); return e?(e.keywords[type]||[]): []; }
+                const a=getEntryById(ids[0]), b=getEntryById(ids[1]);
+                if (!a||!b) return (a||b)?.keywords[type]||[];
+                if (ssBlend==='blended') return [...new Set([...(a.keywords[type]||[]),...(b.keywords[type]||[])])].slice(0,6);
+                if (ssBlend==='combined') return [...(a.keywords[type]||[]).slice(0,3),...(b.keywords[type]||[]).slice(0,3)];
+                return (a.keywords[type]||[]).slice(0,5);
+            };
+
+            const decadePhrase = () => {
+                if (ssDecades.length===0) return null;
+                if (ssDecades.length===1) return `${ssDecades[0]} production atmosphere`;
+                return `rooted in ${ssDecades[0]} with ${ssDecades[1]} production values`;
+            };
+
+            const buildPrompt = (type) => {
+                const gKw = genreKwForType(type);
+                const aKw = buildArtistKw(ssArtists, type);
+                const dec = decadePhrase();
+                let parts = [...new Set([...gKw,...aKw])].slice(0,12);
+                if (dec) parts = [dec, ...parts];
+                return parts.join(', ');
+            };
+
+            const isSpeculative = () => {
+                if (ssDecades.length===0) return false;
+                const earliest = Math.min(...ssDecades.map(d=>parseInt(d)));
+                return Object.keys(ssGenres).filter(g=>(ssGenres[g]||0)>0).some(g=>GENRE_ORIGIN[g]>earliest);
+            };
+
+            const generate = () => {
+                if (genreTotal()===0 && ssArtists.length===0) { setSsError('Select at least one genre or artist before generating.'); return; }
+                if (!ssModes.general && !ssModes.technical && !ssModes.emotional) { setSsError('Activate at least one output mode.'); return; }
+                setSsError('');
+                const spec = isSpeculative();
+                const out = {};
+                ['general','technical','emotional'].forEach(t => { if(ssModes[t]) out[t]=buildPrompt(t); });
+                setSsOutput({ prompts: out, speculative: spec });
+            };
+
+            const resetAll = () => { setSsGenres({}); setSsDecades([]); setSsArtists([]); setSsBlend('blended'); setSsModes({general:true,technical:true,emotional:true}); setSsOutput(null); setSsError(''); };
+
+            const copyPrompt = (type, text) => {
+                navigator.clipboard.writeText(text.replace(/\[Speculative.*?\]/,'').trim()).then(()=>{
+                    setSsCopied(prev=>({...prev,[type]:true}));
+                    setTimeout(()=>setSsCopied(prev=>({...prev,[type]:false})),1800);
+                });
+            };
+
+            const hasChameleon = ssArtists.some(id=>{ const e=getEntryById(id); return e&&e.chameleon; });
+
+            return (
+                <div className="max-w-3xl mx-auto px-4 py-6">
+                    {/* Back button */}
+                    <button onClick={onBack} className="flex items-center gap-2 text-gray-500 hover:text-[#D4AF37] transition-colors mb-8 text-[10px] uppercase tracking-[0.2em]">
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7L9 12" stroke="currentColor" strokeWidth="1.2"/></svg>
+                        Applications
+                    </button>
+
+                    {/* Header */}
+                    <div className="border-b border-[#222] pb-6 mb-8">
+                        <p className="text-[9px] text-gray-600 uppercase tracking-[0.2em] mb-1">Allmer Music · Simon Allmer Entertainment</p>
+                        <h1 className="text-[#D4AF37] brand-font text-xl uppercase tracking-[0.12em] font-light">Sound System</h1>
+                        <p className="text-[11px] text-gray-600 mt-1 tracking-[0.04em]">Suno prompt generator — production DNA only. No names in output. No structure, no BPM, no key.</p>
+                    </div>
+
+                    {/* GENRE */}
+                    <div className="mb-8">
+                        <div className="text-[10px] text-gray-600 uppercase tracking-[0.2em] mb-3 pb-2 border-b border-[#1a1a1a] flex items-center gap-2">
+                            Genre {genreTotal()>0 && <span className="text-[#D4AF37]">({genreTotal()}/3)</span>}
+                        </div>
+                        <div className="flex flex-wrap gap-2 mb-2">
+                            {SS_GENRES.map(g => {
+                                const w = ssGenres[g]||0;
+                                return (
+                                    <button key={g} onClick={()=>toggleGenre(g)}
+                                        className={`px-3 py-1.5 border text-[11px] tracking-[0.08em] transition-all duration-150 rounded-sm ${
+                                            w===2 ? 'border-[#D4AF37] bg-[#D4AF37] text-black font-semibold' :
+                                            w===1 ? 'border-[#D4AF37] text-[#D4AF37] bg-[rgba(212,175,55,0.06)]' :
+                                            'border-[#2a2a2a] text-gray-600 hover:border-[#555] hover:text-gray-300'
+                                        }`}>
+                                        {g}{w>0 && <span className="ml-1 text-[9px] opacity-80">{'×'.repeat(w)}</span>}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                        <p className="text-[10px] text-gray-700">Click once for standard · twice for dominant · max 3 clicks total</p>
+                    </div>
+
+                    {/* DECADE */}
+                    <div className="mb-8">
+                        <div className="text-[10px] text-gray-600 uppercase tracking-[0.2em] mb-3 pb-2 border-b border-[#1a1a1a]">Decade</div>
+                        <div className="flex flex-wrap gap-1.5 mb-2">
+                            {SS_DECADES.map(d => (
+                                <button key={d} onClick={()=>toggleDecade(d)}
+                                    className={`px-3 py-1 border text-[11px] tracking-[0.06em] transition-all duration-150 rounded-sm ${
+                                        ssDecades.includes(d) ? 'border-[#D4AF37] text-[#D4AF37] bg-[rgba(212,175,55,0.06)]' : 'border-[#2a2a2a] text-gray-600 hover:border-[#555] hover:text-gray-300'
+                                    }`}>
+                                    {d}
+                                </button>
+                            ))}
+                        </div>
+                        <p className="text-[10px] text-gray-700">Select up to two decades</p>
+                    </div>
+
+                    {/* ARTISTS */}
+                    <div className="mb-8">
+                        <div className="text-[10px] text-gray-600 uppercase tracking-[0.2em] mb-3 pb-2 border-b border-[#1a1a1a]">Artists &amp; Containers</div>
+                        <div className="flex flex-col gap-3">
+                            {SS_CATALOG.map(container => {
+                                const cid = 'c:'+container.id;
+                                const cSel = ssArtists.includes(cid);
+                                return (
+                                    <div key={container.id} className="border border-[#1e1e1e] rounded-sm overflow-hidden">
+                                        <div className="flex items-center justify-between px-3 py-2 bg-[#111] border-b border-[#1e1e1e]">
+                                            <span className="text-[10px] text-gray-600 uppercase tracking-[0.16em]">{container.label}</span>
+                                            <button onClick={()=>toggleArtist(cid)}
+                                                className={`px-2.5 py-0.5 border text-[10px] tracking-[0.08em] transition-all duration-150 rounded-sm ${
+                                                    cSel ? 'border-[#D4AF37] text-[#D4AF37] bg-[rgba(212,175,55,0.06)]' : 'border-[#2a2a2a] text-gray-700 hover:border-[#555] hover:text-gray-400'
+                                                }`}>
+                                                {cSel ? 'Selected' : 'Use Container'}
+                                            </button>
+                                        </div>
+                                        <div className="flex flex-wrap gap-1.5 p-2.5 bg-[#0d0d0d]">
+                                            {container.artists.map(artist => {
+                                                const aSel = ssArtists.includes(artist.id);
+                                                return (
+                                                    <button key={artist.id} onClick={()=>toggleArtist(artist.id)}
+                                                        className={`px-2.5 py-1 border text-[11px] transition-all duration-150 rounded-sm ${
+                                                            aSel ? 'border-[#D4AF37] text-[#D4AF37] bg-[rgba(212,175,55,0.06)]' : 'border-[#222] text-gray-600 hover:border-[#555] hover:text-gray-300'
+                                                        }`}>
+                                                        {artist.label}{artist.chameleon && <span className="ml-1 text-[#D4AF37] text-[9px]">✦</span>}
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+                                        {container.chameleon && hasChameleon && (
+                                            <p className="text-[10px] text-[#D4AF37] italic px-3 pb-2 bg-[#0d0d0d]">✦ Genre selection strongly shapes output for chameleon artists</p>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        {/* Blend mode */}
+                        {ssArtists.length === 2 && (
+                            <div className="mt-3 p-3 border border-[rgba(212,175,55,0.2)] bg-[rgba(212,175,55,0.03)] rounded-sm">
+                                <p className="text-[10px] text-gray-600 uppercase tracking-[0.1em] mb-2">Two artists selected — output blend mode</p>
+                                <div className="flex flex-wrap gap-1.5">
+                                    {['blended','combined','dominant'].map(b => (
+                                        <button key={b} onClick={()=>setSsBlend(b)}
+                                            className={`px-3 py-1 border text-[10px] tracking-[0.06em] transition-all duration-150 rounded-sm ${
+                                                ssBlend===b ? 'border-[#D4AF37] text-[#D4AF37] bg-[rgba(212,175,55,0.06)]' : 'border-[#2a2a2a] text-gray-600 hover:border-[#555] hover:text-gray-400'
+                                            }`}>
+                                            {b==='dominant' ? 'Dominant only' : b.charAt(0).toUpperCase()+b.slice(1)}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Artist status */}
+                        {ssArtists.length > 0 && (
+                            <p className="text-[11px] text-gray-600 mt-2">
+                                Selected: {ssArtists.map(id=>{ const e=getEntryById(id); return <span key={id} className="text-[#D4AF37]">{e?e.label:id}</span>; }).reduce((a,b)=>[a,' + ',b])}
+                            </p>
+                        )}
+                    </div>
+
+                    {/* OUTPUT MODES */}
+                    <div className="mb-8">
+                        <div className="text-[10px] text-gray-600 uppercase tracking-[0.2em] mb-3 pb-2 border-b border-[#1a1a1a]">Output Mode</div>
+                        <div className="flex flex-wrap gap-2">
+                            {['general','technical','emotional'].map(m => (
+                                <button key={m} onClick={()=>toggleMode(m)}
+                                    className={`px-5 py-2 border text-[11px] uppercase tracking-[0.12em] transition-all duration-150 rounded-sm ${
+                                        ssModes[m] ? 'border-[#D4AF37] text-[#D4AF37] bg-[rgba(212,175,55,0.08)]' : 'border-[#2a2a2a] text-gray-600 hover:border-[#555] hover:text-gray-400'
+                                    }`}>
+                                    {m}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* GENERATE */}
+                    <div className="mb-8">
+                        <div className="flex gap-2">
+                            <button onClick={generate} className="flex-1 py-3.5 bg-[#D4AF37] text-black text-[12px] font-bold uppercase tracking-[0.2em] transition-all hover:bg-[#e8c96e] rounded-sm">
+                                Generate Prompt
+                            </button>
+                            <button onClick={resetAll} className="px-5 py-3.5 border border-[#2a2a2a] text-gray-600 text-[11px] uppercase tracking-[0.14em] hover:border-[#555] hover:text-gray-400 transition-all rounded-sm whitespace-nowrap">
+                                Reset
+                            </button>
+                        </div>
+                        {ssError && <p className="text-[11px] text-red-500 mt-2">{ssError}</p>}
+                    </div>
+
+                    {/* DIVIDER */}
+                    {ssOutput && <div className="border-t border-[#1a1a1a] mb-8"></div>}
+
+                    {/* OUTPUT */}
+                    {ssOutput && (
+                        <div className="flex flex-col gap-5">
+                            {['general','technical','emotional'].filter(t=>ssOutput.prompts[t]).map(t => (
+                                <div key={t} className="border border-[#1e1e1e] rounded-sm overflow-hidden">
+                                    <div className="flex items-center justify-between px-3 py-2 bg-[#111] border-b border-[#1e1e1e]">
+                                        <span className="text-[10px] text-[#D4AF37] uppercase tracking-[0.18em]">{t}</span>
+                                        <button onClick={()=>copyPrompt(t, ssOutput.prompts[t])}
+                                            className={`px-3 py-0.5 border text-[10px] tracking-[0.08em] transition-all rounded-sm ${
+                                                ssCopied[t] ? 'border-green-600 text-green-500' : 'border-[#2a2a2a] text-gray-600 hover:border-[#D4AF37] hover:text-[#D4AF37]'
+                                            }`}>
+                                            {ssCopied[t] ? 'Copied' : 'Copy'}
+                                        </button>
+                                    </div>
+                                    <div className="p-4 bg-[#0d0d0d] text-[13px] text-gray-300 leading-relaxed min-h-[60px]">
+                                        {ssOutput.prompts[t]}
+                                        {ssOutput.speculative && <span className="block mt-2 text-[10px] text-[#D4AF37] italic">[Speculative construct — anachronistic by design]</span>}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+// ─── APPLICATIONS PILLAR ─────────────────────────────────────────────────────
+        const ApplicationsPillar = () => {
+            const [activeApp, setActiveApp] = useState(null);
+
+            const apps = [
+                { id: 'sound-system', name: 'Sound System', subtitle: 'Suno prompt generator', description: 'Production DNA for AI-assisted music generation. Select genre, decade, and artist references to build a style prompt.' }
+            ];
+
+            if (activeApp === 'sound-system') {
+                return <SoundSystemApp onBack={() => setActiveApp(null)} />;
+            }
+
+            return (
+                <div className="max-w-3xl mx-auto px-4 py-8">
+                    <div className="border-b border-[#222] pb-6 mb-8">
+                        <p className="text-[9px] text-gray-600 uppercase tracking-[0.2em] mb-1">Internal Tools</p>
+                        <h2 className="text-[#D4AF37] brand-font text-xl uppercase tracking-[0.12em] font-light">Applications</h2>
+                        <p className="text-[11px] text-gray-600 mt-1 tracking-[0.04em]">Software developed in-house at Allmer. Private access only.</p>
+                    </div>
+
+                    <div className="flex flex-col gap-3">
+                        {apps.map(app => (
+                            <button key={app.id} onClick={() => setActiveApp(app.id)}
+                                className="w-full text-left border border-[#222] hover:border-[#D4AF37] bg-[#0a0a0a] hover:bg-[#111] transition-all duration-200 p-5 group">
+                                <div className="flex items-start justify-between">
+                                    <div>
+                                        <p className="text-[#D4AF37] brand-font text-base uppercase tracking-[0.1em] mb-1 group-hover:text-[#e8c96e] transition-colors">{app.name}</p>
+                                        <p className="text-[10px] text-gray-600 uppercase tracking-[0.15em] mb-2">{app.subtitle}</p>
+                                        <p className="text-[11px] text-gray-500">{app.description}</p>
+                                    </div>
+                                    <svg className="text-gray-700 group-hover:text-[#D4AF37] transition-colors mt-1 flex-shrink-0 ml-4" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                        <path d="M5 2L10 7L5 12" stroke="currentColor" strokeWidth="1.2"/>
+                                    </svg>
+                                </div>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            );
+        };
+
 // All menu items (visible only after PIN)
         const menuItems = [
             { id: 'news', label: 'NEWS' },
@@ -4388,11 +4730,12 @@
             { id: 'stakeholders', label: 'NETWORK' },
             { id: 'worldmap', label: 'LOCATIONS' },
             { id: 'publications', label: 'PUBLICATIONS' },
+            { id: 'applications', label: 'APPLICATIONS' },
             { id: 'scripts', label: 'SCRIPTS' },
         ];
 
         // Pages hidden in public mode (before PIN)
-        const publicOnlyPages = ['assets', 'stakeholders', 'publications', 'scripts'];
+        const publicOnlyPages = ['assets', 'stakeholders', 'publications', 'scripts', 'applications'];
 
         const LoginScreen = ({ onAuthorize }) => {
             const [password, setPassword] = useState('');
@@ -4612,6 +4955,7 @@
                                 {isPrivateMode && activeTab === 'knowledge' && <KnowledgePillar />}
                                 {activeTab === 'worldmap' && <WorldMapPillar />}
                                 {isPrivateMode && activeTab === 'scripts' && <ScriptsVault />}
+                                {isPrivateMode && activeTab === 'applications' && <ApplicationsPillar />}
                             </div>
                         </div>
 
