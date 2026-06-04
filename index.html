@@ -3572,8 +3572,10 @@
             const { useRef, useEffect } = React;
             const [activeCity, setActiveCity] = useState('Vienna');
             const [mapCoords, setMapCoords] = useState({ lat: '48.1876', lng: '16.3704' });
+            const [visiblePins, setVisiblePins] = useState({ offices: true, events: true, partners: true });
             const mapRef = useRef(null);
             const mapInstanceRef = useRef(null);
+            const layersRef = useRef({ offices: null, events: null, partners: null });
 
             const continentsData = [
                 {
@@ -3705,12 +3707,16 @@
 
                 L.control.zoom({ position: 'bottomright' }).addTo(map);
 
+                const officeLayer = L.layerGroup();
                 mapPins.offices.forEach(loc => {
                     L.marker([loc.lat, loc.lng], { icon: createDiamondIcon('#D4AF37') })
-                        .addTo(map)
-                        .bindPopup(popupHtml('Office', '#D4AF37', loc.name, loc.address), { closeButton: false, maxWidth: 220 });
+                        .bindPopup(popupHtml('Office', '#D4AF37', loc.name, loc.address), { closeButton: false, maxWidth: 220 })
+                        .addTo(officeLayer);
                 });
+                officeLayer.addTo(map);
+                layersRef.current.offices = officeLayer;
 
+                const eventLayer = L.layerGroup();
                 mapPins.events.forEach(loc => {
                     const extra = `
                         <div style="margin-top:7px;padding-top:7px;border-top:1px solid #222;">
@@ -3719,10 +3725,13 @@
                             <a href="${loc.eventUrl}" target="_blank" rel="noopener noreferrer" style="color:#4FC3F7;font-family:'Courier New',monospace;font-size:9px;text-decoration:underline;opacity:0.8;">${loc.eventUrl.replace('https://','')} ↗</a>
                         </div>`;
                     L.marker([loc.lat, loc.lng], { icon: createDiamondIcon('#4FC3F7') })
-                        .addTo(map)
-                        .bindPopup(popupHtml('Event Venue', '#4FC3F7', loc.name, loc.address, extra), { closeButton: false, maxWidth: 260 });
+                        .bindPopup(popupHtml('Event Venue', '#4FC3F7', loc.name, loc.address, extra), { closeButton: false, maxWidth: 260 })
+                        .addTo(eventLayer);
                 });
+                eventLayer.addTo(map);
+                layersRef.current.events = eventLayer;
 
+                const partnerLayer = L.layerGroup();
                 mapPins.partners.forEach(loc => {
                     const extra = `
                         <div style="margin-top:7px;padding-top:7px;border-top:1px solid #222;">
@@ -3730,9 +3739,11 @@
                             ${loc.url ? `<a href="${loc.url}" target="_blank" rel="noopener noreferrer" style="color:#EF5350;font-family:'Courier New',monospace;font-size:9px;text-decoration:underline;opacity:0.8;">${loc.url.replace('https://','').replace('http://','').replace(/\/$/,'')} ↗</a>` : ''}
                         </div>`;
                     L.marker([loc.lat, loc.lng], { icon: createDiamondIcon('#EF5350') })
-                        .addTo(map)
-                        .bindPopup(popupHtml('Partner', '#EF5350', loc.name, loc.address, extra), { closeButton: false, maxWidth: 260 });
+                        .bindPopup(popupHtml('Partner', '#EF5350', loc.name, loc.address, extra), { closeButton: false, maxWidth: 260 })
+                        .addTo(partnerLayer);
                 });
+                partnerLayer.addTo(map);
+                layersRef.current.partners = partnerLayer;
 
                 map.on('mousemove', (e) => {
                     setMapCoords({
@@ -3742,6 +3753,8 @@
                 });
 
                 mapInstanceRef.current = map;
+                // store map ref so visibility effect can use it
+                mapRef._map = map;
 
                 // Invalidate size when content panel resizes (sidebar open/close)
                 const ro = new ResizeObserver(() => {
@@ -3757,6 +3770,19 @@
                     }
                 };
             }, []);
+
+            useEffect(() => {
+                const map = mapInstanceRef.current;
+                if (!map) return;
+                const layers = layersRef.current;
+                Object.keys(visiblePins).forEach(key => {
+                    if (!layers[key]) return;
+                    if (visiblePins[key]) { if (!map.hasLayer(layers[key])) layers[key].addTo(map); }
+                    else { if (map.hasLayer(layers[key])) map.removeLayer(layers[key]); }
+                });
+            }, [visiblePins]);
+
+            const togglePin = (key) => setVisiblePins(prev => ({ ...prev, [key]: !prev[key] }));
 
             const flyToCity = (cityName) => {
                 const coords = cityCoords[cityName];
@@ -3807,18 +3833,22 @@
                             {/* Legend + status footer */}
                             <div className="flex items-center justify-between px-4 py-2 border-t border-[#D4AF37]/20 bg-[#050505]">
                                 <div className="flex items-center gap-6">
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-2.5 h-2.5 rotate-45 bg-[#D4AF37]" style={{boxShadow:'0 0 6px #D4AF37'}}></div>
-                                        <span className="text-[9px] font-mono uppercase tracking-widest text-gray-500">Office</span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-2.5 h-2.5 rotate-45 bg-[#4FC3F7]" style={{boxShadow:'0 0 6px #4FC3F7'}}></div>
-                                        <span className="text-[9px] font-mono uppercase tracking-widest text-gray-500">Event Venue</span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-2.5 h-2.5 rotate-45 bg-[#EF5350]" style={{boxShadow:'0 0 6px #EF5350'}}></div>
-                                        <span className="text-[9px] font-mono uppercase tracking-widest text-gray-500">Partner</span>
-                                    </div>
+                                    {[
+                                        { key: 'offices', label: 'Office', color: '#D4AF37' },
+                                        { key: 'events', label: 'Event Venue', color: '#4FC3F7' },
+                                        { key: 'partners', label: 'Partner', color: '#EF5350' },
+                                    ].map(({ key, label, color }) => {
+                                        const on = visiblePins[key];
+                                        return (
+                                            <button key={key} onClick={() => togglePin(key)}
+                                                className="flex items-center gap-2 cursor-pointer select-none transition-opacity hover:opacity-80"
+                                                style={{ opacity: on ? 1 : 0.4 }}>
+                                                <div className="w-2.5 h-2.5 rotate-45 transition-all"
+                                                    style={{ background: on ? color : '#333', boxShadow: on ? `0 0 6px ${color}` : 'none' }}></div>
+                                                <span className="text-[9px] font-mono uppercase tracking-widest" style={{ color: on ? '#9ca3af' : '#4b5563' }}>{label}</span>
+                                            </button>
+                                        );
+                                    })}
                                 </div>
                                 <span className="text-[9px] font-mono text-gray-700">© OpenStreetMap · CARTO</span>
                             </div>
