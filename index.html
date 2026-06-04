@@ -913,7 +913,7 @@
             const [city, setCity] = useState('Vienna');
             const [transactions, setTransactions] = useState([
                 { id: 1, date: '2026.03.15', description: 'Various Game Sales - Paradice am See, Vienna, Austria - Various Customers', studio: 'games', event: 'Paradice am See', type: 'oneoff', amount: 30.00, transactionType: 'income' },
-                { id: 2, date: '2026.03.21', description: 'Arcade Subscription (Yearly) - Austria - Customer 000000006', studio: 'games', event: '', type: 'recurring', amount: 5.00, transactionType: 'income', recurringPeriod: 'yearly', recurringDay: 21 },
+                { id: 2, date: '2026.03.21', description: 'Arcade Subscription (Yearly) - Austria - Customer 000000006', studio: 'games', event: '', type: 'recurring', amount: 6.00, transactionType: 'income', recurringPeriod: 'yearly', recurringDay: 21 },
                 { id: 3, date: '2026.03.22', description: 'Arcade Subscription (Monthly) - Vienna, Austria - Customer 000000003', studio: 'games', event: '', type: 'recurring', amount: 1.00, transactionType: 'income', recurringPeriod: 'monthly', recurringDay: 22 },
                 { id: 9, date: '2026.04.22', description: 'Arcade Subscription (Monthly) - Vienna, Austria - Customer 000000003', studio: 'games', event: '', type: 'recurring', amount: 1.00, transactionType: 'income', recurringPeriod: 'monthly', recurringDay: 22 },
                 { id: 10, date: '2026.05.22', description: 'Arcade Subscription (Monthly) - Vienna, Austria - Customer 000000003', studio: 'games', event: '', type: 'recurring', amount: 1.00, transactionType: 'income', recurringPeriod: 'monthly', recurringDay: 22 },
@@ -975,7 +975,7 @@
             const [subData, setSubData] = useState(() => Array.from({ length: daysInYear }).map((_, i) => {
                 const date = new Date(2026, 0, 1); date.setDate(i + 1);
                 let revenue = 0, source = '';
-                if (date.getDate() === 21 && date.getMonth() === 2) { revenue = 5.00; source = 'Arcade (Yearly) - 000000006'; }
+                if (date.getDate() === 21 && date.getMonth() === 2) { revenue = 6.00; source = 'Arcade (Yearly) - 000000006'; }
                 else if (date.getDate() === 22) { revenue = 1.00; source = 'Arcade (Monthly) - 000000003'; }
                 return { dayOfYear: i, date, revenue, source };
             }));
@@ -1531,7 +1531,7 @@
                                     <a key={d.name} href={d.url} target="_blank" rel="noopener noreferrer"
                                         className={`flex items-center justify-between px-4 py-3 hover:bg-[#111] transition-colors group ${d.interim ? 'opacity-70' : ''}`}>
                                         <div className="flex items-center gap-3">
-                                            <span className={`font-mono text-sm transition-colors ${d.interim ? 'text-gray-500 group-hover:text-gray-400' : 'text-white group-hover:text-[#D4AF37]'}`}>{d.name}</span>
+                                            <span className={`font-mono text-sm transition-colors ${d.interim ? 'text-gray-300 group-hover:text-white' : 'text-white group-hover:text-[#D4AF37]'}`}>{d.name}</span>
                                             <span className="text-gray-700 text-[10px] font-mono">{d.letters}</span>
                                         </div>
                                         <svg className={`transition-colors ${d.interim ? 'text-gray-700 group-hover:text-gray-500' : 'text-gray-700 group-hover:text-[#D4AF37]'}`} width="10" height="10" viewBox="0 0 10 10" fill="none">
